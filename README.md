@@ -20,7 +20,7 @@ Fast Image Vector Search Tool built in PyTorch
     - [Dataset (Numpy 28x28 grayscale bitmap .npy)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap)
     - [Dataset (Used for Sketch-RNN)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/sketchrnn)
 - Sketchy
-    - ![](https://sketchy.eye.gatech.edu/img/paper_figure.png)
+    ![](https://user-images.githubusercontent.com/27071473/158042446-208bd207-c2d4-4b0c-a557-dc11d0340c70.png)
     - 75K sketches of 12K objects from 125 categories.
     - [Paper](https://sketchy.eye.gatech.edu/paper.pdf)
     - [Website](https://sketchy.eye.gatech.edu/)
