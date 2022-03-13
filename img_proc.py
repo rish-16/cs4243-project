@@ -21,13 +21,10 @@ def grayscale_img(arr):
 def flip_img(arr):
     return 1-arr
 
-def threshold_img(arr, thr=None):
+def threshold_img(arr, lower, upper):
     if len(arr.shape) == 3:
         arr = grayscale_img(arr)
-    if thr:
-        _, arr = cv.threshold(arr, thr, 255, cv.THRESH_BINARY)
-    else:
-        arr = cv.adaptiveThreshold(arr,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY,11,2)
+    _, arr = cv.threshold(arr, lower, upper, cv.THRESH_TOZERO_INV)
     return arr
 
 def blur_img(arr, kernel=5):
@@ -47,9 +44,9 @@ def denoise_img(arr):
         arr = cv.fastNlMeansDenoisingColored(arr, None, 10, 10, 7, 21)
     return arr
 
-def erode_img(arr, itr=1):
+def erode_img(arr, kernel, itr=1):
     """Thin boundaries"""
-    kernel = np.ones((5,5), np.uint8)
+    kernel = np.ones((kernel, kernel), np.uint8)
     return cv.erode(arr, kernel, iterations=itr)
 
 def dilate_img(arr, kernel=5, itr=1):
@@ -59,8 +56,8 @@ def dilate_img(arr, kernel=5, itr=1):
 
 def open_img(arr, kernel=5, itr=1):
     """Close white holes"""
-    arr = erode_img(arr, itr=itr)
-    arr = dilate_img(arr, itr=itr)
+    arr = erode_img(arr, kernel, itr=itr)
+    arr = dilate_img(arr, kernel, itr=itr)
     return arr
 
 def close_img(arr, kernel=5, itr=1):
@@ -88,3 +85,7 @@ def watercolor_img(arr, size=60, color=0.6):
 def sharpen_img(arr):
     kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
     return cv.filter2D(arr, -1, kernel)
+
+def discrete_img(arr):
+    arr[arr > 0] = 1
+    return arr
