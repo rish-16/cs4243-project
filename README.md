@@ -1,5 +1,9 @@
-# cs4243-project
+# CS4243 Project
 Fast Image Vector Search Tool built in PyTorch
+
+# Set-up
+1. Download datasets: [QuickDraw](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap), [Sketchy](https://tinyurl.com/v2dj69y9), [TUBerlin](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip).
+2. Unzip datasets QuickDraw, Sketchy and TUBerlin, rename into `quickdraw/`, `sketchy/` and `tuberlin/` respectively, and run `dataset.ipynb`.
 
 # Dataset
 - CIFAR10
