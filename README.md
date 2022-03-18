@@ -14,11 +14,7 @@ Fast Image Vector Search Tool built in PyTorch
     - 50M doodles across 345 categories.
     - Download - Download and unzip `quickdraw.zip` in `dataset/` folder.
     - [Code](https://github.com/googlecreativelab/quickdraw-dataset)
-    - [Dataset (Raw .ndjson)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/raw)
-    - [Dataset (Simplified .ndjson)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/simplified)
-    - [Dataset (Binary .bin)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/binary)
     - [Dataset (Numpy 28x28 grayscale bitmap .npy)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap)
-    - [Dataset (Used for Sketch-RNN)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/sketchrnn)
 - Sketchy
     ![](https://user-images.githubusercontent.com/27071473/158042446-208bd207-c2d4-4b0c-a557-dc11d0340c70.png)
     - 75K sketches of 12K objects from 125 categories.
@@ -27,7 +23,6 @@ Fast Image Vector Search Tool built in PyTorch
     - [Code](https://github.com/CDOTAD/SketchyDatabase)
     - [Dataset (Sketches and Photos)](https://tinyurl.com/v2dj69y9)
     - [Dataset (Annotation and Info)](https://tinyurl.com/yxv6s8dv)
-    - [Dataset (Sketches in SVG)](https://tinyurl.com/yt7y9tz4)
     - [Supplementary Report](https://sketchy.eye.gatech.edu/supp.pdf)
 - TUBerlin
     - ![](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/teaser_siggraph.jpg)
