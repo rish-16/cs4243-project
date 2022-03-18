@@ -3,8 +3,8 @@ Fast Image Vector Search Tool built in PyTorch
 
 # Set-up
 1. Download datasets: [QuickDraw](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap), [Sketchy](https://tinyurl.com/v2dj69y9), [TUBerlin](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip).
-2. Unzip datasets QuickDraw, Sketchy and TUBerlin in `dataset/`, rename into `quickdraw/`, `sketchy/` and `tuberlin/` respectively, and run [dataset.ipynb](dataset.ipynb).
-3. Unzip TUBerlin's [info.txt]()
+2. Unzip datasets QuickDraw, Sketchy and TUBerlin in `dataset/`, rename into `quickdraw/`, `sketchy/` and `tuberlin/` respectively, unzip TUBerlin's [info.txt](https://tinyurl.com/yxv6s8dv) in `dataset/sketchy/`.
+3. Run [dataset.ipynb](dataset.ipynb)
 
 # Dataset
 - CIFAR10
