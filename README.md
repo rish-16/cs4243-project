@@ -1,9 +1,10 @@
 # CS4243 Project
 Fast Image Vector Search Tool built in PyTorch
 
-# Set-up
+# Set-up Datasets
 1. Download datasets: [QuickDraw](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap), [Sketchy](https://tinyurl.com/v2dj69y9), [TUBerlin](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip).
-2. Unzip datasets QuickDraw, Sketchy and TUBerlin in `dataset/`, rename into `quickdraw/`, `sketchy/` and `tuberlin/` respectively, and run [dataset.ipynb](dataset.ipynb).
+2. Unzip datasets QuickDraw, Sketchy and TUBerlin in `dataset/`, rename into `quickdraw/`, `sketchy/` and `tuberlin/` respectively, unzip TUBerlin's [info.txt](https://tinyurl.com/yxv6s8dv) in `dataset/sketchy/`.
+3. Run [dataset.ipynb](dataset.ipynb), and load dataset using `np.load('dataset/dataset.npy', allow_pickle=True)[()]`.
 
 # Dataset
 - CIFAR10
@@ -43,28 +44,8 @@ Fast Image Vector Search Tool built in PyTorch
     - [Code](https://github.com/googlecreativelab/quickdraw-dataset)
     - [Dataset (Numpy 28x28 grayscale bitmap .npy)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap)
 - Sketchy
-    - ![image](https://user-images.githubusercontent.com/27071473/158947259-692a5110-3e49-43db-8bb6-05778c6ef01c.png)
-    - Image shape: (1111, 1111)
-    - No. classes: 8
-    - Classes: airplane, car, cat, dog, bird, frog, horse, truck
-    - Count per class:
-        - airplane - 80
-        - car - 80
-        - cat - 80
-        - dog - 80
-        - bird - 80
-        - frog - 80
-        - horse - 80
-        - truck - 80
-    - Dataset size: 640
-    - [Paper](https://sketchy.eye.gatech.edu/paper.pdf)
-    - [Website](https://sketchy.eye.gatech.edu/)
-    - [Code](https://github.com/CDOTAD/SketchyDatabase)
-    - [Dataset (Sketches and Photos)](https://tinyurl.com/v2dj69y9)
-    - [Supplementary Report](https://sketchy.eye.gatech.edu/supp.pdf)
-- TUBerlin
     - ![image](https://user-images.githubusercontent.com/27071473/158947274-707285cf-6175-4ad9-9726-27d7db93f6d7.png)
-    - ![image](https://user-images.githubusercontent.com/27071473/158947286-5cd72af1-495d-4f8e-b476-b4112eada746.png)
+    - ![image](https://user-images.githubusercontent.com/27071473/158958660-522b8a08-c2b0-407e-830a-6e5cadd63cb8.png)
     - Real
         - Image shape: (256, 256, 3)
         - No. classes: 8
@@ -84,15 +65,35 @@ Fast Image Vector Search Tool built in PyTorch
         - No. classes: 8
         - Classes: airplane, car, cat, dog, frog, horse, truck, bird
         - Count per class:
-            - airplane - 709
-            - car - 642
-            - cat - 692
-            - dog - 692
-            - frog - 608
-            - horse - 738
-            - truck - 698
-            - bird - 529
-        - Dataset size: 5308
+            - airplane - 528
+            - car - 534
+            - cat - 512
+            - dog - 512
+            - frog - 502
+            - horse - 525
+            - truck - 524
+            - bird - 504
+    - Dataset size: 4141
+    - [Paper](https://sketchy.eye.gatech.edu/paper.pdf)
+    - [Website](https://sketchy.eye.gatech.edu/)
+    - [Code](https://github.com/CDOTAD/SketchyDatabase)
+    - [Dataset (Sketches and Photos)](https://tinyurl.com/v2dj69y9)
+    - [Supplementary Report](https://sketchy.eye.gatech.edu/supp.pdf)
+- TUBerlin
+    - ![image](https://user-images.githubusercontent.com/27071473/158947259-692a5110-3e49-43db-8bb6-05778c6ef01c.png)
+    - Image shape: (1111, 1111)
+    - No. classes: 8
+    - Classes: airplane, car, cat, dog, bird, frog, horse, truck
+    - Count per class:
+        - airplane - 80
+        - car - 80
+        - cat - 80
+        - dog - 80
+        - bird - 80
+        - frog - 80
+        - horse - 80
+        - truck - 80
+    - Dataset size: 640
     - [Paper](http://cybertron.cg.tu-berlin.de/eitz/pdf/2012_siggraph_classifysketch.pdf)
     - [Website](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/)
     - [Dataset (Sketches in png)](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip)
