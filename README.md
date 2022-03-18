@@ -1,23 +1,58 @@
 # cs4243-project
 Fast Image Vector Search Tool built in PyTorch
 
-# Dataset Download
+# Dataset
 - CIFAR10
-    - ![](https://www.cs.toronto.edu/~kriz/cifar-10-sample/deer4.png)
-    - 60K 32x32 RGB images, 6K per class for 10 classes. 50K training and 10K test.
-    - Classes: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck (mutually exclusive)
-    - Download - `download-cifar.ipynb`
+    - ![image](https://user-images.githubusercontent.com/27071473/158947211-5c05aab3-4d7c-424f-94c1-423bcf32cb7a.png)
+    - Image shape: (32, 32, 3)
+    - No. classes: 9
+    - Classes: airplane, car, bird, cat, dog, frog, horse, ship, truck
+    - Count per class (train/test):
+        - airplane - 5000/1000
+        - car - 5000/1000
+        - bird - 5000/1000
+        - cat - 5000/1000
+        - dog - 5000/1000
+        - frog - 5000/1000
+        - horse - 5000/1000
+        - ship - 5000/1000
+        - truck - 5000/1000
+    - Dataset size (train/test): 45000/9000
+    - Download - Run `download-cifar.ipynb`, then run `dataset.ipynb`.
     - [Website](https://www.cs.toronto.edu/~kriz/cifar.html)
-    - [Dataset](https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz)
 - QuickDraw
-    - ![](https://github.com/googlecreativelab/quickdraw-dataset/blob/master/preview.jpg)
-    - 50M doodles across 345 categories.
-    - Download - Download and unzip `quickdraw.zip` in `dataset/` folder.
+    - ![image](https://user-images.githubusercontent.com/27071473/158947246-b1d168c0-2108-4ed5-9e57-8330e3faa5b7.png)
+    - Image shape: (28, 28)
+    - No. classes: 9
+    - Classes: airplane, bird, car, cat, ship, dog, frog, horse, truck
+    - Count per class:
+        - airplane - 151623
+        - bird - 133572
+        - car - 182764
+        - cat - 123202
+        - ship - 123410
+        - dog - 152159
+        - frog - 159047
+        - horse - 178286
+        - truck - 131354
+    - Dataset size: 1335417
     - [Code](https://github.com/googlecreativelab/quickdraw-dataset)
     - [Dataset (Numpy 28x28 grayscale bitmap .npy)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap)
 - Sketchy
-    ![](https://user-images.githubusercontent.com/27071473/158042446-208bd207-c2d4-4b0c-a557-dc11d0340c70.png)
-    - 75K sketches of 12K objects from 125 categories.
+    - ![image](https://user-images.githubusercontent.com/27071473/158947259-692a5110-3e49-43db-8bb6-05778c6ef01c.png)
+    - Image shape: (1111, 1111)
+    - No. classes: 8
+    - Classes: airplane, car, cat, dog, bird, frog, horse, truck
+    - Count per class:
+        - airplane - 80
+        - car - 80
+        - cat - 80
+        - dog - 80
+        - bird - 80
+        - frog - 80
+        - horse - 80
+        - truck - 80
+    - Dataset size: 640
     - [Paper](https://sketchy.eye.gatech.edu/paper.pdf)
     - [Website](https://sketchy.eye.gatech.edu/)
     - [Code](https://github.com/CDOTAD/SketchyDatabase)
@@ -25,8 +60,21 @@ Fast Image Vector Search Tool built in PyTorch
     - [Dataset (Annotation and Info)](https://tinyurl.com/yxv6s8dv)
     - [Supplementary Report](https://sketchy.eye.gatech.edu/supp.pdf)
 - TUBerlin
-    - ![](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/teaser_siggraph.jpg)
+    - ![image](https://user-images.githubusercontent.com/27071473/158947274-707285cf-6175-4ad9-9726-27d7db93f6d7.png)
+    - ![image](https://user-images.githubusercontent.com/27071473/158947286-5cd72af1-495d-4f8e-b476-b4112eada746.png)
+    - Image shape: (256, 256, 3)
+    - No. classes: 8
+    - Classes: airplane, car, cat, dog, frog, horse, truck, bird
+    - Count per class:
+        - airplane - 100
+        - car - 100
+        - cat - 100
+        - dog - 100
+        - frog - 100
+        - horse - 100
+        - truck - 100
+        - bird - 100
+    - Dataset size: 800
     - [Paper](http://cybertron.cg.tu-berlin.de/eitz/pdf/2012_siggraph_classifysketch.pdf)
     - [Website](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/)
-    - [Dataset (Sketches in SVG)](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_svg.zip)
     - [Dataset (Sketches in png)](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip)
