@@ -57,24 +57,38 @@ Fast Image Vector Search Tool built in PyTorch
     - [Website](https://sketchy.eye.gatech.edu/)
     - [Code](https://github.com/CDOTAD/SketchyDatabase)
     - [Dataset (Sketches and Photos)](https://tinyurl.com/v2dj69y9)
-    - [Dataset (Annotation and Info)](https://tinyurl.com/yxv6s8dv)
     - [Supplementary Report](https://sketchy.eye.gatech.edu/supp.pdf)
 - TUBerlin
     - ![image](https://user-images.githubusercontent.com/27071473/158947274-707285cf-6175-4ad9-9726-27d7db93f6d7.png)
     - ![image](https://user-images.githubusercontent.com/27071473/158947286-5cd72af1-495d-4f8e-b476-b4112eada746.png)
-    - Image shape: (256, 256, 3)
-    - No. classes: 8
-    - Classes: airplane, car, cat, dog, frog, horse, truck, bird
-    - Count per class:
-        - airplane - 100
-        - car - 100
-        - cat - 100
-        - dog - 100
-        - frog - 100
-        - horse - 100
-        - truck - 100
-        - bird - 100
-    - Dataset size: 800
+    - Real
+        - Image shape: (256, 256, 3)
+        - No. classes: 8
+        - Classes: airplane, car, cat, dog, frog, horse, truck, bird
+        - Count per class:
+            - airplane - 100
+            - car - 100
+            - cat - 100
+            - dog - 100
+            - frog - 100
+            - horse - 100
+            - truck - 100
+            - bird - 100
+        - Dataset size: 800
+    - Doodle
+        - Image shape: (256, 256)
+        - No. classes: 8
+        - Classes: airplane, car, cat, dog, frog, horse, truck, bird
+        - Count per class:
+            - airplane - 709
+            - car - 642
+            - cat - 692
+            - dog - 692
+            - frog - 608
+            - horse - 738
+            - truck - 698
+            - bird - 529
+        - Dataset size: 5308
     - [Paper](http://cybertron.cg.tu-berlin.de/eitz/pdf/2012_siggraph_classifysketch.pdf)
     - [Website](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/)
     - [Dataset (Sketches in png)](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip)
