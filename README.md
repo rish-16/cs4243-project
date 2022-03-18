@@ -4,6 +4,7 @@ Fast Image Vector Search Tool built in PyTorch
 # Set-up
 1. Download datasets: [QuickDraw](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap), [Sketchy](https://tinyurl.com/v2dj69y9), [TUBerlin](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip).
 2. Unzip datasets QuickDraw, Sketchy and TUBerlin in `dataset/`, rename into `quickdraw/`, `sketchy/` and `tuberlin/` respectively, and run [dataset.ipynb](dataset.ipynb).
+3. Unzip TUBerlin's [info.txt]()
 
 # Dataset
 - CIFAR10
@@ -43,26 +44,6 @@ Fast Image Vector Search Tool built in PyTorch
     - [Code](https://github.com/googlecreativelab/quickdraw-dataset)
     - [Dataset (Numpy 28x28 grayscale bitmap .npy)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap)
 - Sketchy
-    - ![image](https://user-images.githubusercontent.com/27071473/158947259-692a5110-3e49-43db-8bb6-05778c6ef01c.png)
-    - Image shape: (1111, 1111)
-    - No. classes: 8
-    - Classes: airplane, car, cat, dog, bird, frog, horse, truck
-    - Count per class:
-        - airplane - 80
-        - car - 80
-        - cat - 80
-        - dog - 80
-        - bird - 80
-        - frog - 80
-        - horse - 80
-        - truck - 80
-    - Dataset size: 640
-    - [Paper](https://sketchy.eye.gatech.edu/paper.pdf)
-    - [Website](https://sketchy.eye.gatech.edu/)
-    - [Code](https://github.com/CDOTAD/SketchyDatabase)
-    - [Dataset (Sketches and Photos)](https://tinyurl.com/v2dj69y9)
-    - [Supplementary Report](https://sketchy.eye.gatech.edu/supp.pdf)
-- TUBerlin
     - ![image](https://user-images.githubusercontent.com/27071473/158947274-707285cf-6175-4ad9-9726-27d7db93f6d7.png)
     - ![image](https://user-images.githubusercontent.com/27071473/158947286-5cd72af1-495d-4f8e-b476-b4112eada746.png)
     - Real
@@ -93,6 +74,26 @@ Fast Image Vector Search Tool built in PyTorch
             - truck - 698
             - bird - 529
         - Dataset size: 5308
+    - [Paper](https://sketchy.eye.gatech.edu/paper.pdf)
+    - [Website](https://sketchy.eye.gatech.edu/)
+    - [Code](https://github.com/CDOTAD/SketchyDatabase)
+    - [Dataset (Sketches and Photos)](https://tinyurl.com/v2dj69y9)
+    - [Supplementary Report](https://sketchy.eye.gatech.edu/supp.pdf)
+- TUBerlin
+    - ![image](https://user-images.githubusercontent.com/27071473/158947259-692a5110-3e49-43db-8bb6-05778c6ef01c.png)
+    - Image shape: (1111, 1111)
+    - No. classes: 8
+    - Classes: airplane, car, cat, dog, bird, frog, horse, truck
+    - Count per class:
+        - airplane - 80
+        - car - 80
+        - cat - 80
+        - dog - 80
+        - bird - 80
+        - frog - 80
+        - horse - 80
+        - truck - 80
+    - Dataset size: 640
     - [Paper](http://cybertron.cg.tu-berlin.de/eitz/pdf/2012_siggraph_classifysketch.pdf)
     - [Website](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/)
     - [Dataset (Sketches in png)](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip)
