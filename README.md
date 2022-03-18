@@ -45,7 +45,7 @@ Fast Image Vector Search Tool built in PyTorch
     - [Dataset (Numpy 28x28 grayscale bitmap .npy)](https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap)
 - Sketchy
     - ![image](https://user-images.githubusercontent.com/27071473/158947274-707285cf-6175-4ad9-9726-27d7db93f6d7.png)
-    - ![image](https://user-images.githubusercontent.com/27071473/158947286-5cd72af1-495d-4f8e-b476-b4112eada746.png)
+    - ![image](https://user-images.githubusercontent.com/27071473/158958660-522b8a08-c2b0-407e-830a-6e5cadd63cb8.png)
     - Real
         - Image shape: (256, 256, 3)
         - No. classes: 8
@@ -65,15 +65,15 @@ Fast Image Vector Search Tool built in PyTorch
         - No. classes: 8
         - Classes: airplane, car, cat, dog, frog, horse, truck, bird
         - Count per class:
-            - airplane - 709
-            - car - 642
-            - cat - 692
-            - dog - 692
-            - frog - 608
-            - horse - 738
-            - truck - 698
-            - bird - 529
-        - Dataset size: 5308
+            - airplane - 528
+            - car - 534
+            - cat - 512
+            - dog - 512
+            - frog - 502
+            - horse - 525
+            - truck - 524
+            - bird - 504
+    - Dataset size: 4141
     - [Paper](https://sketchy.eye.gatech.edu/paper.pdf)
     - [Website](https://sketchy.eye.gatech.edu/)
     - [Code](https://github.com/CDOTAD/SketchyDatabase)
