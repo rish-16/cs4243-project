@@ -47,6 +47,68 @@ class CNN(nn.Module):
 
         return out
 
+class LayerNorm(nn.Module):
+    def __init__(self, normalized_shape, eps=1e-6, data_format="channels_last"):
+        super().__init__()
+        self.weight = nn.Parameter(torch.ones(normalized_shape))
+        self.bias = nn.Parameter(torch.zeros(normalized_shape))
+        self.eps = eps
+        self.data_format = data_format
+        if self.data_format not in ["channels_last", "channels_first"]:
+            raise NotImplementedError 
+        self.normalized_shape = (normalized_shape, )
+    
+    def forward(self, x):
+        if self.data_format == "channels_last":
+            return F.layer_norm(x, self.normalized_shape, self.weight, self.bias, self.eps)
+        elif self.data_format == "channels_first":
+            u = x.mean(1, keepdim=True)
+            s = (x - u).pow(2).mean(1, keepdim=True)
+            x = (x - u) / torch.sqrt(s + self.eps)
+            x = self.weight[:, None, None] * x + self.bias[:, None, None]
+            return x                
+
+class ConvNeXtBlock(nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+        self.conv1 = nn.Conv2d(dim, dim, (7,7), padding=3, groups=dim)
+        self.lin1 = nn.Linear(dim, 4 * dim)
+        self.lin2 = nn.Linear(4 * dim, dim)
+        self.ln = nn.LayerNorm(dim)
+        self.gelu = nn.GELU()
+
+    def forward(self, x):
+        res_inp = x
+        x = self.conv1(x)
+        x = x.permute(0, 2, 3, 1) # NCHW -> NHWC
+        x = self.ln(x)
+        x = self.lin1(x)
+        x = self.lin2(x)
+        x = self.gelu(x)
+        x = x.permute(0, 3, 1, 2) # NHWC -> NCHW
+        out = x + res_inp
+
+        return out
+
 class ConvNeXt(nn.Module):
-    def __init__(self):
-        pass
+    # TODO: ensure ConvNeXt is comparable to CNN (model size)
+    # best to stick with one block
+    def __init__(self, in_channels, classes, dims=[96, 192, 384, 768], depth=[]):
+        super().__init__()
+        self.conv = nn.Conv2d(in_channels, dims[0], (4,4), stride=4)
+        self.blocks = nn.ModuleList()
+        for dim in dims:
+            stage = nn.Sequential(ConvNeXtBlock(dim))
+            self.blocks.append(stage)
+        self.project = nn.Linear(dims[-1], classes)
+
+    def forward(self, x):
+        x = self.conv(x)
+        x = self.blocks(x)
+        out = self.project(x)
+        return out
+
+convnext = ConvNeXt(3, 10)
+x = torch.rand(2, 3, 32, 32)
+y = convnext(x)
+print (y.shape)
