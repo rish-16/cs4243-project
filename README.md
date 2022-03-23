@@ -97,3 +97,19 @@ Fast Image Vector Search Tool built in PyTorch
     - [Paper](http://cybertron.cg.tu-berlin.de/eitz/pdf/2012_siggraph_classifysketch.pdf)
     - [Website](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/)
     - [Dataset (Sketches in png)](http://cybertron.cg.tu-berlin.de/eitz/projects/classifysketch/sketches_png.zip)
+- Google Images
+    - ![image](https://user-images.githubusercontent.com/27071473/159695999-54c92bc1-d769-48f6-be32-a485b9d12250.png)
+    - Image shape: (256, 256)
+    - No. classes: 9
+    - Classes: airplane, car, bird, cat, dog, frog, horse, ship, truck
+    - Count per class:
+        - airplane - 500
+        - car - 500
+        - bird - 500
+        - cat - 500
+        - dog - 500
+        - frog - 500
+        - horse - 500
+        - ship - 500
+        - truck - 500
+    - Dataset size: 4500
