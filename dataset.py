@@ -1,13 +1,21 @@
+from torch.utils.data import Dataset, DataLoader, Sampler
+from torchvision import transforms
+import torch
 import random
 
-import torch
-from torch.utils.data import Dataset, Sampler
+import numpy as np
 
 
-# Below are just a template. The Sampler might be usable for us.
 class BertDataset(Dataset):
-    def __init__(self, x, y, tokenizer, length=128, return_idx=False):
+    DATASET_DIR = 'dataset/dataset.npy'
+
+    def __init__(self, doodle_size, real_size):
         super(BertDataset, self).__init__()
+
+        dataset = np.load(self.DATASET_DIR, allow_pickle=True)[()]
+        dataset_names = dataset.keys()
+
+        self.
         self.tokenizer = tokenizer
         self.length = length
         self.x = x
@@ -41,8 +49,7 @@ class BertDataset(Dataset):
         return len(self.y)
 
 
-# Necessary for contrastive learning.
-class TrainSamplerMultiClassUnit(Sampler):
+class TrainSamplerMultilCassUnit(Sampler):
     def __init__(self, dataset, sample_unit_size):
         super().__init__(None)
         self.x = dataset.x
@@ -79,3 +86,34 @@ class TrainSamplerMultiClassUnit(Sampler):
 
     def __len__(self):
         return self.length
+
+
+class TransformerEnsembleDataset(Dataset):
+    def __init__(self, x, y, tokenizers, lengths):
+        super(TransformerEnsembleDataset, self).__init__()
+        self.x = x
+        self.tokenizers = tokenizers
+        self.lengths = lengths
+        self.caches = [{} for i in range(len(tokenizers))]
+        self.y = torch.tensor(y)
+
+    def tokenize(self, x, i):
+        dic = self.tokenizers[i].batch_encode_plus(
+            batch_text_or_text_pairs=[x],  # input must be a list
+            max_length=self.lengths[i],
+            padding='max_length',
+            truncation=True,
+            return_token_type_ids=True,
+            return_tensors="pt"
+        )
+        return [x[0] for x in dic.values()]  # get rid of the first dim
+
+    def __getitem__(self, idx):
+        if idx not in self.caches[0]:
+            for i in range(len(self.tokenizers)):
+                self.caches[i][idx] = self.tokenize(self.x[idx], i)
+
+        return [self.caches[i][idx] for i in range(len(self.tokenizers))], self.y[idx]
+
+    def __len__(self):
+        return len(self.y)
