@@ -1,5 +1,4 @@
 import os
-
 import torch
 
 
@@ -52,6 +51,11 @@ def load_model_dic(model, ckpt_path, verbose=True, strict=True):
         print(f'Model loaded: {ckpt_path}')
 
     return model
+
+def compute_accuracy(pred, label):
+    pred, label = pred.cpu(), label.cpu()       # unknown bug without this line
+    return (pred.argmax(1) == label).sum().item() / len(label)
+
 
 import torch
 import numpy as np

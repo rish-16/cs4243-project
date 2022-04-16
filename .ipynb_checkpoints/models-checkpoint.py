@@ -2,6 +2,74 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
+class ExampleMLP(nn.Module):
+    def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
+        super(ExampleMLP, self).__init__()
+        self.l1 = nn.Linear(in_dim, hid_dim)
+        self.l2 = nn.Linear(hid_dim, hid_dim)
+        self.l3 = nn.Linear(hid_dim, hid_dim)
+        self.l4 = nn.Linear(hid_dim, out_dim)
+        self.relu = nn.LeakyReLU(negative_slope=0.2)
+        self.dropout = nn.Dropout(p=dropout)
+
+    def forward(self, x, return_feats=False):
+        x = x.flatten(1)    # flatten a pic into a vector
+        x = self.relu(self.l1(x))
+        x = self.dropout(x)
+        x = self.relu(self.l2(x))
+        x = self.l3(x)
+        feat = x
+        x = self.relu(x)
+        x = self.dropout(x)
+        x = self.l4(x)
+
+        if return_feats:
+            return x, feat
+
+        return x
+
+
+def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
+    return nn.Sequential(
+        nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
+        nn.BatchNorm2d(out_channels),
+        nn.ReLU(inplace=True)
+    )
+
+
+class ExampleCNN(nn.Module):
+    HEAD_CHANNELS = [3, 64]      # standard resnet channel dimension
+    CHANNELS = [128, 192, 256]
+    POOL = (2, 2)
+
+    def __init__(self, num_classes, dropout=0.2):
+        super().__init__()
+        # self.conv1 = convbn(3, 64, kernel_size=7, stride=2, padding=3)
+        # self.conv2 = convbn(64, 128, kernel_size=3, stride=2, padding=1)
+        # self.conv3 = convbn(128, 256, kernel_size=3, stride=2, padding=1)
+        layer1 = nn.Sequential(
+            convbn(self.HEAD_CHANNELS[0], self.HEAD_CHANNELS[1], kernel_size=7, stride=2, padding=3, bias=False),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+            convbn(self.HEAD_CHANNELS[1], self.CHANNELS[0], kernel_size=3, stride=1, padding=1, bias=True)
+        )
+        layer2 = convbn(self.CHANNELS[0], self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
+        layer3 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
+        pool = nn.AdaptiveAvgPool2d(self.POOL)
+        self.layers = nn.Sequential(layer1, layer2, layer3, pool)
+        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[2], num_classes)
+        self.dropout = nn.Dropout(p=dropout)
+
+    def forward(self, x, return_feats=False):
+        feats = self.layers(x).flatten(1)
+        x = self.nn(self.dropout(feats))
+
+        if return_feats:
+            return x, feats
+
+        return x
+
+
 class MLP(nn.Module):
     def __init__(self, indim, classes):
         super().__init__()
@@ -20,6 +88,7 @@ class MLP(nn.Module):
         out = torch.softmax(self.l5(x), 1)
 
         return out
+
 
 class CNN(nn.Module):
     def __init__(self, in_channels, classes):
@@ -74,7 +143,7 @@ class ConvNeXtBlock(nn.Module):
         self.conv1 = nn.Conv2d(dim, dim, (7,7), padding=3, groups=dim)
         self.lin1 = nn.Linear(dim, 4 * dim)
         self.lin2 = nn.Linear(4 * dim, dim)
-        self.ln = LayerNorm(dim)
+        self.ln = nn.LayerNorm(dim)
         self.gelu = nn.GELU()
 
     def forward(self, x):
@@ -91,47 +160,30 @@ class ConvNeXtBlock(nn.Module):
         return out
 
 class ConvNeXt(nn.Module):
-    def __init__(self, in_chans=3, num_classes=10, depths=[3, 3, 9, 3], dims=[96, 192, 384, 768]):
+    # TODO: ensure ConvNeXt is comparable to CNN (model size)
+    # best to stick with one block
+    def __init__(self, in_channels, classes, dims=[96, 192, 384, 768], depth=[]):
         super().__init__()
-
-        self.downsample_layers = nn.ModuleList() # stem and 3 intermediate downsampling conv layers
-        stem = nn.Sequential(
-            nn.Conv2d(in_chans, dims[0], kernel_size=4, stride=4),
-            LayerNorm(dims[0], eps=1e-6, data_format="channels_first")
-        )
-        self.downsample_layers.append(stem)
-        for i in range(3):
-            downsample_layer = nn.Sequential(
-                    LayerNorm(dims[i], eps=1e-6, data_format="channels_first"),
-                    nn.Conv2d(dims[i], dims[i+1], kernel_size=2, stride=2),
-            )
-            self.downsample_layers.append(downsample_layer)
-
-        self.stages = nn.ModuleList() # 4 feature resolution stages, each consisting of multiple residual blocks
-        cur = 0
-        for i in range(4):
-            stage = nn.Sequential(
-                *[ConvNeXtBlock(dim=dims[i]) for j in range(depths[i])]
-            )
-            self.stages.append(stage)
-            cur += depths[i]
-
-        self.norm = nn.LayerNorm(dims[-1], eps=1e-6) # final norm layer
-        self.head = nn.Linear(dims[-1], num_classes)
-
-        self.head.weight.data.mul_(1.0)
-        self.head.bias.data.mul_(1.0)
-
-    def forward_features(self, x):
-        for i in range(4):
-            x = self.downsample_layers[i](x)
-            x = self.stages[i](x)
-        return self.norm(x.mean([-2, -1])) # global average pooling, (N, C, H, W) -> (N, C)
+        self.conv = nn.Conv2d(in_channels, dims[0], (4,4), stride=4)
+        self.blocks = nn.ModuleList()
+        for dim in dims:
+            stage = nn.Sequential(ConvNeXtBlock(dim))
+            self.blocks.append(stage)
+        self.project = nn.Linear(dims[-1], classes)
 
     def forward(self, x):
-        x = self.forward_features(x)
-        x = self.head(x)
-        return x
+        x = self.conv(x)
+        print(x.shape)
+        for block in self.blocks:
+            x = block(x)
+        out = self.project(x)
+        return out
+
+# TODO: debug the following sample
+# convnext = ConvNeXt(3, 10)
+# x = torch.rand(2, 3, 32, 32)
+# y = convnext(x)
+# print (y.shape)
 
 if __name__ == "__main__":
     model = ConvNeXt()
