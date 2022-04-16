@@ -52,3 +52,38 @@ def load_model_dic(model, ckpt_path, verbose=True, strict=True):
         print(f'Model loaded: {ckpt_path}')
 
     return model
+
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+
+def display_num_param(net):
+	nb_param = 0
+	for param in net.parameters():
+	    nb_param += param.numel()
+	print('There are {} ({:.2f} million) parameters in this neural network'.format(
+		nb_param, nb_param/1e6)
+	     )
+
+
+def get_error( scores , labels ):
+
+    bs=scores.size(0)
+    predicted_labels = scores.argmax(dim=1)
+    indicator = (predicted_labels == labels)
+    num_matches=indicator.sum()
+    
+    return 1-num_matches.float()/bs    
+
+
+def show(X):
+    if X.dim() == 3 and X.size(0) == 3:
+        plt.imshow( np.transpose(  X.numpy() , (1, 2, 0))  )
+        plt.show()
+    elif X.dim() == 2:
+        plt.imshow(   X.numpy() , cmap='gray'  )
+        plt.show()
+    else:
+        print('WRONG TENSOR SIZE')

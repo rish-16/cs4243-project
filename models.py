@@ -133,7 +133,8 @@ class ConvNeXt(nn.Module):
         x = self.head(x)
         return x
 
-model = ConvNeXt()
-x = torch.rand(1, 3, 64, 64)
-y = model(x)
-print (y.shape)
+if __name__ == "__main__":
+    model = ConvNeXt()
+    x = torch.rand(1, 3, 64, 64)
+    y = model(x)
+    print (y.shape)
