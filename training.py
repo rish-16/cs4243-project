@@ -12,8 +12,11 @@ NUM_CLASSES = 10
 DOODLE_SIZE = 112
 REAL_SIZE = 224
 
+fix_seed(0)
 
-def train_model(train_set, tqdm_on, id, num_epochs, batch_size, learning_rate, coefficient, train=['doodle, real']):
+
+def train_model(train_set, val_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c1, c2, t):
+
     from models import ExampleMLP
     # model1 = ExampleMLP(DOODLE_SIZE * DOODLE_SIZE, 128, NUM_CLASSES)
     # model2 = SampleMLP(REAL_SIZE*REAL_SIZE*3, 256, NUM_CLASSES)
@@ -31,16 +34,16 @@ def train_model(train_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
 
     # contrastive loss params
-    temperature, sample_unit_size = 0.1, 2
-    print(f'coefficient, temperature, sample_unit_size = {coefficient, temperature, sample_unit_size}')
+    print(f'c1, c2, temperature = {c1, c2, t}')
 
     # logger
-    exp_dir = os.path.join(ckpt_dir,
-                           f'{id}_coe{coefficient}_temp{temperature}_unit{sample_unit_size}_epoch{num_epochs}')
+    # exp_dir = os.path.join(ckpt_dir,
+    #                        f'{id}_coe{coefficient}_temp{t}_unit{sample_unit_size}_epoch{num_epochs}')
 
     # load the training data
-    train_set_len = int(0.8 * len(train_set))
-    train_set, val_set = torch.utils.data.dataset.random_split(train_set, [train_set_len, len(train_set) - train_set_len])
+    # train_set_len = int(0.8 * len(train_set))
+    # train_set, val_set = torch.utils.data.dataset.random_split(train_set,
+    # [train_set_len, len(train_set) - train_set_len])
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True,
                               num_workers=8, pin_memory=True, drop_last=True)
     val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=8,
@@ -52,6 +55,7 @@ def train_model(train_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c
         loss1_model2 = AverageMeter()
         loss2_model1 = AverageMeter()
         loss2_model2 = AverageMeter()
+        loss3_combined = AverageMeter()
         acc_model1 = AverageMeter()
         acc_model2 = AverageMeter()
 
@@ -66,20 +70,25 @@ def train_model(train_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c
             x1 = torch.cat([x1, x1, x1], dim=1)
             pred1, feats1 = model1(x1, return_feats=True)
             loss_1 = criterion(pred1, y1)    # classification loss
-            loss_2 = compute_contrastive_loss_from_feats(feats1, y1, temperature)
+            loss_2 = compute_contrastive_loss_from_feats(feats1, y1, t)
             loss1_model1.update(loss_1)
             loss2_model1.update(loss_2)
-            loss_model1 = loss_1 + coefficient * loss_2
+            loss_model1 = loss_1 + c1 * loss_2
 
             # train model2 (real)
             pred2, feats2 = model2(x2, return_feats=True)
             loss_1 = criterion(pred2, y2)   # classification loss
-            loss_2 = compute_contrastive_loss_from_feats(feats2, y2, temperature)
+            loss_2 = compute_contrastive_loss_from_feats(feats2, y2, t)
             loss1_model2.update(loss_1)
             loss2_model2.update(loss_2)
-            loss_model2 = loss_1 + coefficient * loss_2
+            loss_model2 = loss_1 + c1 * loss_2
 
-            loss = loss_model1 + loss_model2
+            # the third loss
+            combined_feat = feats1 * feats2
+            loss_3 = compute_contrastive_loss_from_feats(combined_feat, y1, t)
+            loss3_combined.update(loss_3)
+
+            loss = loss_model1 + loss_model2 + c2 * loss_3
 
             # statistics
             acc_model1.update(compute_accuracy(pred1, y1))
@@ -101,8 +110,9 @@ def train_model(train_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c
                 'train epoch': '{:03d}'.format(epoch)
             })
 
-        print(f'train epoch {epoch}, acc 1={acc_model1.avg}, acc 2={acc_model2.avg}, l1m1={loss1_model1.avg:.3f},'
-              f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}')
+        print(f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
+              f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}, '
+              f'l3={loss3_combined.avg:.3f}')
 
         # validation
         model1.eval(), model1.eval()
@@ -138,12 +148,13 @@ def train_model(train_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c
 
 if __name__ == "__main__":
     from dataset import ImageDataset
-    train_set = ImageDataset(DOODLE_SIZE, REAL_SIZE)
+    train_set = ImageDataset(DOODLE_SIZE, REAL_SIZE, train=True)
+    val_set = ImageDataset(DOODLE_SIZE, REAL_SIZE, train=False)
     tqdm_on = not True
     id = 0
     num_epochs = 100
-    base_bs = 128
+    base_bs = 256
     base_lr = 1e-2
-    coefficient = 0
+    c1, c2, t = 1, 1, 0.1
 
-    train_model(train_set, tqdm_on, id, num_epochs, base_bs, base_lr, coefficient)
+    train_model(train_set, val_set, tqdm_on, id, num_epochs, base_bs, base_lr, c1, c2, t)
