@@ -17,7 +17,7 @@ fix_seed(0)
 
 def train_model(train_set, val_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c1, c2, t):
 
-    from models import ExampleMLP
+    from models import ExampleMLP, CNN
     # model1 = ExampleMLP(DOODLE_SIZE * DOODLE_SIZE, 128, NUM_CLASSES)
     # model2 = SampleMLP(REAL_SIZE*REAL_SIZE*3, 256, NUM_CLASSES)
     model1 = ExampleCNN(NUM_CLASSES)

@@ -162,7 +162,7 @@ class ConvNeXtBlock(nn.Module):
 class ConvNeXt(nn.Module):
     # TODO: ensure ConvNeXt is comparable to CNN (model size)
     # best to stick with one block
-    def __init__(self, in_channels, classes, dims=[96, 192, 384, 768], depth=[]):
+    def __init__(self, in_channels, classes, dims=[96, 192, 384, 768]):
         super().__init__()
         self.conv = nn.Conv2d(in_channels, dims[0], (4,4), stride=4)
         self.blocks = nn.ModuleList()
@@ -176,6 +176,7 @@ class ConvNeXt(nn.Module):
         print(x.shape)
         for block in self.blocks:
             x = block(x)
+        print (x.shape)
         out = self.project(x)
         return out
 
@@ -186,7 +187,7 @@ class ConvNeXt(nn.Module):
 # print (y.shape)
 
 if __name__ == "__main__":
-    model = ConvNeXt()
+    model = ConvNeXt(3, 10)
     x = torch.rand(1, 3, 64, 64)
     y = model(x)
     print (y.shape)
