@@ -1,5 +1,7 @@
 import os
 import torch
+import random
+import numpy as np
 
 
 class AverageMeter(object):
@@ -21,6 +23,9 @@ class AverageMeter(object):
         self.sum += val * n
         self.count += n
         self.avg = self.sum / self.count
+
+    def __str__(self):
+        return self.avg
 
 
 def save_model(ckpt_dir, cp_name, model):
@@ -91,3 +96,9 @@ def show(X):
         plt.show()
     else:
         print('WRONG TENSOR SIZE')
+
+
+def fix_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
