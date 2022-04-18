@@ -1,141 +1,152 @@
 import torch.nn as nn
+import torch.utils.data.dataset
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
-
-from dataset import TrainSamplerMultiClassUnit
-from losses import compute_sim_matrix, compute_target_matrix, contrastive_loss
+from losses import compute_contrastive_loss_from_feats
 from utils import *  # bad practice, nvm
+from models import *
 
 ckpt_dir = 'exp_data'
 
 
-def train_bert(train_set, val_set, model, tqdm_on, id, num_epochs, base_bs, base_lr,
-               coefficient, num_authors):
-    ngpus, dropout = torch.cuda.device_count(), 0.35
-    num_tokens, hidden_dim, out_dim = 512, 512, num_authors
-    model = nn.DataParallel(model).cuda()
+def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c1, c2, t):
+    # cuda side setup
+    model1 = nn.DataParallel(model1).cuda()
+    model2 = nn.DataParallel(model2).cuda()
 
-    optimizer = torch.optim.AdamW(params=model.parameters(), lr=base_lr * ngpus, weight_decay=3e-4)
+    # training side
+    optimizer = torch.optim.AdamW(params=list(model1.parameters()) + list(model2.parameters()),
+                                  lr=learning_rate, weight_decay=3e-4)
     criterion = nn.CrossEntropyLoss()
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
-    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=10, verbose=True)
-
-    temperature, sample_unit_size = 0.1, 2
-    print(f'coefficient, temperature, sample_unit_size = {coefficient, temperature, sample_unit_size}')
-
-    # logger
-    exp_dir = os.path.join(ckpt_dir,
-                           f'{id}_coe{coefficient}_temp{temperature}_unit{sample_unit_size}_epoch{num_epochs}')
-    writer = SummaryWriter(os.path.join(exp_dir, 'board'))
 
     # load the training data
-    train_sampler = TrainSamplerMultiClassUnit(train_set, sample_unit_size=sample_unit_size)
-    train_loader = DataLoader(train_set, batch_size=base_bs * ngpus, sampler=train_sampler, shuffle=False,
-                              num_workers=4 * ngpus, pin_memory=True, drop_last=True)
-    val_loader = DataLoader(val_set, batch_size=base_bs * ngpus, shuffle=False, num_workers=4 * ngpus,
+    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True,
+                              num_workers=8, pin_memory=True, drop_last=True)
+    val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=8,
                             pin_memory=True, drop_last=True)
 
     # training loop
     for epoch in range(num_epochs):
-        train_acc = AverageMeter()
-        train_loss = AverageMeter()
-        train_loss_1 = AverageMeter()
-        train_loss_2 = AverageMeter()
+        loss1_model1 = AverageMeter()
+        loss1_model2 = AverageMeter()
+        loss2_model1 = AverageMeter()
+        loss2_model2 = AverageMeter()
+        loss3_combined = AverageMeter()
+        acc_model1 = AverageMeter()
+        acc_model2 = AverageMeter()
 
-        # decay coefficient
-        # coefficient = coefficient - 1 / num_epochs
-
-        model.train()
+        model1.train()
+        model2.train()
         pg = tqdm(train_loader, leave=False, total=len(train_loader), disable=not tqdm_on)
-        for i, (x1, x2, x3, y) in enumerate(pg):  # for x1, x2, x3, y in train_set:
-            x, y = (x1.cuda(), x2.cuda(), x3.cuda()), y.cuda()
-            pred, feats = model(x, return_feat=True)
+        for i, (x1, y1, x2, y2) in enumerate(pg):
+            # doodle, label, real, label
+            x1, y1, x2, y2 = x1.cuda(), y1.cuda(), x2.cuda(), y2.cuda()
 
-            # classification loss
-            loss_1 = criterion(pred, y.long())
+            # train model1 (doodle)
+            pred1, feats1 = model1(x1, return_feats=True)
+            loss_1 = criterion(pred1, y1)    # classification loss
+            loss_2 = compute_contrastive_loss_from_feats(feats1, y1, t)
+            loss1_model1.update(loss_1)
+            loss2_model1.update(loss_2)
+            loss_model1 = loss_1 + c1 * loss_2
 
-            # contrastive learning
-            sim_matrix = compute_sim_matrix(feats)
-            target_matrix = compute_target_matrix(y)
-            loss_2 = contrastive_loss(sim_matrix, target_matrix, temperature, y)
+            # train model2 (real)
+            pred2, feats2 = model2(x2, return_feats=True)
+            loss_1 = criterion(pred2, y2)   # classification loss
+            loss_2 = compute_contrastive_loss_from_feats(feats2, y2, t)
+            loss1_model2.update(loss_1)
+            loss2_model2.update(loss_2)
+            loss_model2 = loss_1 + c1 * loss_2
 
-            # total loss
-            loss = loss_1 + coefficient * loss_2
+            # the third loss
+            loss = loss_model1 + loss_model2
+            if c2:
+                combined_feat = feats1 * feats2
+                loss_3 = compute_contrastive_loss_from_feats(combined_feat, y1, t)
+                loss3_combined.update(loss_3)
+                loss += c2 * loss_3
 
-            acc = (pred.argmax(1) == y).sum().item() / len(y)
-            train_acc.update(acc)
-            train_loss.update(loss.item())
-            train_loss_1.update(loss_1.item())
-            train_loss_2.update(loss_2.item())
+            # statistics
+            acc_model1.update(compute_accuracy(pred1, y1))
+            acc_model2.update(compute_accuracy(pred2, y2))
 
+            # optimization
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
 
+            # display
             pg.set_postfix({
-                'train acc': '{:.6f}'.format(train_acc.avg),
-                'train L1': '{:.6f}'.format(train_loss_1.avg),
-                'train L2': '{:.6f}'.format(train_loss_2.avg),
-                'train L': '{:.6f}'.format(train_loss.avg),
-                'epoch': '{:03d}'.format(epoch)
+                'acc 1': '{:.6f}'.format(acc_model1.avg),
+                'acc 2': '{:.6f}'.format(acc_model2.avg),
+                'l1m1': '{:.6f}'.format(loss1_model1.avg),
+                'l2m1': '{:.6f}'.format(loss2_model1.avg),
+                'l1m2': '{:.6f}'.format(loss1_model2.avg),
+                'l2m2': '{:.6f}'.format(loss2_model2.avg),
+                'train epoch': '{:03d}'.format(epoch)
             })
+        if c2:
+            print(f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
+                  f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}, '
+                  f'l3={loss3_combined.avg:.3f}')
+        else:
+            print(f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
+                  f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}')
 
-            # iteration logger
-            step = i + epoch * len(pg)
-            writer.add_scalar("train-iteration/L1", loss_1.item(), step)
-            writer.add_scalar("train-iteration/L2", loss_2.item(), step)
-            writer.add_scalar("train-iteration/L", loss.item(), step)
-            writer.add_scalar("train-iteration/acc", acc, step)
-
-        print('train acc: {:.6f}'.format(train_acc.avg), 'train L1 {:.6f}'.format(train_loss_1.avg),
-              'train L2 {:.6f}'.format(train_loss_2.avg), 'train L {:.6f}'.format(train_loss.avg), f'epoch {epoch}')
-
-        # epoch logger
-        writer.add_scalar("train/L1", train_loss_1.avg, epoch)
-        writer.add_scalar("train/L2", train_loss_2.avg, epoch)
-        writer.add_scalar("train/L", train_loss.avg, epoch)
-        writer.add_scalar("train/acc", train_acc.avg, epoch)
-
-        # train_val
-        model.eval()
+        # validation
+        model1.eval(), model1.eval()
+        acc_model1.reset(), acc_model2.reset()
         pg = tqdm(val_loader, leave=False, total=len(val_loader), disable=not tqdm_on)
-        val_acc = AverageMeter()  # tv stands for train_val
-        val_loss_1 = AverageMeter()
-        val_loss_2 = AverageMeter()
-        val_loss = AverageMeter()
         with torch.no_grad():
-            for i, (x1, x2, x3, y) in enumerate(pg):
-                x, y = (x1.cuda(), x2.cuda(), x3.cuda()), y.cuda()
-                pred, feats = model(x, return_feat=True)
+            for i, (x1, y1, x2, y2) in enumerate(pg):
+                pred1, feats1 = model1(x1, return_feats=True)
+                pred2, feats2 = model2(x2, return_feats=True)
+                acc_model1.update(compute_accuracy(pred1, y1))
+                acc_model2.update(compute_accuracy(pred2, y2))
 
-                # classification
-                loss_1 = criterion(pred, y.long())
-
-                # contrastive learning
-                sim_matrix = compute_sim_matrix(feats)
-                target_matrix = compute_target_matrix(y)
-                loss_2 = contrastive_loss(sim_matrix, target_matrix, temperature, y)
-
-                # total loss
-                loss = loss_1 + coefficient * loss_2
-
-                # logger
-                val_acc.update((pred.argmax(1) == y).sum().item() / len(y))
-                val_loss.update(loss.item())
-                val_loss_1.update(loss_1.item())
-                val_loss_2.update(loss_2.item())
-
+                # display
                 pg.set_postfix({
-                    'train_val acc': '{:.6f}'.format(val_acc.avg),
-                    'epoch': '{:03d}'.format(epoch)
+                    'acc 1': '{:.6f}'.format(acc_model1.avg),
+                    'acc 2': '{:.6f}'.format(acc_model2.avg),
+                    'val epoch': '{:03d}'.format(epoch)
                 })
 
-        # scheduler.step(test_loss.avg)
+        print(f'validation epoch {epoch}, acc 1 (doodle) = {acc_model1.avg:.3f}, acc 2 (real) = {acc_model2.avg:.3f}')
+
         scheduler.step()
 
-        print(f'epoch {epoch}, train acc {train_acc.avg}, test acc {val_acc.avg}, val acc {val_acc.avg}, '
-              f'val loss {val_loss}')
+    print(f'training finished')
 
     # save checkpoint
-    save_model(exp_dir, f'{id}_val{val_acc:.5f}_finale{epoch}.pt', model)
+    exp_dir = f'exp_data/{id}'
+    save_model(exp_dir, f'{id}_model1.pt', model1)
+    save_model(exp_dir, f'{id}_model2.pt', model2)
+
+
+fix_seed(0)         # zero seed by default
+if __name__ == "__main__":
+    from dataset import ImageDataset
+    from training_config import doodles, reals, doodle_size, real_size, NUM_CLASSES
+
+    train_set = ImageDataset(doodles, reals, doodle_size, real_size, train=True)
+    val_set = ImageDataset(doodles, reals, doodle_size, real_size, train=False)
+
+    # tunable hyper params.
+    use_cnn = False
+    num_epochs, base_bs, base_lr = 20, 256, 1e-2
+    c1, c2, t = 0, 0, 0.1  # contrastive learning. if you want vanilla (cross-entropy) training, set c1 and c2 to 0.
+    dropout = 0.2
+
+    # models
+    doodle_model = ExampleCNN(NUM_CLASSES, dropout) if use_cnn \
+        else DoodleMLP(doodle_size * doodle_size, 128, NUM_CLASSES, dropout=0.2)
+    real_model = ExampleCNN(NUM_CLASSES, dropout) if use_cnn \
+        else RealMLP(real_size * real_size * 3, 512, NUM_CLASSES, dropout=0.2)
+
+    # just some logistics
+    tqdm_on = False     # progress bar
+    id = 14              # change to the id of each experiment accordingly
+
+    train_model(doodle_model, real_model, train_set, val_set, tqdm_on, id, num_epochs, base_bs, base_lr, c1, c2, t)
