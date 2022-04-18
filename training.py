@@ -45,7 +45,6 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
             x1, y1, x2, y2 = x1.cuda(), y1.cuda(), x2.cuda(), y2.cuda()
 
             # train model1 (doodle)
-            x1 = torch.cat([x1, x1, x1], dim=1)
             pred1, feats1 = model1(x1, return_feats=True)
             loss_1 = criterion(pred1, y1)    # classification loss
             loss_2 = compute_contrastive_loss_from_feats(feats1, y1, t)
@@ -62,11 +61,12 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
             loss_model2 = loss_1 + c1 * loss_2
 
             # the third loss
-            combined_feat = feats1 * feats2
-            loss_3 = compute_contrastive_loss_from_feats(combined_feat, y1, t)
-            loss3_combined.update(loss_3)
-
-            loss = loss_model1 + loss_model2 + c2 * loss_3
+            loss = loss_model1 + loss_model2
+            if c2:
+                combined_feat = feats1 * feats2
+                loss_3 = compute_contrastive_loss_from_feats(combined_feat, y1, t)
+                loss3_combined.update(loss_3)
+                loss += c2 * loss_3
 
             # statistics
             acc_model1.update(compute_accuracy(pred1, y1))
@@ -87,10 +87,13 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
                 'l2m2': '{:.6f}'.format(loss2_model2.avg),
                 'train epoch': '{:03d}'.format(epoch)
             })
-
-        print(f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
-              f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}, '
-              f'l3={loss3_combined.avg:.3f}')
+        if c2:
+            print(f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
+                  f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}, '
+                  f'l3={loss3_combined.avg:.3f}')
+        else:
+            print(f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
+                  f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}')
 
         # validation
         model1.eval(), model1.eval()
@@ -98,7 +101,6 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
         pg = tqdm(val_loader, leave=False, total=len(val_loader), disable=not tqdm_on)
         with torch.no_grad():
             for i, (x1, y1, x2, y2) in enumerate(pg):
-                x1 = torch.cat([x1, x1, x1], dim=1)
                 pred1, feats1 = model1(x1, return_feats=True)
                 pred2, feats2 = model2(x2, return_feats=True)
                 acc_model1.update(compute_accuracy(pred1, y1))
@@ -132,19 +134,19 @@ if __name__ == "__main__":
     val_set = ImageDataset(doodles, reals, doodle_size, real_size, train=False)
 
     # tunable hyper params.
-    use_cnn = True
+    use_cnn = False
     num_epochs, base_bs, base_lr = 20, 256, 1e-2
-    c1, c2, t = 1, 1, 0.1  # contrastive learning. if you want vanilla (cross-entropy) training, set c1 and c2 to 0.
+    c1, c2, t = 0, 0, 0.1  # contrastive learning. if you want vanilla (cross-entropy) training, set c1 and c2 to 0.
     dropout = 0.2
 
     # models
     doodle_model = ExampleCNN(NUM_CLASSES, dropout) if use_cnn \
-        else ExampleMLP(doodle_size * doodle_size, 128, NUM_CLASSES)
+        else DoodleMLP(doodle_size * doodle_size, 128, NUM_CLASSES, dropout=0.2)
     real_model = ExampleCNN(NUM_CLASSES, dropout) if use_cnn \
-        else ExampleMLP(doodle_size * doodle_size, 128, NUM_CLASSES)
+        else RealMLP(real_size * real_size * 3, 512, NUM_CLASSES, dropout=0.2)
 
     # just some logistics
     tqdm_on = False     # progress bar
-    id = 0              # change to the id of each experiment accordingly
+    id = 14              # change to the id of each experiment accordingly
 
     train_model(doodle_model, real_model, train_set, val_set, tqdm_on, id, num_epochs, base_bs, base_lr, c1, c2, t)
