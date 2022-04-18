@@ -8,21 +8,9 @@ from utils import *  # bad practice, nvm
 from models import *
 
 ckpt_dir = 'exp_data'
-NUM_CLASSES = 10
-DOODLE_SIZE = 112
-REAL_SIZE = 224
-
-fix_seed(0)
 
 
-def train_model(train_set, val_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c1, c2, t):
-
-    from models import ExampleMLP, CNN
-    # model1 = ExampleMLP(DOODLE_SIZE * DOODLE_SIZE, 128, NUM_CLASSES)
-    # model2 = SampleMLP(REAL_SIZE*REAL_SIZE*3, 256, NUM_CLASSES)
-    model1 = ExampleCNN(NUM_CLASSES)
-    model2 = ExampleCNN(NUM_CLASSES)
-
+def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c1, c2, t):
     # cuda side setup
     model1 = nn.DataParallel(model1).cuda()
     model2 = nn.DataParallel(model2).cuda()
@@ -33,17 +21,7 @@ def train_model(train_set, val_set, tqdm_on, id, num_epochs, batch_size, learnin
     criterion = nn.CrossEntropyLoss()
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
 
-    # contrastive loss params
-    print(f'c1, c2, temperature = {c1, c2, t}')
-
-    # logger
-    # exp_dir = os.path.join(ckpt_dir,
-    #                        f'{id}_coe{coefficient}_temp{t}_unit{sample_unit_size}_epoch{num_epochs}')
-
     # load the training data
-    # train_set_len = int(0.8 * len(train_set))
-    # train_set, val_set = torch.utils.data.dataset.random_split(train_set,
-    # [train_set_len, len(train_set) - train_set_len])
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True,
                               num_workers=8, pin_memory=True, drop_last=True)
     val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=8,
@@ -133,28 +111,40 @@ def train_model(train_set, val_set, tqdm_on, id, num_epochs, batch_size, learnin
                     'val epoch': '{:03d}'.format(epoch)
                 })
 
-        print(f'validation epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}')
+        print(f'validation epoch {epoch}, acc 1 (doodle) = {acc_model1.avg:.3f}, acc 2 (real) = {acc_model2.avg:.3f}')
 
         scheduler.step()
 
-        # print(f'epoch {epoch}, train acc {train_acc.avg}, test acc {val_acc.avg}, val acc {val_acc.avg}, '
-        #       f'val loss {val_loss.avg}')
-
     print(f'training finished')
 
-    # # save checkpoint
-    # save_model(exp_dir, f'{id}_val{val_acc:.5f}_finale{epoch}.pt', model)
+    # save checkpoint
+    exp_dir = f'exp_data/{id}'
+    save_model(exp_dir, f'{id}_model1.pt', model1)
+    save_model(exp_dir, f'{id}_model2.pt', model2)
 
 
+fix_seed(0)         # zero seed by default
 if __name__ == "__main__":
     from dataset import ImageDataset
-    train_set = ImageDataset(DOODLE_SIZE, REAL_SIZE, train=True)
-    val_set = ImageDataset(DOODLE_SIZE, REAL_SIZE, train=False)
-    tqdm_on = not True
-    id = 0
-    num_epochs = 100
-    base_bs = 256
-    base_lr = 1e-2
-    c1, c2, t = 1, 1, 0.1
+    from training_config import doodles, reals, doodle_size, real_size, NUM_CLASSES
 
-    train_model(train_set, val_set, tqdm_on, id, num_epochs, base_bs, base_lr, c1, c2, t)
+    train_set = ImageDataset(doodles, reals, doodle_size, real_size, train=True)
+    val_set = ImageDataset(doodles, reals, doodle_size, real_size, train=False)
+
+    # tunable hyper params.
+    use_cnn = True
+    num_epochs, base_bs, base_lr = 20, 256, 1e-2
+    c1, c2, t = 1, 1, 0.1  # contrastive learning. if you want vanilla (cross-entropy) training, set c1 and c2 to 0.
+    dropout = 0.2
+
+    # models
+    doodle_model = ExampleCNN(NUM_CLASSES, dropout) if use_cnn \
+        else ExampleMLP(doodle_size * doodle_size, 128, NUM_CLASSES)
+    real_model = ExampleCNN(NUM_CLASSES, dropout) if use_cnn \
+        else ExampleMLP(doodle_size * doodle_size, 128, NUM_CLASSES)
+
+    # just some logistics
+    tqdm_on = False     # progress bar
+    id = 0              # change to the id of each experiment accordingly
+
+    train_model(doodle_model, real_model, train_set, val_set, tqdm_on, id, num_epochs, base_bs, base_lr, c1, c2, t)
