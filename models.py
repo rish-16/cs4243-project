@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
 class DoodleMLP(nn.Module):
     def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
         super(DoodleMLP, self).__init__()
@@ -44,7 +43,7 @@ class RealMLP(nn.Module):
         self.bn3 = nn.BatchNorm1d(hid_dim)
 
     def forward(self, x, return_feats=False):
-        x = x.flatten(1)    # flatten a pic into a vector
+        x = x.flatten(1) # flatten a pic into a vector
         x = self.l1(x)
         x = self.relu(x)
         x = self.bn1(x)
@@ -79,9 +78,6 @@ class ExampleCNN(nn.Module):
 
     def __init__(self, num_classes, dropout=0.2):
         super().__init__()
-        # self.conv1 = convbn(3, 64, kernel_size=7, stride=2, padding=3)
-        # self.conv2 = convbn(64, 128, kernel_size=3, stride=2, padding=1)
-        # self.conv3 = convbn(128, 256, kernel_size=3, stride=2, padding=1)
         layer1 = nn.Sequential(
             convbn(self.HEAD_CHANNELS[0], self.HEAD_CHANNELS[1], kernel_size=7, stride=2, padding=3, bias=False),
             nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
@@ -103,7 +99,6 @@ class ExampleCNN(nn.Module):
 
         return x
 
-
 class MLP(nn.Module):
     def __init__(self, indim, classes):
         super().__init__()
@@ -122,7 +117,6 @@ class MLP(nn.Module):
         out = torch.softmax(self.l5(x), 1)
 
         return out
-
 
 class CNN(nn.Module):
     def __init__(self, in_channels, classes):
@@ -147,6 +141,40 @@ class CNN(nn.Module):
         x = self.relu(self.l2(x))
         x = self.relu(self.l3(x))
         out = torch.softmax(self.l4(x), 1)
+
+        return out     
+
+class BetterCNN(nn.Module):
+    def __init__(self, in_channels, classes):
+        super().__init__()
+        self.conv1 = nn.Conv2d(in_channels, 32, (3,3))
+        self.conv2 = nn.Conv2d(32, 32, (3,3))
+        self.conv3 = nn.Conv2d(32, 64, (3,3))
+        self.conv4 = nn.Conv2d(64, 64, (3,3))
+        self.mp = nn.MaxPool2d((2,2))
+        self.flatten = nn.Flatten(1)
+
+        self.l1 = nn.Linear(1600, 512)
+        self.l2 = nn.Linear(512, 128)
+        self.l3 = nn.Linear(128, classes)
+        self.relu = nn.LeakyReLU()
+
+    def forward(self, x):
+        x = self.relu(self.conv1(x))
+        x = self.relu(self.mp(self.conv2(x)))
+        x = self.relu(self.conv3(x))
+        x = self.relu(self.mp(self.conv4(x)))
+        print (x.shape)
+        x = self.flatten(x)
+        print (x.shape)
+        x = self.relu(self.l1(x))
+        x = self.relu(self.l2(x))
+        out = torch.softmax(self.l3(x), 1)
+        
+        """
+        opt = SGD(lr=0.001, momentum=0.9)
+        model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+        """
 
         return out
 
@@ -196,7 +224,7 @@ class ConvNeXtBlock(nn.Module):
 class ConvNeXt(nn.Module):
     # TODO: ensure ConvNeXt is comparable to CNN (model size)
     # best to stick with one block
-    def __init__(self, in_channels, classes, dims=[96, 192, 384, 768]):
+    def __init__(self, in_channels, classes, dims=[96, 192]):
         super().__init__()
         self.conv = nn.Conv2d(in_channels, dims[0], (4,4), stride=4)
         self.blocks = nn.ModuleList()
