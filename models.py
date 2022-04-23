@@ -37,7 +37,6 @@ def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
         nn.ReLU(inplace=True)
     )
 
-
 class ExampleCNN(nn.Module):
     CHANNELS = [64, 128, 192, 256, 512]
     POOL = (1, 1)
@@ -161,34 +160,20 @@ class ConvNeXtBlock(nn.Module):
         return out
 
 class ConvNeXt(nn.Module):
-    # TODO: ensure ConvNeXt is comparable to CNN (model size)
-    # best to stick with one block
-    def __init__(self, in_channels, classes, dims=[96, 192, 384, 768]):
+    def __init__(self, in_channels, classes, block_dims=[192, 384]):
         super().__init__()
-        self.conv = nn.Conv2d(in_channels, dims[0], (4,4), stride=4)
-        self.blocks = nn.ModuleList()
-        for dim in dims:
-            stage = nn.Sequential(ConvNeXtBlock(dim))
-            self.blocks.append(stage)
-        self.project = nn.Linear(dims[-1], classes)
+        self.blocks = nn.Sequential(
+                        nn.Conv2d(in_channels, block_dims[0], kernel_size=2, stride=2),
+                        ConvNeXtBlock(block_dims[0]),
+                        nn.Conv2d(block_dims[0], block_dims[1], kernel_size=2, stride=2),
+                        ConvNeXtBlock(block_dims[1]),
+                    )
+        self.block_dims = block_dims
+        self.project = nn.Linear(block_dims[-1], classes)
 
-    def forward(self, x):
-        x = self.conv(x)
-        print(x.shape)
-        for block in self.blocks:
-            x = block(x)
-        print (x.shape)
+    def forward(self, x, return_feats=False):
+        feats = self.blocks(x)
+        x = feats.view(-1, self.block_dims[-1], 16*16).mean(2)
         out = self.project(x)
-        return out
 
-# TODO: debug the following sample
-# convnext = ConvNeXt(3, 10)
-# x = torch.rand(2, 3, 32, 32)
-# y = convnext(x)
-# print (y.shape)
-
-if __name__ == "__main__":
-    model = ExampleCNN(3, 10, add_layers=False)
-    x = torch.rand(1, 3, 64, 64)
-    y = model(x)
-    print(y.shape)
+        return out, feats if return_feats else out

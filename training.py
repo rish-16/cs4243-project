@@ -9,7 +9,6 @@ from models import *
 
 ckpt_dir = 'exp_data'
 
-
 def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c1, c2, t):
     # cuda side setup
     model1 = nn.DataParallel(model1).cuda()
