@@ -2,64 +2,31 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class DoodleMLP(nn.Module):
-    def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
-        super(DoodleMLP, self).__init__()
-        self.l1 = nn.Linear(in_dim, hid_dim)
-        self.l2 = nn.Linear(hid_dim, hid_dim)
-        self.l3 = nn.Linear(hid_dim, out_dim)
-        self.relu = nn.LeakyReLU(negative_slope=0.2)
-        self.dropout = nn.Dropout(p=dropout)
-        self.bn1 = nn.BatchNorm1d(hid_dim)
-        self.bn2 = nn.BatchNorm1d(hid_dim)
 
-    def forward(self, x, return_feats=False):
-        x = x.flatten(1)    # flatten a pic into a vector
-        x = self.l1(x)
-        x = self.relu(x)
-        # x = self.bn1(x)
-        x = self.dropout(x)
-        x = self.l2(x)
-        feat = x
-        x = self.relu(x)
-        # x = self.bn2(x)
-        x = self.dropout(x)
-        x = self.l3(x)
-        if return_feats:
-            return x, feat
-        return x
-
-class RealMLP(nn.Module):
+class ExampleMLP(nn.Module):
     def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
-        super(RealMLP, self).__init__()
+        super(ExampleMLP, self).__init__()
         self.l1 = nn.Linear(in_dim, hid_dim)
         self.l2 = nn.Linear(hid_dim, hid_dim)
         self.l3 = nn.Linear(hid_dim, hid_dim)
         self.l4 = nn.Linear(hid_dim, out_dim)
         self.relu = nn.LeakyReLU(negative_slope=0.2)
         self.dropout = nn.Dropout(p=dropout)
-        self.bn1 = nn.BatchNorm1d(hid_dim)
-        self.bn2 = nn.BatchNorm1d(hid_dim)
-        self.bn3 = nn.BatchNorm1d(hid_dim)
 
     def forward(self, x, return_feats=False):
-        x = x.flatten(1) # flatten a pic into a vector
-        x = self.l1(x)
-        x = self.relu(x)
-        x = self.bn1(x)
-        # x = self.dropout(x)
-        x = self.l2(x)
-        x = self.relu(x)
-        x = self.bn2(x)
-        # x = self.dropout(x)
+        x = x.flatten(1)    # flatten a pic into a vector
+        x = self.relu(self.l1(x))
+        x = self.dropout(x)
+        x = self.relu(self.l2(x))
         x = self.l3(x)
         feat = x
         x = self.relu(x)
-        x = self.bn3(x)
-        # x = self.dropout(x)
+        x = self.dropout(x)
         x = self.l4(x)
+
         if return_feats:
             return x, feat
+
         return x
 
 
@@ -72,22 +39,26 @@ def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
 
 
 class ExampleCNN(nn.Module):
-    HEAD_CHANNELS = [3, 64]      # standard resnet channel dimension
-    CHANNELS = [128, 192, 256]
-    POOL = (2, 2)
+    CHANNELS = [64, 128, 192, 256, 512]
+    POOL = (1, 1)
 
-    def __init__(self, num_classes, dropout=0.2):
+    def __init__(self, in_c, num_classes, dropout=0.2, add_layers=False):
         super().__init__()
-        layer1 = nn.Sequential(
-            convbn(self.HEAD_CHANNELS[0], self.HEAD_CHANNELS[1], kernel_size=7, stride=2, padding=3, bias=False),
-            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
-            convbn(self.HEAD_CHANNELS[1], self.CHANNELS[0], kernel_size=3, stride=1, padding=1, bias=True)
-        )
-        layer2 = convbn(self.CHANNELS[0], self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
-        layer3 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
+        layer1 = convbn(in_c, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
+        layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
+        layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
+        layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
         pool = nn.AdaptiveAvgPool2d(self.POOL)
-        self.layers = nn.Sequential(layer1, layer2, layer3, pool)
-        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[2], num_classes)
+        self.layers = nn.Sequential(layer1, layer2, layer3, layer4, pool)
+
+        if add_layers:
+            layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
+            layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
+            layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
+            layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
+            self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4_2, pool)
+
+        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], num_classes)
         self.dropout = nn.Dropout(p=dropout)
 
     def forward(self, x, return_feats=False):
@@ -98,6 +69,7 @@ class ExampleCNN(nn.Module):
             return x, feats
 
         return x
+
 
 class MLP(nn.Module):
     def __init__(self, indim, classes):
@@ -117,6 +89,7 @@ class MLP(nn.Module):
         out = torch.softmax(self.l5(x), 1)
 
         return out
+
 
 class CNN(nn.Module):
     def __init__(self, in_channels, classes):
@@ -141,40 +114,6 @@ class CNN(nn.Module):
         x = self.relu(self.l2(x))
         x = self.relu(self.l3(x))
         out = torch.softmax(self.l4(x), 1)
-
-        return out     
-
-class BetterCNN(nn.Module):
-    def __init__(self, in_channels, classes):
-        super().__init__()
-        self.conv1 = nn.Conv2d(in_channels, 32, (3,3))
-        self.conv2 = nn.Conv2d(32, 32, (3,3))
-        self.conv3 = nn.Conv2d(32, 64, (3,3))
-        self.conv4 = nn.Conv2d(64, 64, (3,3))
-        self.mp = nn.MaxPool2d((2,2))
-        self.flatten = nn.Flatten(1)
-
-        self.l1 = nn.Linear(1600, 512)
-        self.l2 = nn.Linear(512, 128)
-        self.l3 = nn.Linear(128, classes)
-        self.relu = nn.LeakyReLU()
-
-    def forward(self, x):
-        x = self.relu(self.conv1(x))
-        x = self.relu(self.mp(self.conv2(x)))
-        x = self.relu(self.conv3(x))
-        x = self.relu(self.mp(self.conv4(x)))
-        print (x.shape)
-        x = self.flatten(x)
-        print (x.shape)
-        x = self.relu(self.l1(x))
-        x = self.relu(self.l2(x))
-        out = torch.softmax(self.l3(x), 1)
-        
-        """
-        opt = SGD(lr=0.001, momentum=0.9)
-        model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
-        """
 
         return out
 
@@ -224,7 +163,7 @@ class ConvNeXtBlock(nn.Module):
 class ConvNeXt(nn.Module):
     # TODO: ensure ConvNeXt is comparable to CNN (model size)
     # best to stick with one block
-    def __init__(self, in_channels, classes, dims=[96, 192]):
+    def __init__(self, in_channels, classes, dims=[96, 192, 384, 768]):
         super().__init__()
         self.conv = nn.Conv2d(in_channels, dims[0], (4,4), stride=4)
         self.blocks = nn.ModuleList()
@@ -249,7 +188,7 @@ class ConvNeXt(nn.Module):
 # print (y.shape)
 
 if __name__ == "__main__":
-    model = ConvNeXt(3, 10)
+    model = ExampleCNN(3, 10, add_layers=False)
     x = torch.rand(1, 3, 64, 64)
     y = model(x)
-    print (y.shape)
+    print(y.shape)
