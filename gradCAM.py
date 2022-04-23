@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from torchvision import transforms
+import matplotlib.pyplot as plt
 
 def get_CAM(feature_map, weight, class_idx):
     size_upsample = (32, 32)

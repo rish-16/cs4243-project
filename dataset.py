@@ -83,8 +83,8 @@ class ImageDataset(Dataset):
         # naive sampling scheme - sample with replacement
         # sample label first so that doodle and real data belong to the same category
         label = random.choice(list(self.label_idx.keys()))
-        doodle_data = self.doodle_preprocess(random.choice(self.doodle_dict[label]))
-        real_data = self.real_preprocess(random.choice(self.real_dict[label]))
+        doodle_data = self.doodle_preprocess(self.doodle_dict[label][idx])
+        real_data = self.real_preprocess(self.real_dict[label][idx])
         numer_label = self.label_idx[label]
         return doodle_data, numer_label, real_data, numer_label
 
