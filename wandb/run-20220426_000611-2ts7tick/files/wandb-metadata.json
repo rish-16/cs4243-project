@@ -1,0 +1,22 @@
+{
+    "os": "Darwin-21.2.0-x86_64-i386-64bit",
+    "python": "3.6.13",
+    "heartbeatAt": "2022-04-25T16:06:13.390871",
+    "startedAt": "2022-04-25T16:06:11.838556",
+    "docker": null,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "v1.py",
+    "codePath": "v1.py",
+    "git": {
+        "remote": "https://github.com/rish-16/cs4243-project.git",
+        "commit": "261059ac226b17079d4fc66f00ede4dd90ffb1d0"
+    },
+    "email": null,
+    "root": "/Users/rish/Desktop/cs4243-project",
+    "host": "rishabhs-MacBook-Pro.local",
+    "username": "rish",
+    "executable": "/opt/anaconda3/envs/CS4243/bin/python"
+}
