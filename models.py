@@ -1,6 +1,4 @@
-import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 class ExampleMLP(nn.Module):
@@ -14,7 +12,7 @@ class ExampleMLP(nn.Module):
         self.dropout = nn.Dropout(p=dropout)
 
     def forward(self, x, return_feats=False):
-        x = x.flatten(1)    # flatten a pic into a vector
+        x = x.flatten(1)  # flatten a pic into a vector
         x = self.relu(self.l1(x))
         x = self.dropout(x)
         x = self.relu(self.l2(x))
@@ -37,6 +35,10 @@ def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
         nn.ReLU(inplace=True)
     )
 
+
+from models import *
+
+
 class ExampleCNN(nn.Module):
     CHANNELS = [64, 128, 192, 256, 512]
     POOL = (1, 1)
@@ -51,11 +53,11 @@ class ExampleCNN(nn.Module):
         self.layers = nn.Sequential(layer1, layer2, layer3, layer4, pool)
 
         if add_layers:
-            layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
-            layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
-            layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
-            layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
-            self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4_2, pool)
+            layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=1, bias=True)
+            layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=1, bias=True)
+            layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=1, bias=True)
+            layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=1, bias=True)
+            self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
 
         self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], num_classes)
         self.dropout = nn.Dropout(p=dropout)
@@ -93,10 +95,10 @@ class MLP(nn.Module):
 class CNN(nn.Module):
     def __init__(self, in_channels, classes):
         super().__init__()
-        self.conv1 = nn.Conv2d(in_channels, 32, (3,3))
-        self.conv2 = nn.Conv2d(32, 64, (3,3))
-        self.mp1 = nn.MaxPool2d((2,2))
-        self.mp2 = nn.MaxPool2d((2,2))
+        self.conv1 = nn.Conv2d(in_channels, 32, (3, 3))
+        self.conv2 = nn.Conv2d(32, 64, (3, 3))
+        self.mp1 = nn.MaxPool2d((2, 2))
+        self.mp2 = nn.MaxPool2d((2, 2))
         self.flatten = nn.Flatten()
 
         self.l1 = nn.Linear(2304, 1024)
@@ -116,6 +118,7 @@ class CNN(nn.Module):
 
         return out
 
+
 class LayerNorm(nn.Module):
     def __init__(self, normalized_shape, eps=1e-6, data_format="channels_last"):
         super().__init__()
@@ -124,9 +127,9 @@ class LayerNorm(nn.Module):
         self.eps = eps
         self.data_format = data_format
         if self.data_format not in ["channels_last", "channels_first"]:
-            raise NotImplementedError 
-        self.normalized_shape = (normalized_shape, )
-    
+            raise NotImplementedError
+        self.normalized_shape = (normalized_shape,)
+
     def forward(self, x):
         if self.data_format == "channels_last":
             return F.layer_norm(x, self.normalized_shape, self.weight, self.bias, self.eps)
@@ -135,12 +138,13 @@ class LayerNorm(nn.Module):
             s = (x - u).pow(2).mean(1, keepdim=True)
             x = (x - u) / torch.sqrt(s + self.eps)
             x = self.weight[:, None, None] * x + self.bias[:, None, None]
-            return x                
+            return x
+
 
 class ConvNeXtBlock(nn.Module):
     def __init__(self, dim):
         super().__init__()
-        self.conv1 = nn.Conv2d(dim, dim, (7,7), padding=3, groups=dim)
+        self.conv1 = nn.Conv2d(dim, dim, (7, 7), padding=3, groups=dim)
         self.lin1 = nn.Linear(dim, 4 * dim)
         self.lin2 = nn.Linear(4 * dim, dim)
         self.ln = nn.LayerNorm(dim)
@@ -149,31 +153,32 @@ class ConvNeXtBlock(nn.Module):
     def forward(self, x):
         res_inp = x
         x = self.conv1(x)
-        x = x.permute(0, 2, 3, 1) # NCHW -> NHWC
+        x = x.permute(0, 2, 3, 1)  # NCHW -> NHWC
         x = self.ln(x)
         x = self.lin1(x)
         x = self.lin2(x)
         x = self.gelu(x)
-        x = x.permute(0, 3, 1, 2) # NHWC -> NCHW
+        x = x.permute(0, 3, 1, 2)  # NHWC -> NCHW
         out = x + res_inp
 
         return out
+
 
 class ConvNeXt(nn.Module):
     def __init__(self, in_channels, classes, block_dims=[192, 384]):
         super().__init__()
         self.blocks = nn.Sequential(
-                        nn.Conv2d(in_channels, block_dims[0], kernel_size=2, stride=2),
-                        ConvNeXtBlock(block_dims[0]),
-                        nn.Conv2d(block_dims[0], block_dims[1], kernel_size=2, stride=2),
-                        ConvNeXtBlock(block_dims[1]),
-                    )
+            nn.Conv2d(in_channels, block_dims[0], kernel_size=2, stride=2),
+            ConvNeXtBlock(block_dims[0]),
+            nn.Conv2d(block_dims[0], block_dims[1], kernel_size=2, stride=2),
+            ConvNeXtBlock(block_dims[1]),
+        )
         self.block_dims = block_dims
         self.project = nn.Linear(block_dims[-1], classes)
 
     def forward(self, x, return_feats=False):
         feats = self.blocks(x)
-        x = feats.view(-1, self.block_dims[-1], 16*16).mean(2)
+        x = feats.view(-1, self.block_dims[-1], 16 * 16).mean(2)
         out = self.project(x)
 
         return out, feats if return_feats else out
