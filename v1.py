@@ -1,4 +1,5 @@
-import torch
+import torch, sys
+import argparse
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -6,13 +7,21 @@ import torch.utils.data.dataset
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-import wandb
+# import wandb
 from dataset import ImageDataset
 from training_config import doodles, reals, doodle_size, real_size, NUM_CLASSES
 from utils import *  # bad practice, nvm
 from losses import compute_contrastive_loss_from_feats
 
-wandb.init(project="cs4243-project", entity="rish-16")
+parser = argparse.ArgumentParser(description="WandB model tracking")
+parser.add_argument('--wandb', action='store_true')
+parser.add_argument('--no-wandb', action='store_false')
+# parser.set_defaults(wandb=True)
+args = parser.parse_args()
+
+if args.wandb:
+    import wandb
+    wandb.init(project="cs4243-project", entity="rish-16")
 
 class ExampleMLP(nn.Module):
     def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
@@ -40,7 +49,7 @@ class ExampleMLP(nn.Module):
 
         return x
 
-def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, batch_size, learning_rate, c1, c2, t, wandb):
+def train_model(model1, model2, train_set, val_set, tqdm_on,  num_epochs, batch_size, learning_rate, c1, c2, t):
     # cuda side setup
     model1 = nn.DataParallel(model1).cuda()
     model2 = nn.DataParallel(model2).cuda()
@@ -141,18 +150,19 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
                     'val epoch': '{:03d}'.format(epoch)
                 })
 
-                wandb.log({
-                    'acc 1': '{:.6f}'.format(acc_model1.avg),
-                    'acc 2': '{:.6f}'.format(acc_model2.avg),
-                    'val epoch': '{:03d}'.format(epoch),
-                    'acc 1': '{:.6f}'.format(acc_model1.avg),
-                    'acc 2': '{:.6f}'.format(acc_model2.avg),
-                    'l1m1': '{:.6f}'.format(loss1_model1.avg),
-                    'l2m1': '{:.6f}'.format(loss2_model1.avg),
-                    'l1m2': '{:.6f}'.format(loss1_model2.avg),
-                    'l2m2': '{:.6f}'.format(loss2_model2.avg),
-                    'train epoch': '{:03d}'.format(epoch)
-                })
+                if use_wandb:
+                    wandb.log({
+                        'acc 1': '{:.6f}'.format(acc_model1.avg),
+                        'acc 2': '{:.6f}'.format(acc_model2.avg),
+                        'val epoch': '{:03d}'.format(epoch),
+                        'acc 1': '{:.6f}'.format(acc_model1.avg),
+                        'acc 2': '{:.6f}'.format(acc_model2.avg),
+                        'l1m1': '{:.6f}'.format(loss1_model1.avg),
+                        'l2m1': '{:.6f}'.format(loss2_model1.avg),
+                        'l1m2': '{:.6f}'.format(loss1_model2.avg),
+                        'l2m2': '{:.6f}'.format(loss2_model2.avg),
+                        'train epoch': '{:03d}'.format(epoch)
+                    })
 
         print(f'validation epoch {epoch}, acc 1 (doodle) = {acc_model1.avg:.3f}, acc 2 (real) = {acc_model2.avg:.3f}')
 
@@ -188,11 +198,12 @@ config = {
   "batch_size": base_bs
 }
 
-wandb.init(config=config)
-config = wandb.config
+if args.wandb:
+    wandb.init(config=config)
+    config = wandb.config
 
 # just some logistics
 tqdm_on = False  # progress bar
-id = 0 # change to the id of each experiment accordingly
+# id = 0 # change to the id of each experiment accordingly
 
-train_model(doodle_model, real_model, train_set, val_set, tqdm_on, id, num_epochs, base_bs, base_lr, c1, c2, t, wandb)
+train_model(doodle_model, real_model, train_set, val_set, tqdm_on, num_epochs, base_bs, base_lr, c1, c2, t)

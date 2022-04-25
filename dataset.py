@@ -92,11 +92,11 @@ class ImageDataset(Dataset):
         return max(len(self.doodle_data), len(self.real_data))     # could be arbitrary number
 
 
-if __name__ == '__main__':
-    doodles = ['sketchy_doodle', 'tuberlin', 'google_doodles']
-    reals = ['sketchy_real', 'google_real', 'cifar']
-    doodle_size = 64
-    real_size = 64
-    train_set = ImageDataset(doodles, reals, doodle_size, real_size, train=True)
-    val_set = ImageDataset(doodles, reals, doodle_size, real_size, train=False)
-    print(len(train_set[0]))
+# if __name__ == '__main__':
+#    doodles = ['sketchy_doodle', 'tuberlin', 'google_doodles']
+#    reals = ['sketchy_real', 'google_real', 'cifar']
+#    doodle_size = 64
+#    real_size = 64
+#    train_set = ImageDataset(doodles, reals, doodle_size, real_size, train=True)
+#    val_set = ImageDataset(doodles, reals, doodle_size, real_size, train=False)
+#    print(len(train_set[0]))
