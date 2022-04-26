@@ -42,7 +42,7 @@ class RealMLP(nn.Module):
         self.bn3 = nn.BatchNorm1d(hid_dim)
 
     def forward(self, x, return_feats=False):
-        x = x.flatten(0)    # flatten a pic into a vector
+        x = x.flatten(1)    # flatten a pic into a vector
         x = self.l1(x)
         x = self.relu(x)
         x = self.bn1(x)
@@ -89,6 +89,7 @@ class ExampleMLP(nn.Module):
         return x
 
 
+
 def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
     return nn.Sequential(
         nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
@@ -96,11 +97,7 @@ def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
         nn.ReLU(inplace=True)
     )
 
-
-from models import *
-
-
-class ExampleCNN(nn.Module):
+class V2ConvNet(nn.Module):
     CHANNELS = [64, 128, 192, 256, 512]
     POOL = (1, 1)
 
@@ -111,14 +108,14 @@ class ExampleCNN(nn.Module):
         layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
         layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
         pool = nn.AdaptiveAvgPool2d(self.POOL)
-        self.layers = nn.Sequential(layer1, layer2, layer3, layer4, pool)
+#         self.layers = nn.Sequential(layer1, layer2, layer3, layer4, pool)
 
-        if add_layers:
-            layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=1, bias=True)
-            layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=1, bias=True)
-            layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=1, bias=True)
-            layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=1, bias=True)
-            self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
+#         if add_layers:
+        layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
+        layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
+        layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
+        layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
+        self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
 
         self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], num_classes)
         self.dropout = nn.Dropout(p=dropout)
