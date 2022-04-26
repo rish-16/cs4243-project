@@ -1,0 +1,12 @@
+wandb_version: 1
+
+channel_combos:
+  value:
+  - 32
+  - 64
+  - 192
+  - 256
+dropout:
+  value: 0.5
+hidden_dim:
+  value: 64

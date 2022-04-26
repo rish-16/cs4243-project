@@ -1,0 +1,57 @@
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]/home/rishabh/practice_runs/cs4243-project/losses.py:28: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  return F.kl_div(F.softmax(pred_sim_matrix / temperature).log(), F.softmax(target_matrix / temperature),
+
+
+
+
+
+ 99%|██████████▉| 89/90 [00:13<00:00,  7.86it/s, acc 1=0.121928, acc 2=0.147362, l1m1=3.255904, l2m1=3.355386, l1m2=3.264507, l2m2=3.530573, train epoch=000]
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+ 90%|█████████▉ | 81/90 [00:12<00:01,  7.90it/s, acc 1=0.131052, acc 2=0.214771, l1m1=2.210456, l2m1=3.116654, l1m2=1.996827, l2m2=2.960166, train epoch=001]
+
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+100%|███████████| 90/90 [00:13<00:00,  7.85it/s, acc 1=0.172418, acc 2=0.321441, l1m1=2.111008, l2m1=2.914457, l1m2=1.692597, l2m2=2.723368, train epoch=003]
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+ 11%|█▏         | 10/90 [00:03<00:12,  6.38it/s, acc 1=0.245508, acc 2=0.363477, l1m1=1.922728, l2m1=2.838393, l1m2=1.609685, l2m2=2.679299, train epoch=005]

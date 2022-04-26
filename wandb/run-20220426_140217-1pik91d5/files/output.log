@@ -1,0 +1,8 @@
+Train = True. Doodle list: ['sketchy_doodle', 'tuberlin', 'google_doodles'],
+ real list: ['sketchy_real', 'google_real', 'cifar'].
+ classes: dict_keys(['airplane', 'car', 'cat', 'dog', 'frog', 'horse', 'truck', 'bird', 'ship'])
+Doodle data size 7022, real data size 46364, ratio 0.15145371408851696
+Train = False. Doodle list: ['sketchy_doodle', 'tuberlin', 'google_doodles'],
+ real list: ['sketchy_real', 'google_real', 'cifar'].
+ classes: dict_keys(['airplane', 'car', 'cat', 'dog', 'frog', 'horse', 'truck', 'bird', 'ship'])
+Doodle data size 1764, real data size 9341, ratio 0.18884487742211756

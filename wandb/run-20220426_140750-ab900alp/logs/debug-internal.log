@@ -1,0 +1,160 @@
+2022-04-26 14:07:51,677 INFO    MainThread:2545430 [internal.py:wandb_internal():93] W&B internal server running at pid: 2545430, started at: 2022-04-26 14:07:51.676793
+2022-04-26 14:07:51,680 INFO    WriterThread:2545430 [datastore.py:open_for_write():75] open: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/run-ab900alp.wandb
+2022-04-26 14:07:51,682 DEBUG   SenderThread:2545430 [sender.py:send():232] send: header
+2022-04-26 14:07:51,682 DEBUG   SenderThread:2545430 [sender.py:send():232] send: run
+2022-04-26 14:07:52,005 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: check_version
+2022-04-26 14:07:52,006 INFO    SenderThread:2545430 [dir_watcher.py:__init__():166] watching files in: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files
+2022-04-26 14:07:52,007 INFO    SenderThread:2545430 [sender.py:_start_run_threads():814] run started: ab900alp with start time 1650953271
+2022-04-26 14:07:52,007 DEBUG   SenderThread:2545430 [sender.py:send():232] send: summary
+2022-04-26 14:07:52,007 INFO    SenderThread:2545430 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 14:07:52,008 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: check_version
+2022-04-26 14:07:52,058 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: run_start
+2022-04-26 14:07:52,067 DEBUG   HandlerThread:2545430 [meta.py:__init__():35] meta init
+2022-04-26 14:07:52,067 DEBUG   HandlerThread:2545430 [meta.py:__init__():49] meta init done
+2022-04-26 14:07:52,068 DEBUG   HandlerThread:2545430 [meta.py:probe():209] probe
+2022-04-26 14:07:52,075 DEBUG   HandlerThread:2545430 [meta.py:_setup_git():199] setup git
+2022-04-26 14:07:52,100 DEBUG   HandlerThread:2545430 [meta.py:_setup_git():206] setup git done
+2022-04-26 14:07:52,100 DEBUG   HandlerThread:2545430 [meta.py:_save_pip():53] save pip
+2022-04-26 14:07:52,101 DEBUG   HandlerThread:2545430 [meta.py:_save_pip():67] save pip done
+2022-04-26 14:07:52,101 DEBUG   HandlerThread:2545430 [meta.py:_save_conda():74] save conda
+2022-04-26 14:07:53,011 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/conda-environment.yaml
+2022-04-26 14:07:53,011 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/wandb-summary.json
+2022-04-26 14:07:53,011 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/requirements.txt
+2022-04-26 14:07:53,468 DEBUG   HandlerThread:2545430 [meta.py:_save_conda():84] save conda done
+2022-04-26 14:07:53,468 DEBUG   HandlerThread:2545430 [meta.py:probe():247] probe done
+2022-04-26 14:07:53,475 DEBUG   SenderThread:2545430 [sender.py:send():232] send: files
+2022-04-26 14:07:53,476 INFO    SenderThread:2545430 [sender.py:_save_file():946] saving file wandb-metadata.json with policy now
+2022-04-26 14:07:53,489 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 14:07:53,490 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 14:07:53,747 DEBUG   SenderThread:2545430 [sender.py:send():232] send: telemetry
+2022-04-26 14:07:54,011 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/conda-environment.yaml
+2022-04-26 14:07:54,012 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/output.log
+2022-04-26 14:07:54,012 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/wandb-metadata.json
+2022-04-26 14:07:54,130 INFO    Thread-11 :2545430 [upload_job.py:push():137] Uploaded file /tmp/tmpre3qs7miwandb/1n01q34i-wandb-metadata.json
+2022-04-26 14:08:08,771 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 14:08:08,771 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 14:08:16,024 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/output.log
+2022-04-26 14:08:17,451 DEBUG   SenderThread:2545430 [sender.py:send():232] send: telemetry
+2022-04-26 14:08:17,453 DEBUG   SenderThread:2545430 [sender.py:send():232] send: telemetry
+2022-04-26 14:08:18,025 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/output.log
+2022-04-26 14:08:18,041 DEBUG   SenderThread:2545430 [sender.py:send():232] send: exit
+2022-04-26 14:08:18,041 INFO    SenderThread:2545430 [sender.py:send_exit():368] handling exit code: 1
+2022-04-26 14:08:18,042 INFO    SenderThread:2545430 [sender.py:send_exit():370] handling runtime: 25
+2022-04-26 14:08:18,042 INFO    SenderThread:2545430 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 14:08:18,043 INFO    SenderThread:2545430 [sender.py:send_exit():376] send defer
+2022-04-26 14:08:18,043 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:18,044 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:18,044 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:18,044 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 0
+2022-04-26 14:08:18,045 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:18,045 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 0
+2022-04-26 14:08:18,045 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 1
+2022-04-26 14:08:18,045 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:18,046 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 1
+2022-04-26 14:08:18,150 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:18,151 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 1
+2022-04-26 14:08:18,151 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 2
+2022-04-26 14:08:18,151 DEBUG   SenderThread:2545430 [sender.py:send():232] send: stats
+2022-04-26 14:08:18,152 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:18,152 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 2
+2022-04-26 14:08:18,152 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:18,153 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:18,153 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 2
+2022-04-26 14:08:18,153 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 3
+2022-04-26 14:08:18,153 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:18,154 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:18,154 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 3
+2022-04-26 14:08:18,154 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:18,154 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 3
+2022-04-26 14:08:18,155 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 4
+2022-04-26 14:08:18,155 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:18,155 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 4
+2022-04-26 14:08:18,156 DEBUG   SenderThread:2545430 [sender.py:send():232] send: summary
+2022-04-26 14:08:18,156 INFO    SenderThread:2545430 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 14:08:18,156 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:18,157 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 4
+2022-04-26 14:08:18,157 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 5
+2022-04-26 14:08:18,157 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:18,157 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 5
+2022-04-26 14:08:18,158 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:18,158 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 5
+2022-04-26 14:08:18,255 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:18,550 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 6
+2022-04-26 14:08:18,550 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:18,551 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:18,551 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 6
+2022-04-26 14:08:18,551 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:18,551 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 6
+2022-04-26 14:08:18,551 INFO    SenderThread:2545430 [dir_watcher.py:finish():279] shutting down directory watcher
+2022-04-26 14:08:18,652 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,026 INFO    Thread-7  :2545430 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/output.log
+2022-04-26 14:08:19,027 INFO    SenderThread:2545430 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/config.yaml
+2022-04-26 14:08:19,027 INFO    SenderThread:2545430 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/wandb-summary.json
+2022-04-26 14:08:19,027 INFO    SenderThread:2545430 [dir_watcher.py:finish():309] scan: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files
+2022-04-26 14:08:19,028 INFO    SenderThread:2545430 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/config.yaml config.yaml
+2022-04-26 14:08:19,028 INFO    SenderThread:2545430 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/wandb-metadata.json wandb-metadata.json
+2022-04-26 14:08:19,028 INFO    SenderThread:2545430 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/conda-environment.yaml conda-environment.yaml
+2022-04-26 14:08:19,028 INFO    SenderThread:2545430 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/wandb-summary.json wandb-summary.json
+2022-04-26 14:08:19,029 INFO    SenderThread:2545430 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/output.log output.log
+2022-04-26 14:08:19,035 INFO    SenderThread:2545430 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/requirements.txt requirements.txt
+2022-04-26 14:08:19,042 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 7
+2022-04-26 14:08:19,048 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,055 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:19,055 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 7
+2022-04-26 14:08:19,057 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:19,057 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 7
+2022-04-26 14:08:19,063 INFO    SenderThread:2545430 [file_pusher.py:finish():145] shutting down file pusher
+2022-04-26 14:08:19,159 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,159 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,261 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,262 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,364 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,364 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,468 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,468 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,572 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,572 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,674 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,675 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,724 INFO    Thread-15 :2545430 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/output.log
+2022-04-26 14:08:19,755 INFO    Thread-12 :2545430 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/config.yaml
+2022-04-26 14:08:19,758 INFO    Thread-14 :2545430 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/wandb-summary.json
+2022-04-26 14:08:19,760 INFO    Thread-13 :2545430 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/conda-environment.yaml
+2022-04-26 14:08:19,777 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,777 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,782 INFO    Thread-16 :2545430 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/files/requirements.txt
+2022-04-26 14:08:19,879 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,880 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,982 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:19,982 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:19,983 INFO    Thread-6  :2545430 [sender.py:transition_state():389] send defer: 8
+2022-04-26 14:08:19,984 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:19,984 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 8
+2022-04-26 14:08:19,984 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:19,985 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 8
+2022-04-26 14:08:20,085 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:20,445 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 9
+2022-04-26 14:08:20,445 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:20,446 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:20,446 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 9
+2022-04-26 14:08:20,447 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:20,447 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 9
+2022-04-26 14:08:20,447 INFO    SenderThread:2545430 [sender.py:transition_state():389] send defer: 10
+2022-04-26 14:08:20,448 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 14:08:20,448 DEBUG   SenderThread:2545430 [sender.py:send():232] send: final
+2022-04-26 14:08:20,448 INFO    HandlerThread:2545430 [handler.py:handle_request_defer():164] handle defer: 10
+2022-04-26 14:08:20,448 DEBUG   SenderThread:2545430 [sender.py:send():232] send: footer
+2022-04-26 14:08:20,449 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: defer
+2022-04-26 14:08:20,449 INFO    SenderThread:2545430 [sender.py:send_request_defer():385] handle sender defer: 10
+2022-04-26 14:08:20,548 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 14:08:20,548 DEBUG   SenderThread:2545430 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 14:08:20,549 INFO    SenderThread:2545430 [file_pusher.py:join():150] waiting for file pusher
+2022-04-26 14:08:21,548 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: sampled_history
+2022-04-26 14:08:21,549 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: get_summary
+2022-04-26 14:08:21,551 DEBUG   HandlerThread:2545430 [handler.py:handle_request():141] handle_request: shutdown
+2022-04-26 14:08:21,551 INFO    HandlerThread:2545430 [handler.py:finish():806] shutting down handler
+2022-04-26 14:08:22,446 INFO    SenderThread:2545430 [sender.py:finish():1106] shutting down sender
+2022-04-26 14:08:22,446 INFO    SenderThread:2545430 [file_pusher.py:finish():145] shutting down file pusher
+2022-04-26 14:08:22,446 INFO    SenderThread:2545430 [file_pusher.py:join():150] waiting for file pusher
+2022-04-26 14:08:22,449 INFO    WriterThread:2545430 [datastore.py:close():279] close: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_140750-ab900alp/run-ab900alp.wandb
+2022-04-26 14:08:22,450 INFO    MainThread:2545430 [internal.py:handle_exit():80] Internal process exited

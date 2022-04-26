@@ -1,0 +1,624 @@
+2022-04-26 12:35:59,736 INFO    MainThread:2504480 [internal.py:wandb_internal():93] W&B internal server running at pid: 2504480, started at: 2022-04-26 12:35:59.735789
+2022-04-26 12:35:59,738 INFO    WriterThread:2504480 [datastore.py:open_for_write():75] open: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/run-r44ohsgy.wandb
+2022-04-26 12:35:59,741 DEBUG   SenderThread:2504480 [sender.py:send():232] send: header
+2022-04-26 12:35:59,741 DEBUG   SenderThread:2504480 [sender.py:send():232] send: run
+2022-04-26 12:36:00,029 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: check_version
+2022-04-26 12:36:00,039 INFO    SenderThread:2504480 [dir_watcher.py:__init__():166] watching files in: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files
+2022-04-26 12:36:00,039 INFO    SenderThread:2504480 [sender.py:_start_run_threads():814] run started: r44ohsgy with start time 1650947759
+2022-04-26 12:36:00,039 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:36:00,040 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:36:00,040 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: check_version
+2022-04-26 12:36:00,091 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: run_start
+2022-04-26 12:36:00,101 DEBUG   HandlerThread:2504480 [meta.py:__init__():35] meta init
+2022-04-26 12:36:00,101 DEBUG   HandlerThread:2504480 [meta.py:__init__():49] meta init done
+2022-04-26 12:36:00,102 DEBUG   HandlerThread:2504480 [meta.py:probe():209] probe
+2022-04-26 12:36:00,109 DEBUG   HandlerThread:2504480 [meta.py:_setup_git():199] setup git
+2022-04-26 12:36:00,133 DEBUG   HandlerThread:2504480 [meta.py:_setup_git():206] setup git done
+2022-04-26 12:36:00,133 DEBUG   HandlerThread:2504480 [meta.py:_save_pip():53] save pip
+2022-04-26 12:36:00,134 DEBUG   HandlerThread:2504480 [meta.py:_save_pip():67] save pip done
+2022-04-26 12:36:00,134 DEBUG   HandlerThread:2504480 [meta.py:_save_conda():74] save conda
+2022-04-26 12:36:01,043 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/requirements.txt
+2022-04-26 12:36:01,043 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/conda-environment.yaml
+2022-04-26 12:36:01,044 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:36:01,499 DEBUG   HandlerThread:2504480 [meta.py:_save_conda():84] save conda done
+2022-04-26 12:36:01,499 DEBUG   HandlerThread:2504480 [meta.py:probe():247] probe done
+2022-04-26 12:36:01,507 DEBUG   SenderThread:2504480 [sender.py:send():232] send: files
+2022-04-26 12:36:01,507 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-metadata.json with policy now
+2022-04-26 12:36:01,521 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:36:01,521 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:36:01,769 DEBUG   SenderThread:2504480 [sender.py:send():232] send: telemetry
+2022-04-26 12:36:02,043 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/conda-environment.yaml
+2022-04-26 12:36:02,043 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:02,044 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_created():213] file/dir created: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-metadata.json
+2022-04-26 12:36:02,150 INFO    Thread-11 :2504480 [upload_job.py:push():137] Uploaded file /tmp/tmpzczu2daewandb/1u8kcu6p-wandb-metadata.json
+2022-04-26 12:36:10,047 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:12,048 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:14,049 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:16,050 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:16,774 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:36:16,774 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:36:18,051 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:20,052 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:21,433 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:36:21,436 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:36:21,436 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:36:21,437 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:36:22,053 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:22,054 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:36:24,054 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:25,716 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:36:25,718 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:36:25,718 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:36:25,719 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:36:26,055 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:26,056 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:36:28,058 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:29,392 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:36:30,058 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:31,058 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/config.yaml
+2022-04-26 12:36:32,016 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:36:32,016 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:36:32,059 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:34,060 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:36,061 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:38,062 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:40,063 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:40,541 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:36:40,543 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:36:40,543 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:36:40,544 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:36:41,064 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:36:42,064 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:43,065 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:43,909 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:36:43,910 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:36:43,911 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:36:43,911 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:36:44,065 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:36:45,066 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:47,067 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:47,263 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:36:47,264 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:36:49,068 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:51,070 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:53,071 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:55,072 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:57,074 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:36:57,649 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:36:57,651 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:36:57,651 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:36:57,652 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:36:58,074 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:36:59,075 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:00,692 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:37:01,076 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:01,202 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:37:01,203 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:37:01,204 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:37:01,205 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:37:02,077 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:37:02,573 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:37:02,574 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:37:03,077 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:05,078 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:07,079 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:09,080 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:11,082 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:13,083 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:14,766 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:37:14,768 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:37:14,768 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:37:14,769 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:37:15,084 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:15,084 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:37:17,085 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:17,919 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:37:17,919 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:37:19,066 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:37:19,067 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:37:19,068 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:37:19,068 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:37:19,086 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:19,086 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:37:21,087 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:23,088 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:25,089 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:27,091 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:29,092 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:31,093 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:31,927 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:37:33,094 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:33,179 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:37:33,180 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:37:33,639 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:37:33,641 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:37:33,641 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:37:33,642 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:37:34,094 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:37:35,095 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:37,916 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:37:37,917 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:37:37,917 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:37:37,918 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:37:38,097 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:37:39,097 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:43,099 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:45,101 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:47,102 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:48,432 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:37:48,432 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:37:49,103 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:51,105 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:51,746 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:37:51,747 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:37:51,747 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:37:51,748 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:37:52,105 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:37:53,106 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:37:55,969 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:37:55,971 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:37:55,971 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:37:55,971 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:37:56,107 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:37:57,108 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:01,110 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:03,112 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:03,169 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:38:03,677 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:38:03,677 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:38:05,113 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:07,114 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:09,115 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:10,720 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:38:10,721 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:38:10,721 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:38:10,722 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:38:11,116 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:11,117 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:38:13,117 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:14,127 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:38:14,129 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:38:14,129 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:38:14,130 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:38:15,118 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:15,119 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:38:17,120 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:18,942 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:38:18,943 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:38:19,121 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:21,122 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:23,123 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:25,124 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:27,125 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:27,901 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:38:27,902 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:38:27,903 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:38:27,903 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:38:28,126 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:38:30,127 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:32,133 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:38:32,134 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:38:32,135 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:38:32,137 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:38:33,129 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:38:34,129 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:34,263 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:38:34,263 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:38:34,504 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:38:38,132 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:40,133 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:42,134 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:44,135 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:46,136 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:46,864 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:38:46,865 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:38:46,865 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:38:46,866 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:38:47,137 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:38:48,138 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:49,618 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:38:49,618 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:38:50,139 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:50,209 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:38:50,210 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:38:50,210 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:38:50,211 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:38:51,139 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:38:52,140 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:54,141 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:56,142 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:38:58,144 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:00,146 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:02,147 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:04,000 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:39:04,002 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:39:04,003 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:39:04,003 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:39:04,148 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:04,148 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:39:04,945 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:39:04,945 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:39:05,773 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:39:06,149 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:07,231 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:39:07,232 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:39:07,232 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:39:07,233 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:39:08,150 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:08,151 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:39:10,151 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:12,153 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:14,154 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:16,155 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:18,156 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:20,157 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:20,289 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:39:20,289 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:39:20,993 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:39:20,994 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:39:20,994 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:39:20,995 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:39:21,158 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:39:22,159 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:25,250 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:39:25,252 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:39:25,252 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:39:25,255 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:39:26,161 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:26,161 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:39:30,163 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:32,164 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:34,165 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:35,531 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:39:35,531 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:39:36,166 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:37,088 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:39:38,167 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:39,922 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:39:39,924 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:39:39,924 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:39:39,925 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:39:40,168 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:40,169 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:39:42,169 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:43,170 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:44,079 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:39:44,080 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:39:44,080 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:39:44,081 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:39:44,171 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:44,171 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:39:46,172 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:47,172 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:48,173 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:50,174 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:50,778 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:39:50,778 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:39:52,175 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:55,176 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:57,178 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:58,740 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:39:58,741 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:39:58,741 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:39:58,742 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:39:59,179 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:39:59,179 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:40:01,180 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:03,029 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:40:03,030 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:40:03,031 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:40:03,032 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:40:03,181 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:40:05,182 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:06,026 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:40:06,027 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:40:08,458 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:40:09,184 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:11,186 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:13,187 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:15,188 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:17,189 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:18,089 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:40:18,091 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:40:18,091 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:40:18,092 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:40:18,189 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:40:19,190 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:21,191 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:21,290 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:40:21,291 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:40:22,288 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:40:22,289 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:40:22,290 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:40:22,291 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:40:23,192 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:23,192 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:40:25,193 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:27,194 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:29,195 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:31,196 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:33,197 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:35,198 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:36,528 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:40:36,529 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:40:37,153 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:40:37,154 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:40:37,155 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:40:37,155 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:40:37,199 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:37,200 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:40:39,200 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:39,654 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:40:40,201 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:41,202 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:41,366 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:40:41,367 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:40:41,367 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:40:41,368 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:40:42,202 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:40:43,203 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:44,203 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:45,204 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:47,205 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:49,206 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:51,207 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:51,773 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:40:51,773 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:40:53,208 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:55,209 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:56,128 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:40:56,129 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:40:56,130 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:40:56,131 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:40:56,210 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:40:57,210 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:40:58,211 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:00,297 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:41:00,297 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:41:00,298 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:41:00,298 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:41:01,212 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:41:02,213 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:06,214 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:07,019 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:41:07,019 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:41:08,216 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:10,217 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:10,874 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:41:12,218 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:14,219 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:15,037 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:41:15,039 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:41:15,039 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:41:15,039 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:41:15,220 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:41:16,220 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:18,221 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:19,213 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:41:19,214 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:41:19,214 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:41:19,218 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:41:19,221 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:41:20,222 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:22,223 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:22,266 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:41:22,267 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:41:24,224 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:26,225 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:28,226 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:30,227 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:32,229 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:32,989 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:41:32,989 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:41:32,990 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:41:32,991 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:41:33,229 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:41:34,230 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:37,234 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:41:37,235 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:41:37,235 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:41:37,236 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:41:37,603 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:41:37,603 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:41:38,232 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:38,232 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:41:42,094 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:41:42,233 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:44,234 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:46,235 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:48,236 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:50,236 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:51,906 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:41:51,907 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:41:51,907 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:41:51,908 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:41:52,237 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:52,238 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:41:52,961 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:41:52,961 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:41:54,238 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:56,192 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:41:56,193 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:41:56,194 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:41:56,194 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:41:56,239 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:41:57,240 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:41:59,241 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:01,242 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:03,243 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:05,244 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:07,245 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:08,308 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:42:08,309 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:42:09,246 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:11,070 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:42:11,071 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:42:11,071 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:42:11,072 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:42:11,247 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:11,247 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:42:13,248 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:13,280 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:42:15,249 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:15,298 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: partial_history
+2022-04-26 12:42:15,299 DEBUG   SenderThread:2504480 [sender.py:send():232] send: history
+2022-04-26 12:42:15,299 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:42:15,300 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:42:16,250 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:42:17,250 INFO    Thread-7  :2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:42:23,566 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:42:23,566 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:42:38,811 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:42:38,811 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:42:44,442 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:42:54,065 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:42:54,065 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:43:09,302 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:43:09,302 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:43:15,630 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:43:24,550 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:43:24,551 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:43:39,794 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:43:39,794 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:43:46,813 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:43:55,043 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:43:55,044 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:44:10,285 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:44:10,285 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:44:17,998 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:44:25,566 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:44:25,567 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:44:40,810 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:44:40,810 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:44:49,197 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:44:56,221 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:44:56,222 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:45:11,475 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: stop_status
+2022-04-26 12:45:11,475 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: stop_status
+2022-04-26 12:45:18,240 DEBUG   SenderThread:2504480 [sender.py:send():232] send: telemetry
+2022-04-26 12:45:18,241 DEBUG   SenderThread:2504480 [sender.py:send():232] send: telemetry
+2022-04-26 12:45:18,635 DEBUG   SenderThread:2504480 [sender.py:send():232] send: exit
+2022-04-26 12:45:18,635 INFO    SenderThread:2504480 [sender.py:send_exit():368] handling exit code: 0
+2022-04-26 12:45:18,636 INFO    SenderThread:2504480 [sender.py:send_exit():370] handling runtime: 558
+2022-04-26 12:45:18,637 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:45:18,637 INFO    SenderThread:2504480 [sender.py:send_exit():376] send defer
+2022-04-26 12:45:18,639 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:18,640 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 0
+2022-04-26 12:45:18,640 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:18,640 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 0
+2022-04-26 12:45:18,640 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 1
+2022-04-26 12:45:18,641 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:18,641 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 1
+2022-04-26 12:45:18,736 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:18,736 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:18,737 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 1
+2022-04-26 12:45:18,737 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 2
+2022-04-26 12:45:18,737 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:18,738 DEBUG   SenderThread:2504480 [sender.py:send():232] send: stats
+2022-04-26 12:45:18,739 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:18,739 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 2
+2022-04-26 12:45:18,740 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:18,740 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 2
+2022-04-26 12:45:18,740 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 3
+2022-04-26 12:45:18,740 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:18,740 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 3
+2022-04-26 12:45:18,741 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:18,741 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 3
+2022-04-26 12:45:18,741 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 4
+2022-04-26 12:45:18,741 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:18,742 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 4
+2022-04-26 12:45:18,742 DEBUG   SenderThread:2504480 [sender.py:send():232] send: summary
+2022-04-26 12:45:18,743 INFO    SenderThread:2504480 [sender.py:_save_file():946] saving file wandb-summary.json with policy end
+2022-04-26 12:45:18,743 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:18,743 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 4
+2022-04-26 12:45:18,743 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 5
+2022-04-26 12:45:18,744 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:18,744 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 5
+2022-04-26 12:45:18,744 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:18,745 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 5
+2022-04-26 12:45:18,867 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:19,027 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 6
+2022-04-26 12:45:19,028 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:19,029 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:19,029 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 6
+2022-04-26 12:45:19,029 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:19,030 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 6
+2022-04-26 12:45:19,030 INFO    SenderThread:2504480 [dir_watcher.py:finish():279] shutting down directory watcher
+2022-04-26 12:45:19,131 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:19,290 INFO    SenderThread:2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/config.yaml
+2022-04-26 12:45:19,291 INFO    SenderThread:2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:45:19,291 INFO    SenderThread:2504480 [dir_watcher.py:_on_file_modified():226] file/dir modified: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:45:19,292 INFO    SenderThread:2504480 [dir_watcher.py:finish():309] scan: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files
+2022-04-26 12:45:19,292 INFO    SenderThread:2504480 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/config.yaml config.yaml
+2022-04-26 12:45:19,292 INFO    SenderThread:2504480 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-metadata.json wandb-metadata.json
+2022-04-26 12:45:19,292 INFO    SenderThread:2504480 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/conda-environment.yaml conda-environment.yaml
+2022-04-26 12:45:19,293 INFO    SenderThread:2504480 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json wandb-summary.json
+2022-04-26 12:45:19,306 INFO    SenderThread:2504480 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log output.log
+2022-04-26 12:45:19,306 INFO    SenderThread:2504480 [dir_watcher.py:finish():323] scan save: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/requirements.txt requirements.txt
+2022-04-26 12:45:19,307 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 7
+2022-04-26 12:45:19,313 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:19,319 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:19,323 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 7
+2022-04-26 12:45:19,331 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:19,331 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 7
+2022-04-26 12:45:19,331 INFO    SenderThread:2504480 [file_pusher.py:finish():145] shutting down file pusher
+2022-04-26 12:45:19,432 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:19,433 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:19,545 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:19,546 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:19,652 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:19,652 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:19,765 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:19,765 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:19,871 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:19,871 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:19,976 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:19,977 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:20,005 INFO    Thread-15 :2504480 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/output.log
+2022-04-26 12:45:20,007 INFO    Thread-16 :2504480 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/requirements.txt
+2022-04-26 12:45:20,083 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:20,083 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:20,107 INFO    Thread-14 :2504480 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/wandb-summary.json
+2022-04-26 12:45:20,165 INFO    Thread-13 :2504480 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/conda-environment.yaml
+2022-04-26 12:45:20,193 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:20,193 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:20,299 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:20,299 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:20,405 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:20,405 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:20,458 INFO    Thread-12 :2504480 [upload_job.py:push():137] Uploaded file /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/files/config.yaml
+2022-04-26 12:45:20,510 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:20,510 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:20,616 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:20,616 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:20,659 INFO    Thread-6  :2504480 [sender.py:transition_state():389] send defer: 8
+2022-04-26 12:45:20,660 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:20,660 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 8
+2022-04-26 12:45:20,661 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:20,661 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 8
+2022-04-26 12:45:20,719 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:20,902 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 9
+2022-04-26 12:45:20,902 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:20,903 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:20,903 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 9
+2022-04-26 12:45:20,904 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:20,904 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 9
+2022-04-26 12:45:20,904 INFO    SenderThread:2504480 [sender.py:transition_state():389] send defer: 10
+2022-04-26 12:45:20,905 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: defer
+2022-04-26 12:45:20,905 DEBUG   SenderThread:2504480 [sender.py:send():232] send: final
+2022-04-26 12:45:20,905 INFO    HandlerThread:2504480 [handler.py:handle_request_defer():164] handle defer: 10
+2022-04-26 12:45:20,906 DEBUG   SenderThread:2504480 [sender.py:send():232] send: footer
+2022-04-26 12:45:20,906 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: defer
+2022-04-26 12:45:20,906 INFO    SenderThread:2504480 [sender.py:send_request_defer():385] handle sender defer: 10
+2022-04-26 12:45:21,008 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: poll_exit
+2022-04-26 12:45:21,009 DEBUG   SenderThread:2504480 [sender.py:send_request():246] send_request: poll_exit
+2022-04-26 12:45:21,009 INFO    SenderThread:2504480 [file_pusher.py:join():150] waiting for file pusher
+2022-04-26 12:45:21,616 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: sampled_history
+2022-04-26 12:45:21,619 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: get_summary
+2022-04-26 12:45:21,621 DEBUG   HandlerThread:2504480 [handler.py:handle_request():141] handle_request: shutdown
+2022-04-26 12:45:21,621 INFO    HandlerThread:2504480 [handler.py:finish():806] shutting down handler
+2022-04-26 12:45:21,906 INFO    WriterThread:2504480 [datastore.py:close():279] close: /home/rishabh/practice_runs/cs4243-project/wandb/run-20220426_123554-r44ohsgy/run-r44ohsgy.wandb
+2022-04-26 12:45:22,508 INFO    SenderThread:2504480 [sender.py:finish():1106] shutting down sender
+2022-04-26 12:45:22,508 INFO    SenderThread:2504480 [file_pusher.py:finish():145] shutting down file pusher
+2022-04-26 12:45:22,508 INFO    SenderThread:2504480 [file_pusher.py:join():150] waiting for file pusher
+2022-04-26 12:45:22,512 INFO    MainThread:2504480 [internal.py:handle_exit():80] Internal process exited

@@ -1,0 +1,17 @@
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]/home/rishabh/practice_runs/cs4243-project/losses.py:28: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  return F.kl_div(F.softmax(pred_sim_matrix / temperature).log(), F.softmax(target_matrix / temperature),
+
+
+
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+train epoch 0, acc 1=0.122, acc 2=0.135, l1m1=3.046,l1m2=3.349, l2m1=3.356, l2m2=3.543, l3=4.914

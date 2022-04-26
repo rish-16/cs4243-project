@@ -1,0 +1,489 @@
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]/home/rishabh/practice_runs/cs4243-project/losses.py:28: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  return F.kl_div(F.softmax(pred_sim_matrix / temperature).log(), F.softmax(target_matrix / temperature),
+
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+100%|█████████████████████████████████████████████████████████████████████████| 18/18 [00:03<00:00, 12.14it/s, acc 1=0.134006, acc 2=0.172309, val epoch=000]
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+train epoch 2, acc 1=0.160, acc 2=0.233, l1m1=2.137,l1m2=1.961, l2m1=2.943, l2m2=2.937, l3=4.517
+validation epoch 2, acc 1 (doodle) = 0.177, acc 2 (real) = 0.232
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+ 99%|██████████▉| 89/90 [00:14<00:00,  7.79it/s, acc 1=0.222152, acc 2=0.317350, l1m1=1.977512, l2m1=2.861112, l1m2=1.666641, l2m2=2.699746, train epoch=004]
+
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+ 96%|██████████▌| 86/90 [00:14<00:00,  7.77it/s, acc 1=0.279501, acc 2=0.400868, l1m1=1.832985, l2m1=2.800562, l1m2=1.522727, l2m2=2.621931, train epoch=006]
+
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+train epoch 9, acc 1=0.394, acc 2=0.507, l1m1=1.577,l1m2=1.309, l2m1=2.674, l2m2=2.508, l3=4.157
+
+
+
+
+
+
+
+ 96%|██████████▌| 86/90 [00:14<00:00,  7.86it/s, acc 1=0.421784, acc 2=0.529569, l1m1=1.502239, l2m1=2.632875, l1m2=1.262662, l2m2=2.493193, train epoch=010]
+
+
+ 22%|████████████████▍                                                         | 4/18 [00:03<00:08,  1.59it/s, acc 1=0.436523, acc 2=0.463379, val epoch=010]
+
+
+
+
+
+
+ 87%|█████████▌ | 78/90 [00:13<00:01,  7.82it/s, acc 1=0.448443, acc 2=0.547100, l1m1=1.431038, l2m1=2.595261, l1m2=1.220219, l2m2=2.471153, train epoch=011]
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+ 89%|████████████████████████████████████████████████████████████████▉        | 16/18 [00:03<00:00, 11.29it/s, acc 1=0.463108, acc 2=0.497179, val epoch=013]
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+ 93%|██████████▎| 84/90 [00:15<00:00,  7.01it/s, acc 1=0.549642, acc 2=0.630976, l1m1=1.125291, l2m1=2.396392, l1m2=1.018957, l2m2=2.373153, train epoch=017]
+
+
+  6%|████                                                                      | 1/18 [00:04<01:19,  4.66s/it, acc 1=0.471680, acc 2=0.536133, val epoch=017]
+
+
+
+
+
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+ 50%|█████████████████████████████████████                                     | 9/18 [00:06<00:02,  3.07it/s, acc 1=0.463976, acc 2=0.521918, val epoch=018]
+
+
+
+
+
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+100%|█████████████████████████████████████████████████████████████████████████| 18/18 [00:06<00:00,  9.60it/s, acc 1=0.460938, acc 2=0.524631, val epoch=019]
+validation epoch 19, acc 1 (doodle) = 0.461, acc 2 (real) = 0.525
+
+training finished
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+100%|███████████| 90/90 [00:28<00:00,  4.10it/s, acc 1=0.021736, acc 2=0.025890, l1m1=0.546016, l2m1=0.590021, l1m2=0.531001, l2m2=0.601840, train epoch=000]
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+ 89%|████████████████████████████████████████████████████████████████▉        | 16/18 [00:05<00:00,  9.54it/s, acc 1=0.004452, acc 2=0.007931, val epoch=001]
+
+
+
+
+
+
+ 53%|█████▊     | 48/90 [00:11<00:06,  6.79it/s, acc 1=0.011665, acc 2=0.023663, l1m1=0.205845, l2m1=0.290405, l1m2=0.182962, l2m2=0.269889, train epoch=002]
+
+
+
+
+
+
+
+ 94%|████████▌| 85/90 [00:16<00:00,  7.88it/s, acc 1=10.275391, acc 2=12.939453, l1m1=0.559943, l2m1=0.570778, l1m2=0.605897, l2m2=0.568835, train epoch=000]
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+
+100%|█████████| 90/90 [00:16<00:00,  5.58it/s, acc 1=12.408203, acc 2=17.517578, l1m1=0.387109, l2m1=0.545554, l1m2=0.363290, l2m2=0.547151, train epoch=001]
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]Exception ignored in: <function _releaseLock at 0x7f6f79a5db00>
+Traceback (most recent call last):
+  File "/home/rishabh/miniconda3/envs/Rish4243/lib/python3.7/logging/__init__.py", line 221, in _releaseLock
+    def _releaseLock():
+KeyboardInterrupt
+train epoch 2, acc 1=14.240, acc 2=21.053, l1m1=2.152,l1m2=0.346, l2m1=0.524, l2m2=0.528, l3=0.805
+ 56%|████████████████████████████████████████▌                                | 10/18 [00:04<00:01,  4.07it/s, acc 1=2.068359, acc 2=2.533203, val epoch=002]Exception in thread NetStatThr:
+Traceback (most recent call last):
+  File "/home/rishabh/miniconda3/envs/Rish4243/lib/python3.7/threading.py", line 926, in _bootstrap_inner
+    self.run()
+  File "/home/rishabh/miniconda3/envs/Rish4243/lib/python3.7/threading.py", line 870, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 152, in check_network_status
+    status_response = self._interface.communicate_network_status()
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 125, in communicate_network_status
+    resp = self._communicate_network_status(status)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 405, in _communicate_network_status
+    resp = self._communicate(req, local=True)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 226, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 231, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+ 56%|████████████████████████████████████████▌                                | 10/18 [00:04<00:01,  4.07it/s, acc 1=2.490234, acc 2=3.066406, val epoch=002]
+
+
+  7%|▊           | 6/90 [00:04<00:29,  2.85it/s, acc 1=1.115234, acc 2=1.632812, l1m1=0.024380, l2m1=0.034301, l1m2=0.021937, l2m2=0.034109, train epoch=003]Exception in thread ChkStopThr:
+Traceback (most recent call last):
+  File "/home/rishabh/miniconda3/envs/Rish4243/lib/python3.7/threading.py", line 926, in _bootstrap_inner
+    self.run()
+  File "/home/rishabh/miniconda3/envs/Rish4243/lib/python3.7/threading.py", line 870, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 170, in check_status
+    status_response = self._interface.communicate_stop_status()
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface.py", line 114, in communicate_stop_status
+    resp = self._communicate_stop_status(status)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 395, in _communicate_stop_status
+    resp = self._communicate(req, local=True)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 226, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 231, in _communicate_async
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+
+
+
+
+
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+100%|█████████| 90/90 [00:15<00:00,  7.53it/s, acc 1=21.148438, acc 2=29.384766, l1m1=0.343904, l2m1=0.506214, l1m2=0.300637, l2m2=0.487945, train epoch=004]
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+
+
+ 99%|████████▉| 89/90 [00:18<00:00,  7.63it/s, acc 1=24.330078, acc 2=32.462891, l1m1=0.324642, l2m1=0.492967, l1m2=0.281330, l2m2=0.471156, train epoch=005]
+
+
+ 72%|████████████████████████████████████████████████████▋                    | 13/18 [00:05<00:00,  6.58it/s, acc 1=4.357422, acc 2=4.554688, val epoch=005]
+
+
+
+
+
+
+
+
+ 90%|████████ | 81/90 [00:16<00:01,  7.34it/s, acc 1=25.054688, acc 2=32.263672, l1m1=0.285001, l2m1=0.444087, l1m2=0.244252, l2m2=0.423139, train epoch=006]
+train epoch 6, acc 1=28.197, acc 2=36.105, l1m1=1.795,l1m2=0.271, l2m1=0.493, l2m2=0.470, l3=0.758
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+ 93%|████████▍| 84/90 [00:16<00:00,  7.45it/s, acc 1=30.433594, acc 2=35.996094, l1m1=0.276091, l2m1=0.452333, l1m2=0.242530, l2m2=0.432016, train epoch=007]
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+ 93%|████████▍| 84/90 [00:14<00:00,  7.89it/s, acc 1=33.361328, acc 2=37.962891, l1m1=0.260196, l2m1=0.442617, l1m2=0.235705, l2m2=0.428434, train epoch=008]
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+100%|█████████| 90/90 [00:14<00:00,  7.65it/s, acc 1=39.220703, acc 2=42.728516, l1m1=0.261841, l2m1=0.465663, l1m2=0.244303, l2m2=0.454637, train epoch=009]
+
+
+  0%|                                                                                                                                 | 0/90 [00:00<?, ?it/s]
+
+
+
+
+
+
+ 98%|████████▊| 88/90 [00:14<00:00,  7.69it/s, acc 1=40.771484, acc 2=43.904297, l1m1=0.241084, l2m1=0.444612, l1m2=0.231263, l2m2=0.440468, train epoch=010]
+
+  0%|                                                                                                                                 | 0/18 [00:00<?, ?it/s]
+
+
+
+
+
+
+ 67%|██████   | 60/90 [00:12<00:03,  7.75it/s, acc 1=28.730469, acc 2=31.037109, l1m1=0.156753, l2m1=0.299158, l1m2=0.152583, l2m2=0.297267, train epoch=011]
+Problem at: /tmp/ipykernel_2409265/2963207141.py 16 <module>
+Traceback (most recent call last):
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_init.py", line 995, in init
+    run = wi.init()
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_init.py", line 503, in init
+    self._wl._global_run_stack[-1].finish()
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 256, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 222, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 1678, in finish
+    return self._finish(exit_code, quiet)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 1684, in _finish
+    tel.feature.finish = True
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/lib/telemetry.py", line 41, in __exit__
+    self._run._telemetry_callback(self._obj)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 572, in _telemetry_callback
+    self._telemetry_flush()
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 583, in _telemetry_flush
+    self._backend.interface._publish_telemetry(self._telemetry_obj)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 74, in _publish_telemetry
+    self._publish(rec)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_queue.py", line 49, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+[34m[1mwandb[39m[22m: [32m[41mERROR[39m[49m Abnormal program exit
+Traceback (most recent call last):
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_init.py", line 992, in init
+    wi.setup(kwargs)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_init.py", line 175, in setup
+    tel.feature.set_init_tags = True
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/lib/telemetry.py", line 41, in __exit__
+    self._run._telemetry_callback(self._obj)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 572, in _telemetry_callback
+    self._telemetry_flush()
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 583, in _telemetry_flush
+    self._backend.interface._publish_telemetry(self._telemetry_obj)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 74, in _publish_telemetry
+    self._publish(rec)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_queue.py", line 49, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+[34m[1mwandb[39m[22m: [32m[41mERROR[39m[49m Abnormal program exit
+Traceback (most recent call last):
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_init.py", line 992, in init
+    wi.setup(kwargs)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_init.py", line 175, in setup
+    tel.feature.set_init_tags = True
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/lib/telemetry.py", line 41, in __exit__
+    self._run._telemetry_callback(self._obj)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 572, in _telemetry_callback
+    self._telemetry_flush()
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/wandb_run.py", line 583, in _telemetry_flush
+    self._backend.interface._publish_telemetry(self._telemetry_obj)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_shared.py", line 74, in _publish_telemetry
+    self._publish(rec)
+  File "/home/rishabh/.local/lib/python3.7/site-packages/wandb/sdk/interface/interface_queue.py", line 49, in _publish
+    raise Exception("The wandb backend process has shutdown")
+Exception: The wandb backend process has shutdown
+[34m[1mwandb[39m[22m: [32m[41mERROR[39m[49m Abnormal program exit

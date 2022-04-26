@@ -1,0 +1,7 @@
+/home/rishabh/practice_runs/cs4243-project/losses.py:28: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  return F.kl_div(F.softmax(pred_sim_matrix / temperature).log(), F.softmax(target_matrix / temperature),
+<class '__main__.ImageDataset'>
+Train = True. Doodle list: ['sketchy_doodle', 'tuberlin', 'google_doodles'],
+ real list: ['sketchy_real', 'google_real', 'cifar'].
+ classes: dict_keys(['airplane', 'car', 'cat', 'dog', 'frog', 'horse', 'truck', 'bird', 'ship'])
+Doodle data size 7022, real data size 46364, ratio 0.15145371408851696

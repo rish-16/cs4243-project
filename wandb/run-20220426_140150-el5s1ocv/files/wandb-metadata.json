@@ -1,0 +1,26 @@
+{
+    "os": "Linux-5.13.0-39-generic-x86_64-with-debian-bullseye-sid",
+    "python": "3.7.13",
+    "heartbeatAt": "2022-04-26T06:01:51.406926",
+    "startedAt": "2022-04-26T06:01:50.343917",
+    "docker": null,
+    "gpu": "GeForce RTX 3090",
+    "gpu_count": 4,
+    "cpu_count": 64,
+    "cuda": null,
+    "args": [
+        "-f",
+        "/home/rishabh/.local/share/jupyter/runtime/kernel-88c686c5-ebdf-4606-aa84-63c9e885f968.json"
+    ],
+    "state": "running",
+    "program": "v2.ipynb",
+    "root": "/home/rishabh/practice_runs/cs4243-project",
+    "git": {
+        "remote": "https://github.com/rish-16/cs4243-project.git",
+        "commit": "6318d1b3a9d3dbf1d6f1945d626d5404cc0b0f51"
+    },
+    "email": "mail.rishabh.anand@gmail.com",
+    "host": "nus-ESC4000-G4",
+    "username": "rishabh",
+    "executable": "/home/rishabh/miniconda3/envs/Rish4243/bin/python"
+}
