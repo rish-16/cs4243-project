@@ -93,3 +93,55 @@ class ContrastiveDataset(Dataset):
         return self.X1[idx1], label, self.X2[idx2], label
     def __len__(self):
         return max(len(self.X1), len(self.X2))
+    
+    
+def save_model(checkpoint_dir, checkpoint_name, model):
+    """
+    Create directory /Checkpoint under exp_data_path and save encoder as cp_name
+    """
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    model_path = os.path.join(checkpoint_dir, checkpoint_name)
+    if isinstance(model, torch.nn.DataParallel):
+        model = model.module  # convert to non-parallel form
+    torch.save(model.state_dict(), model_path)
+    print(f'Saved model at: {model_path}')
+    
+def load_model(model, checkpoint_path, verbose=True, strict=True):
+    """
+    Load weights to model and take care of weight parallelism
+    """
+    assert os.path.exists(checkpoint_path)
+    assert f"trained model {checkpoint_path} does not exist"
+    try:
+        model.load_state_dict(torch.load(checkpoint_path), strict=strict)
+    except:
+        state_dict = torch.load(checkpoint_path)
+        state_dict = {k.partition('module.')[2]: state_dict[k] for k in state_dict.keys()}
+        model.load_state_dict(state_dict, strict=strict)
+    if verbose:
+        print(f'Loaded model from: {checkpoint_path}')
+    return model
+
+def compute_accuracy(pred, label):
+    pred, label = pred.cpu(), label.cpu()
+    return (pred.argmax(1) == label).sum().item() / len(label)
+
+
+class AverageMeter(object):
+    """
+    Computes and stores the average and current value
+    """
+    def __init__(self):
+        self.reset()
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
+    def __str__(self):
+        return self.avg
