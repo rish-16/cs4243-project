@@ -105,19 +105,20 @@ class V2ConvNet(nn.Module):
                  pool_option=(1,1), 
                  hidden=256, 
                  dropout=0.2, 
+                 ks=3,
                  add_layers=False):
         super().__init__()
         
-        layer1 = nn.Conv2d(in_c, channel_list[0], kernel_size=3)
-        layer2 = nn.Conv2d(channel_list[0], channel_list[0], kernel_size=3)
+        layer1 = nn.Conv2d(in_c, channel_list[0], kernel_size=ks)
+        layer2 = nn.Conv2d(channel_list[0], channel_list[0], kernel_size=ks)
         layers = [layer1, layer2]
         
         for i in range(1, len(channel_list)):
             layers.append(
-                nn.Conv2d(channel_list[i-1], channel_list[i], kernel_size=3, stride=2, padding=1, bias=True)
+                nn.Conv2d(channel_list[i-1], channel_list[i], kernel_size=ks, stride=2, padding=1, bias=True)
             )
             layers.append(
-                nn.Conv2d(channel_list[i], channel_list[i], kernel_size=3, stride=2, padding=1, bias=True)
+                nn.Conv2d(channel_list[i], channel_list[i], kernel_size=ks, stride=2, padding=1, bias=True)
             )
             layers.append(
                 nn.BatchNorm2d(channel_list[i])
