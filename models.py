@@ -35,10 +35,6 @@ def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
         nn.ReLU(inplace=True)
     )
 
-
-from models import *
-
-
 class ExampleCNN(nn.Module):
     CHANNELS = [64, 128, 192, 256, 512]
     POOL = (1, 1)
