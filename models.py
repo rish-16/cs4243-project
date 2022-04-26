@@ -1,6 +1,67 @@
 import torch.nn as nn
 
 
+class DoodleMLP(nn.Module):
+    def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
+        super(DoodleMLP, self).__init__()
+        self.l1 = nn.Linear(in_dim, hid_dim)
+        self.l2 = nn.Linear(hid_dim, hid_dim)
+        self.l3 = nn.Linear(hid_dim, out_dim)
+        self.relu = nn.LeakyReLU(negative_slope=0.2)
+        self.dropout = nn.Dropout(p=dropout)
+        self.bn1 = nn.BatchNorm1d(hid_dim)
+        self.bn2 = nn.BatchNorm1d(hid_dim)
+
+    def forward(self, x, return_feats=False):
+        x = x.flatten(1)    # flatten a pic into a vector
+        x = self.l1(x)
+        x = self.relu(x)
+        # x = self.bn1(x)
+        x = self.dropout(x)
+        x = self.l2(x)
+        feat = x
+        x = self.relu(x)
+        # x = self.bn2(x)
+        x = self.dropout(x)
+        x = self.l3(x)
+        if return_feats:
+            return x, feat
+        return x
+
+class RealMLP(nn.Module):
+    def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
+        super(RealMLP, self).__init__()
+        self.l1 = nn.Linear(in_dim, hid_dim)
+        self.l2 = nn.Linear(hid_dim, hid_dim)
+        self.l3 = nn.Linear(hid_dim, hid_dim)
+        self.l4 = nn.Linear(hid_dim, out_dim)
+        self.relu = nn.LeakyReLU(negative_slope=0.2)
+        self.dropout = nn.Dropout(p=dropout)
+        self.bn1 = nn.BatchNorm1d(hid_dim)
+        self.bn2 = nn.BatchNorm1d(hid_dim)
+        self.bn3 = nn.BatchNorm1d(hid_dim)
+
+    def forward(self, x, return_feats=False):
+        x = x.flatten(0)    # flatten a pic into a vector
+        x = self.l1(x)
+        x = self.relu(x)
+        x = self.bn1(x)
+        # x = self.dropout(x)
+        x = self.l2(x)
+        x = self.relu(x)
+        x = self.bn2(x)
+        # x = self.dropout(x)
+        x = self.l3(x)
+        feat = x
+        x = self.relu(x)
+        x = self.bn3(x)
+        # x = self.dropout(x)
+        x = self.l4(x)
+        if return_feats:
+            return x, feat
+        return x
+
+
 class ExampleMLP(nn.Module):
     def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
         super(ExampleMLP, self).__init__()
