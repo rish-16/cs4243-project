@@ -7,12 +7,12 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1710" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/models.py" />
+          <option name="caretOffset" value="5841" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/training.py" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="5574" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/training.py" />
+          <option name="caretOffset" value="794" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/models.py" />
         </OpenedFileInfo>
       </list>
     </option>
