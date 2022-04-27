@@ -1,3 +1,6 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader, Sampler
 from torchvision import transforms
 import torch
@@ -181,3 +184,98 @@ class SimilarityDataset(Dataset):
         return self.idxs[idx], self.T1(self.X1[idx]), self.T2(self.X2[idx]), self.Y[idx]
     def __len__(self):
         return len(self.X1)
+
+    
+def linear_input_units(layers, n_channels=3, size=64):
+    x = torch.empty(1, n_channels, size, size)
+    for layer in layers:
+        x = layer(x)
+    return x.size(-1)
+
+def layer2units(n_linear, layer_i):
+    return 2**(n_linear-layer_i-1) * 64
+
+class MLP(nn.Module):
+    def __init__(self,
+                 n_input=64*64,
+                 n_classes=9,
+                 n_linear=2,
+                 dropout=0.1):
+        super(MLP, self).__init__()
+        self.act = nn.LeakyReLU()
+        self.dropout = nn.Dropout(dropout)
+        self.layers = []
+        if n_linear == 1:
+            self.layers.append(nn.Linear(n_input, n_classes, bias=False))
+        else:
+            self.layers.append(nn.Linear(n_input, layer2units(n_linear, 1), bias=False))
+            self.layers.append(self.act)
+            self.layers.append(self.dropout)
+            for i in range(2, n_linear):
+                self.layers.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
+                self.layers.append(self.act)
+                self.layers.append(self.dropout)
+            self.layers.append(nn.Linear(64, n_classes, bias=False))
+        self.layers = nn.Sequential(*self.layers)
+    def forward(self, x):
+        return self.layers(x)
+
+
+class CNN(nn.Module):
+    def __init__(self,
+                 n_channels=3,
+                 n_classes=9,
+                 n_filters=32,
+                 k_size=3,
+                 p_size=2,
+                 n_conv=2,
+                 n_linear=2,
+                 dropout=0.1):
+        super(CNN, self).__init__()
+        self.p = nn.MaxPool2d((p_size, p_size))
+        self.flatten = nn.Flatten()
+        self.act = nn.LeakyReLU()
+        self.dropout = nn.Dropout(dropout)
+        self.layers = [nn.Conv2d(n_channels, n_filters, (k_size, k_size), padding=1), self.p, self.act]
+        for _ in range(n_conv-1):
+            self.layers.append(nn.Conv2d(n_filters, n_filters, (k_size, k_size), padding=1))
+            self.layers.append(self.p)
+            self.layers.append(self.act)
+        self.layers.append(self.flatten)
+        linear_units = linear_input_units(self.layers, n_channels)
+        if n_linear == 1:
+            self.layers.append(nn.Linear(linear_units, n_classes, bias=False))
+        else:
+            self.layers.append(nn.Linear(linear_units, layer2units(n_linear, 1), bias=False))
+            self.layers.append(self.act)
+            self.layers.append(self.dropout)
+            for i in range(2, n_linear):
+                self.layers.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
+                self.layers.append(self.act)
+                self.layers.append(self.dropout)
+            self.layers.append(nn.Linear(64, n_classes, bias=False))
+        self.layers = nn.Sequential(*self.layers)
+    def forward(self, x):
+        return self.layers(x)
+    
+class AverageMeter(object):
+    """
+    Computes and stores the average and current value
+    """
+    def __init__(self):
+        self.reset()
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
+    def __str__(self):
+        return self.avg
+    
+def running_mean(val):
+    
