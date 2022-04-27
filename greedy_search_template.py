@@ -2,6 +2,13 @@ import torch, copy, random
 import torch.nn as nn
 import torch.nn.functional as F
 from pprint import pprint
+from dataset import *
+import cv2
+
+from torch.utils.data import Dataset, DataLoader, Sampler
+from training_config import doodles, reals, doodle_size, real_size, NUM_CLASSES
+from utils import *  # bad practice, nvm
+from losses import compute_contrastive_loss_from_feats
 
 class V2ConvNet(nn.Module):
     def __init__(self, in_c, num_classes, config):
@@ -119,9 +126,18 @@ class GreedySearch:
 
         others = {}
         for hparam, values in temp_config.items():
-            others[hparam] = random.choice(values)
+            others[hparam] = values[0]
 
         return others
+
+    def _build_dataset(self, bs):
+        train_set = ImageDataset(doodles, reals, doodle_size, real_size, train=True)
+        val_set = ImageDataset(doodles, reals, doodle_size, real_size, train=False)
+
+        train_loader = DataLoader(train_set, batch_size=bs, shuffle=True, num_workers=16, pin_memory=True, drop_last=True)
+        val_loader = DataLoader(val_set, batch_size=bs, shuffle=False, num_workers=16, pin_memory=True, drop_last=True)
+
+        return train_loader, val_loader
 
     def _train_model(self, config):
         '''
@@ -129,26 +145,19 @@ class GreedySearch:
         '''
         
         num_epochs, base_bs, base_lr = 20, 512, 2e-2
-        new_model1 = self.model1(config)
-        criterion = nn.CrossEntropy()
-        optimizer = torch.optim.AdamW(params=new_model1.parameters(), lr=learning_rate, weight_decay=3e-4)
+        model1 = self.model1(3, 9, config)
+        optimizer = torch.optim.AdamW(params=model1.parameters(), lr=config["learning_rate"], weight_decay=3e-4)
         criterion = nn.CrossEntropyLoss()
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
         
         model1 = nn.DataParallel(model1).cuda()
 
-        optimizer = torch.optim.AdamW(
-            params=list(model1.parameters()) + list(model2.parameters()), 
-            lr=config["learning_rate"], 
-            weight_decay=3e-4
-        )
-        criterion = nn.CrossEntropyLoss()
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
+        train_loader, val_loader = self._build_dataset(base_bs)
         
         epochs = []
         for epoch in range(num_epochs):
             # get training metadata
-            epoch_data = train_epoch(
+            epoch_data = self._train_epoch(
                 epoch,
                 model1, 
                 train_loader, 
@@ -168,11 +177,12 @@ class GreedySearch:
         config_cp = copy.deepcopy(self.config)
 
         final_set = {}
-        for hparam, _ in config_cp:
+        for hparam, _ in config_cp.items():
             final_set[hparam] = None
 
         for hparam, values in self.config.items():
-            config_cp.remove(hparam)
+            print ("Currently tuning : ", hparam)
+            config_cp.pop(hparam)
 
             best_acc = float('-inf')
             best_choice = None
@@ -184,8 +194,10 @@ class GreedySearch:
                 for done_hparam, val in final_set.items():
                     other_hparams[done_hparam] = val
 
+            print ("Complete list: ", other_hparams)
+
             for choice in values:
-                other_hparams[hparam] = choiceh
+                other_hparams[hparam] = choice
                 val_acc = self._train_model(other_hparams)
 
                 if val_acc > best_acc:
@@ -202,11 +214,14 @@ def greedy_test():
             [64, 192, 256]
         ],
         "dropout": [0.3],
-        "hidden": [256],
-        "pool_option": [(1,1)]
+        "hidden_dim": [256],
+        "pool_option": [(1,1)],
+        "learning_rate": [0.02]
     }
 
     engine = GreedySearch(config, V2ConvNet)
-    engine.tune()
+    optimal_set = engine.tune()
 
-greedy_test()
+    return optimal_set
+
+print (greedy_test())
