@@ -41,7 +41,7 @@ def plot_dataset(d):
         sample_imgs = sample_array(d[clas])
         plot_row(sample_imgs)
         
-def load_dataset(f, verbose=False):
+def load_dataset(f, verbose=True):
     """
     f is the file name to load a dataset dict of {class: data}
     """
