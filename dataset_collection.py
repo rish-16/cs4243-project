@@ -13,14 +13,18 @@ import cv2
 def sample_array(arr, n=10):
     return arr[np.random.choice(len(arr), n)]
 
-def plot_row(arr):
+def plot_row(arr, titles=None):
     """
     plot a row of images in arr
     """
     n = len(arr)
+    if titles:
+        assert n == len(titles)
     fig, ax = plt.subplots(1, n)
     plt.gcf().set_size_inches(2*n, 2)
     for i in range(n):
+        if titles:
+            ax[i].set_title(titles[i])
         ax[i].imshow(arr[i], cmap='gray')
         ax[i].set_xticks([])
         ax[i].set_yticks([])
@@ -37,19 +41,21 @@ def plot_dataset(d):
         sample_imgs = sample_array(d[clas])
         plot_row(sample_imgs)
         
-def load_dataset(f):
+def load_dataset(f, verbose=False):
     """
     f is the file name to load a dataset dict of {class: data}
     """
     d = np.load(f, allow_pickle=True)[()]
     assert type(d) == dict
-    print(f"Loaded dataset at '{f}'.")
+    if verbose:
+        print(f"Loaded dataset at '{f}'.")
     return d
 
-def save_dataset(f, d):
+def save_dataset(f, d, verbose=False):
     assert type(d) == dict
     np.save(f, d)
-    print(f"Saved dataset at '{f}'.")
+    if verbose:
+        print(f"Saved dataset at '{f}'.")
     
 def dataset_exists(f):
     return os.path.isfile(f)
@@ -252,7 +258,7 @@ def get_real_datasets():
         'google_real': get_google_real()}
     return dd
 
-def collapse_datasets(dd, res=64):
+def collapse_datasets(dd, res=64, split=0):
     """
     Collapses all datasets in dd, a dict of dicts,
     and resizes images to the same specified resolution.
@@ -269,7 +275,15 @@ def collapse_datasets(dd, res=64):
             cd[c].append(resized)
     for c, lst_data in cd.items():
         cd[c] = np.concatenate(lst_data, axis=0)
-    return cd
+    if not split:
+        return cd
+    else:
+        traind, testd = {}, {}
+        for c, data in cd.items():
+            n = int(split * len(data))
+            traind[c] = data[n:]
+            testd[c] = data[n:]
+        return traind, testd
               
               
 def get_sketchy_pairs(f='dataset/sketchy'):
