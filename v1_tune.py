@@ -19,10 +19,6 @@ parser.add_argument('--no-wandb', action='store_false')
 # parser.set_defaults(wandb=True)
 args = parser.parse_args()
 
-if args.wandb:
-    import wandb
-    wandb.init(project="cs4243-project", entity="rish-16")
-
 class ExampleMLP(nn.Module):
     def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
         super(ExampleMLP, self).__init__()
