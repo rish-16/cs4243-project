@@ -20,7 +20,7 @@ def labelled_dataset(d):
         for dat in data:
             xs.append(dat)
             ys.append(class2idx[c])
-    return np.asarray(xs), np.asarray(ys)
+    return np.asarray(xs), np.asarray(ys).astype(np.int64)
 
 class DoodleDataset(Dataset):
     def __init__(self, size=64, train=True, split=0.8):
@@ -197,7 +197,7 @@ def layer2units(n_linear, layer_i):
 
 class MLP(nn.Module):
     def __init__(self,
-                 n_input=64*64,
+                 n_input,
                  n_classes=9,
                  n_linear=2,
                  dropout=0.1):
@@ -217,13 +217,17 @@ class MLP(nn.Module):
                 self.layers.append(self.dropout)
             self.layers.append(nn.Linear(64, n_classes, bias=False))
         self.layers = nn.Sequential(*self.layers)
-    def forward(self, x):
-        return self.layers(x)
+    def forward(self, x, return_feat=False):
+        feat = self.layers[:-1](x.flatten(1))
+        x = self.layers[-1](feat)
+        if return_feat:
+            return x, feat
+        return x
 
 
 class CNN(nn.Module):
     def __init__(self,
-                 n_channels=3,
+                 n_channels,
                  n_classes=9,
                  n_filters=32,
                  k_size=3,
@@ -255,8 +259,12 @@ class CNN(nn.Module):
                 self.layers.append(self.dropout)
             self.layers.append(nn.Linear(64, n_classes, bias=False))
         self.layers = nn.Sequential(*self.layers)
-    def forward(self, x):
-        return self.layers(x)
+    def forward(self, x, return_feat=False):
+        feat = self.layers[:-1](x)
+        x = self.layers[-1](feat)
+        if return_feat:
+            return x, feat
+        return x
     
 class AverageMeter(object):
     """

@@ -20,7 +20,7 @@ def labelled_dataset(d):
         for dat in data:
             xs.append(dat)
             ys.append(class2idx[c])
-    return np.asarray(xs), np.asarray(ys)
+    return np.asarray(xs), np.asarray(ys).astype(np.int64)
 
 class DoodleDataset(Dataset):
     def __init__(self, size=64, train=True, split=0.8):
@@ -197,52 +197,37 @@ def layer2units(n_linear, layer_i):
 
 class MLP(nn.Module):
     def __init__(self,
-                 n_input=64*64,
+                 n_input,
                  n_classes=9,
                  n_linear=2,
                  dropout=0.1):
         super(MLP, self).__init__()
         self.act = nn.LeakyReLU()
         self.dropout = nn.Dropout(dropout)
-        self.layers = [] 
-        pre = []
-        post = []
-
+        self.layers = []
         if n_linear == 1:
-            pre.append(nn.Linear(n_input, n_classes, bias=False))
+            self.layers.append(nn.Linear(n_input, n_classes, bias=False))
         else:
-            pre.append(nn.Linear(n_input, layer2units(n_linear, 1), bias=False))
-            pre.append(self.act)
-            pre.append(self.dropout)
-
-            for i in range(2, n_linear-3):
-                pre.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
-                pre.append(self.act)
-                pre.append(self.dropout)
-
-            for i in range(n_linear-3, n_linear):
-                post.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
-                post.append(self.act)
-                post.append(self.dropout)
-
-            post.append(nn.Linear(64, n_classes, bias=False))
-
-        self.pre = nn.Sequential(*pre)
-        self.post = nn.Sequential(*post)
-    
-    def forward(self, x, return_feats=False):
-        feats = self.pre(x)
-        out = self.post(feats)
-
-        if return_feats:
-            return out, feats
-
-        return out
+            self.layers.append(nn.Linear(n_input, layer2units(n_linear, 1), bias=False))
+            self.layers.append(self.act)
+            self.layers.append(self.dropout)
+            for i in range(2, n_linear):
+                self.layers.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
+                self.layers.append(self.act)
+                self.layers.append(self.dropout)
+            self.layers.append(nn.Linear(64, n_classes, bias=False))
+        self.layers = nn.Sequential(*self.layers)
+    def forward(self, x, return_feat=False):
+        feat = self.layers[:-1](x.flatten(1))
+        x = self.layers[-1](feat)
+        if return_feat:
+            return x, feat
+        return x
 
 
 class CNN(nn.Module):
     def __init__(self,
-                 n_channels=3,
+                 n_channels,
                  n_classes=9,
                  n_filters=32,
                  k_size=3,
@@ -251,44 +236,35 @@ class CNN(nn.Module):
                  n_linear=2,
                  dropout=0.1):
         super(CNN, self).__init__()
-
         self.p = nn.MaxPool2d((p_size, p_size))
         self.flatten = nn.Flatten()
         self.act = nn.LeakyReLU()
         self.dropout = nn.Dropout(dropout)
-        conv = [nn.Conv2d(n_channels, n_filters, (k_size, k_size), padding=1), self.p, self.act]
+        self.layers = [nn.Conv2d(n_channels, n_filters, (k_size, k_size), padding=1), self.p, self.act]
         for _ in range(n_conv-1):
-            conv.append(nn.Conv2d(n_filters, n_filters, (k_size, k_size), padding=1))
-            conv.append(self.p)
-            conv.append(self.act)
-        self.conv = nn.Sequential(*conv)
-
-        mlp = []
+            self.layers.append(nn.Conv2d(n_filters, n_filters, (k_size, k_size), padding=1))
+            self.layers.append(self.p)
+            self.layers.append(self.act)
+        self.layers.append(self.flatten)
         linear_units = linear_input_units(self.layers, n_channels)
-        
         if n_linear == 1:
-            mlp.append(nn.Linear(linear_units, n_classes, bias=False))
+            self.layers.append(nn.Linear(linear_units, n_classes, bias=False))
         else:
-            mlp.append(nn.Linear(linear_units, layer2units(n_linear, 1), bias=False))
-            mlp.append(self.act)
-            mlp.append(self.dropout)
+            self.layers.append(nn.Linear(linear_units, layer2units(n_linear, 1), bias=False))
+            self.layers.append(self.act)
+            self.layers.append(self.dropout)
             for i in range(2, n_linear):
-                mlp.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
-                mlp.append(self.act)
-                mlp.append(self.dropout)
-            mlp.append(nn.Linear(64, n_classes, bias=False))
-            
-        self.mlp = nn.Sequential(*mlp)
-
-    def forward(self, x, return_feats=False):
-        feats = self.layers(x)
-        flat = self.flatten(feats)
-        out = self.mlp(flat)
-
-        if return_feats:
-            return out, feats
-
-        return out
+                self.layers.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
+                self.layers.append(self.act)
+                self.layers.append(self.dropout)
+            self.layers.append(nn.Linear(64, n_classes, bias=False))
+        self.layers = nn.Sequential(*self.layers)
+    def forward(self, x, return_feat=False):
+        feat = self.layers[:-1](x)
+        x = self.layers[-1](feat)
+        if return_feat:
+            return x, feat
+        return x
     
 class AverageMeter(object):
     """
