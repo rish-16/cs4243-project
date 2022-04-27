@@ -1,11 +1,10 @@
-import torch.nn as nn
 import torch.utils.data.dataset
 from torch.utils.data import DataLoader
-from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
+
 from losses import compute_contrastive_loss_from_feats
-from utils import *  # bad practice, nvm
 from models import *
+from utils import *  # bad practice, nvm
 
 ckpt_dir = 'exp_data'
 
@@ -23,8 +22,8 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
 
     # load the training data
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True,
-                              num_workers=8, pin_memory=True, drop_last=True)
-    val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=8,
+                              num_workers=16, pin_memory=True, drop_last=True)
+    val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=16,
                             pin_memory=True, drop_last=True)
 
     # training loop
@@ -46,7 +45,7 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
 
             # train model1 (doodle)
             pred1, feats1 = model1(x1, return_feats=True)
-            loss_1 = criterion(pred1, y1)    # classification loss
+            loss_1 = criterion(pred1, y1)  # classification loss
             loss_2 = compute_contrastive_loss_from_feats(feats1, y1, t)
             loss1_model1.update(loss_1)
             loss2_model1.update(loss_2)
@@ -54,19 +53,18 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
 
             # train model2 (real)
             pred2, feats2 = model2(x2, return_feats=True)
-            loss_1 = criterion(pred2, y2)   # classification loss
+            loss_1 = criterion(pred2, y2)  # classification loss
             loss_2 = compute_contrastive_loss_from_feats(feats2, y2, t)
             loss1_model2.update(loss_1)
             loss2_model2.update(loss_2)
             loss_model2 = loss_1 + c1 * loss_2
 
             # the third loss
-            loss = loss_model1 + loss_model2
-            if c2:
-                combined_feat = feats1 * feats2
-                loss_3 = compute_contrastive_loss_from_feats(combined_feat, y1, t)
-                loss3_combined.update(loss_3)
-                loss += c2 * loss_3
+            combined_feat = feats1 * feats2
+            loss_3 = compute_contrastive_loss_from_feats(combined_feat, y1, t)
+            loss3_combined.update(loss_3)
+
+            loss = loss_model1 + loss_model2 + c2 * loss_3
 
             # statistics
             acc_model1.update(compute_accuracy(pred1, y1))
@@ -87,13 +85,11 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
                 'l2m2': '{:.6f}'.format(loss2_model2.avg),
                 'train epoch': '{:03d}'.format(epoch)
             })
-        if c2:
-            print(f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
-                  f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}, '
-                  f'l3={loss3_combined.avg:.3f}')
-        else:
-            print(f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
-                  f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}')
+
+        print(
+            f'train epoch {epoch}, acc 1={acc_model1.avg:.3f}, acc 2={acc_model2.avg:.3f}, l1m1={loss1_model1.avg:.3f},'
+            f'l1m2={loss1_model2.avg:.3f}, l2m1={loss2_model1.avg:.3f}, l2m2={loss2_model2.avg:.3f}, '
+            f'l3={loss3_combined.avg:.3f}')
 
         # validation
         model1.eval(), model1.eval()
@@ -125,7 +121,8 @@ def train_model(model1, model2, train_set, val_set, tqdm_on, id, num_epochs, bat
     save_model(exp_dir, f'{id}_model2.pt', model2)
 
 
-fix_seed(0)         # zero seed by default
+fix_seed(0)  # zero seed by default
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 if __name__ == "__main__":
     from dataset import ImageDataset
     from training_config import doodles, reals, doodle_size, real_size, NUM_CLASSES
@@ -134,19 +131,20 @@ if __name__ == "__main__":
     val_set = ImageDataset(doodles, reals, doodle_size, real_size, train=False)
 
     # tunable hyper params.
-    use_cnn = False
-    num_epochs, base_bs, base_lr = 20, 256, 1e-2
-    c1, c2, t = 0, 0, 0.1  # contrastive learning. if you want vanilla (cross-entropy) training, set c1 and c2 to 0.
+    use_cnn = True
+    num_epochs, base_bs, base_lr = 20, 512, 2e-2
+    c1, c2, t = 1, 1, 0.1  # contrastive learning. if you want vanilla (cross-entropy) training, set c1 and c2 to 0.
     dropout = 0.2
+    add_layer = True
 
     # models
-    doodle_model = ExampleCNN(NUM_CLASSES, dropout) if use_cnn \
-        else DoodleMLP(doodle_size * doodle_size, 128, NUM_CLASSES, dropout=0.2)
-    real_model = ExampleCNN(NUM_CLASSES, dropout) if use_cnn \
-        else RealMLP(real_size * real_size * 3, 512, NUM_CLASSES, dropout=0.2)
+    doodle_model = ExampleCNN(1, NUM_CLASSES, dropout, add_layer) if use_cnn \
+        else ExampleMLP(doodle_size * doodle_size, 128, NUM_CLASSES)
+    real_model = ExampleCNN(3, NUM_CLASSES, dropout, add_layer) if use_cnn \
+        else ExampleMLP(doodle_size * doodle_size, 128, NUM_CLASSES)
 
     # just some logistics
-    tqdm_on = False     # progress bar
-    id = 14              # change to the id of each experiment accordingly
+    tqdm_on = False  # progress bar
+    id = 0  # change to the id of each experiment accordingly
 
     train_model(doodle_model, real_model, train_set, val_set, tqdm_on, id, num_epochs, base_bs, base_lr, c1, c2, t)
