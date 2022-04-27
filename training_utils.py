@@ -98,8 +98,8 @@ class Trainer:
         total_loss = 0
         total_acc = 0
         history = {
-            "epochs": self.nepochs,
-            "loss": [],
+            "epochs": [],
+            "train_loss": [],
             "val_acc": []
         }
         for epoch in range(self.nepochs):
@@ -109,7 +109,8 @@ class Trainer:
             total_loss += epoch_val_loss
             total_acc += epoch_val_acc
 
-            history['loss'].append(epoch_val_loss)
+            history['epochs'].append(epoch)
+            history['train_loss'].append(epoch_train_loss)
             history["val_acc"].append(epoch_val_acc)
 
             if verbose:

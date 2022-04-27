@@ -1,7 +1,8 @@
 import torch, copy, random
+import matplotlib.pylot as plt
 
-class GreedySearch:
-    def __init__(self, config, trainer, model):
+class Tuner:
+    def __init__(self, config, trainer):
         '''
         config is a dictionary of (hparam:values) pairs
         that need to be tuned.
@@ -11,10 +12,9 @@ class GreedySearch:
         '''
 
         self.config = config
-        self.model = model
         self.trainer = trainer
 
-    def _sample_rest(self, temp_config):
+    def set_other_hparams(self, temp_config):
         '''
         Takes in the config and randomly choses 
         the other hparams to be picked.
@@ -33,6 +33,7 @@ class GreedySearch:
         for hparam, _ in config_cp.items():
             final_set[hparam] = None
 
+        all_histories = {}
         for hparam, values in self.config.items():
             print ("Currently tuning : ", hparam)
             config_cp.pop(hparam)
@@ -41,40 +42,52 @@ class GreedySearch:
             best_choice = None
 
             if best_choice == None:
-                other_hparams = self._sample_rest(config_cp)
+                current_hparams = self.set_other_hparams(config_cp)
             else:
-                other_hparams = self._sample_rest(config_cp)
+                current_hparams = self.set_other_hparams(config_cp)
+
+                # set the existing best hparams into the new config
                 for done_hparam, val in final_set.items():
-                    other_hparams[done_hparam] = val
+                    current_hparams[done_hparam] = val
+
+            hparam_history = []
 
             for choice in values:
-                other_hparams[hparam] = choice
-                print ("Complete list: ", other_hparams)
+                current_hparams[hparam] = choice
+                print ("Complete list: ", current_hparams)
 
-                val_acc, avg_loss = self.trainer.fit(other_hparams, self.model)
+                val_acc, avg_loss, history = self.trainer.fit(current_hparams, verbose=False, return_history=True)
+
+                hparam_history[choice] = {
+                    "history": history,
+                    "hparam_setup": current_hparams
+                }
 
                 if val_acc > best_acc:
                     best_acc = val_acc
                     best_choice = choice
 
             final_set[hparam] = best_choice
+            all_histories[hparam] = hparam_history
 
-        return final_set
+        return final_set, all_histories
 
-# def greedy_test():
-#     config = {
-#         "channel_list": [
-#             [64, 192, 256]
-#         ],
-#         "dropout": [0.3],
-#         "hidden_dim": [256],
-#         "pool_option": [(1,1)],
-#         "learning_rate": [0.02]
-#     }
+    def ablate_hparams_val_accs(self, all_histories):
+        for hparam, hparam_history in all_histories.items():
+            for choice, metadata in hparam_history.items():
+                training_history = metadata['history']
+                plt.plot(metadata['epochs'], metadata['val_acc'], label=repr(choice))
 
-#     engine = GreedySearch(config, V2ConvNet)
-#     optimal_set = engine.tune()
+            plt.legend()
+            plt.title("Sensitivity of {} on Validation Accuracy".format(hparam))
+            plt.show()
 
-#     return optimal_set
+    def ablate_hparam_train_losses(self, all_histories):
+        for hparam, hparam_history in all_histories.items():
+            for choice, metadata in hparam_history.items():
+                training_history = metadata['history']
+                plt.plot(metadata['epochs'], metadata['train_loss'], label=repr(choice))
 
-# print (greedy_test())
+            plt.legend()
+            plt.title("Sensitivity of {} on Validation Accuracy".format(hparam))
+            plt.show()
