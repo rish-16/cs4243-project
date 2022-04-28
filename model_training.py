@@ -315,3 +315,107 @@ def compute_contrastive_loss_from_feats(feats, labels, temperature):
     target_matrix = compute_target_matrix(labels)
     loss = contrastive_loss(sim_matrix, target_matrix, temperature)
     return loss
+
+class CNNCL(nn.Module):
+    def __init__(self,
+                 n_classes=9,
+                 n_filters=32,
+                 k_size=3,
+                 p_size=2,
+                 n_conv=2,
+                 n_linear=2,
+                 dropout=0.1,
+                 c=1,
+                 t=0.1):
+        super(CNNCL, self).__init__()
+        self.c = c
+        self.t = t
+        self.dmodel = CNN(1, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
+        self.rmodel = CNN(3, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
+    def forward(self, x1, x2):
+        pred1, feat1 = self.dmodel(x1, return_feat=True)
+        pred2, feat2 = self.rmodel(x2, return_feat=True)
+        return pred1, feat1, pred2, feat2
+    def loss(self, pred1, feat1, pred2, feat2, y):
+        xent = nn.CrossEntropyLoss()
+        xent_loss1 = xent(pred1, y)
+        xent_loss2 = xent(pred2, y)
+        feat3 = torch.cat((feat1, feat2), axis=0)
+        y3 = torch.cat((y, y), axis=0)
+        cont_loss = compute_contrastive_loss_from_feats(feat3, y3, self.t)
+        loss = xent_loss1 + xent_loss2 + self.c * cont_loss
+        return loss
+    
+class Trainer:
+    def __init__(self, model, trainset, valset, epochs, bs):
+        self.model = model
+        self.contrastive = isinstance(trainset, ContrastiveDataset)
+        self.train_loader = DataLoader(trainset, batch_size=bs)
+        self.val_loader = DataLoader(valset, batch_size=len(valset))
+        self.epochs = epochs
+        self.history = None
+        self.optimizer = torch.optim.AdamW(params=list(self.model.parameters()), lr=1e-3, weight_decay=3e-4)
+        self.xent = nn.CrossEntropyLoss()
+        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=epochs)
+        
+    def track(self, metric, value):
+        if self.history is None:
+            self.history = {
+                "epoch": [],
+                "train_loss": [],
+                "train_acc": [],
+                "val_loss": [],
+                "val_acc": []}
+        assert metric in self.history
+        self.history[metric].append(value)
+    def train_epoch(self):
+        avg_loss = AverageMeter()
+        avg_acc = AverageMeter()
+        if not self.contrastive:
+            for i, (x, y) in enumerate(self.train_loader):
+                pred = self.model(x)
+                loss = self.xent(pred, y)
+                loss.backward()
+                self.optimizer.step()
+                self.optimizer.zero_grad()
+                acc = compute_accuracy(pred, y)
+                avg_loss.update(loss.item())
+                avg_acc.update(acc)
+        else:
+            for i, (x1, x2, y) in enumerate(self.train_loader):
+                pred1, feat1, pred2, feat2 = self.model(x1, x2)
+                loss = self.model.loss(pred1, feat1, pred2, feat2, y)
+                loss.backward()
+                self.optimizer.step()
+                self.optimizer.zero_grad()
+                acc = (compute_accuracy(pred1, y) + compute_accuracy(pred2, y)) / 2
+                avg_loss.update(loss.item())
+                avg_acc.update(acc)
+        return avg_acc.avg, avg_loss.avg
+    def evaluate_epoch(self):
+        if not self.contrastive:
+            x, y = next(iter(self.val_loader))
+            with torch.no_grad():
+                pred, feat = self.model(x, return_feat=True)
+                loss = self.xent(pred, y)
+            _, yhat = torch.max(pred, 1)
+            acc = compute_accuracy(pred, y)
+        else:
+            x1, x2, y = next(iter(self.val_loader))
+            with torch.no_grad():
+                pred1, feat1, pred2, feat2 = self.model(x1, x2)
+                loss = self.model.loss(pred1, feat1, pred2, feat2, y)
+            acc = (compute_accuracy(pred1, y) +  compute_accuracy(pred2, y)) / 2
+        return acc, loss.item()
+    def train(self, verbose=False):
+        for epoch in range(self.epochs):
+            train_acc, train_loss = self.train_epoch()
+            val_acc, val_loss = self.evaluate_epoch()
+            self.track("epoch", epoch)
+            self.track("train_loss", train_loss)
+            self.track("train_acc", train_acc)
+            self.track("val_loss", val_loss)
+            self.track("val_acc", val_acc)
+            if verbose:
+                print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f}")
+        return self.history
