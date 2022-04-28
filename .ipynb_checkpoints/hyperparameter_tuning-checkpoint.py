@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from model_training import *
 
 class Tuner:
-    def __init__(self, model_class, trainset, valset, param_ranges):
+    def __init__(self, model_class, trainset, valset, param_ranges, epoch):
         self.model_class = model_class
         self.trainset = trainset
         self.valset = valset
@@ -24,7 +24,7 @@ class Tuner:
         current_param[p] = v
         for p, v in current_param.items():
             if v is None:
-                current_param[p] = self.param_ranges[p][0]
+                current_param[p] = self.param_ranges[p][-1]
         return current_param
     def create_trainer(self, param):
         if self.model_class == MLP and isinstance(self.trainset, DoodleDataset):
@@ -40,7 +40,7 @@ class Tuner:
     def log_param(self, param, p, hist):
         self.log[param][p] = hist
     def get_val_acc(self, hist):
-        return hist['val_acc'][-1]
+        return max(hist['val_acc'])
     def print_log(self, param):
         print(f"{param:>10}", end="")
         for p in self.param_ranges[param]:
@@ -56,6 +56,19 @@ class Tuner:
                 curr_param = self.init_param(param, p)
                 t = self.create_trainer(curr_param)
                 hist = t.train()
+                t.save(idx=f"{param}-{p}", params=curr_param)
                 self.log_param(param, p, hist)
                 self.update_best_param(param, p)
             self.print_log(param)
+    def plot(self, param):
+        p = self.log[param]
+        xs = []
+        ys = []
+        for val, hist in p.items():
+            xs.append(val)
+            ys.append(self.get_val_acc(hist))
+        plt.plot(xs, ys)
+        plt.xlabel(param)
+        plt.xticks(xs)
+        plt.ylabel("val_acc")
+        plt.show()

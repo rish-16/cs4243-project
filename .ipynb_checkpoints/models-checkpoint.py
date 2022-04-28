@@ -1,6 +1,5 @@
 import torch.nn as nn
 
-
 class DoodleMLP(nn.Module):
     def __init__(self, in_dim, hid_dim, out_dim, dropout=0.2):
         super(DoodleMLP, self).__init__()
