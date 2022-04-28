@@ -235,7 +235,7 @@ def train_test_split(d, split=0.8, shuffle=True):
 def get_all_datasets():
     dd = {
         'cifar': get_cifar(),
-        # 'quickdraw': get_quickdraw(),
+        'quickdraw': get_quickdraw(),
         'sketchy_real': get_sketchy_real(),
         'sketchy_doodle': get_sketchy_doodle(),
         'tuberlin': get_tuberlin(),
@@ -245,7 +245,7 @@ def get_all_datasets():
 
 def get_doodle_datasets():
     dd = {
-        # 'quickdraw': get_quickdraw(),
+        'quickdraw': get_quickdraw(),
         'sketchy_doodle': get_sketchy_doodle(),
         'tuberlin': get_tuberlin(),
         'google_doodles': get_google_doodles()}
