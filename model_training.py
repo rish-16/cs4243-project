@@ -305,26 +305,6 @@ class V2ConvNet(nn.Module):
 
         if return_feats:
             return x, feats
-
-
-class AverageMeter(object):
-    """
-    Computes and stores the average and current value
-    """
-    def __init__(self):
-        self.reset()
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-    def __str__(self):
-        return self.avg
     
 def compute_sim_matrix(feats):
     """
@@ -521,3 +501,7 @@ def load_params(checkpoint_path, verbose=False):
     if verbose:
         print(f"Loaded hyperparameters from: {checkpoint_path}")
     return params
+
+class ConvNeXt(nn.Module):
+    def __init__(self):
+        pass
