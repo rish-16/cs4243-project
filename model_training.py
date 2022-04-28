@@ -265,7 +265,47 @@ class CNN(nn.Module):
         if return_feat:
             return x, feat
         return x
-    
+
+
+def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
+    return nn.Sequential(
+        nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
+        nn.BatchNorm2d(out_channels),
+        nn.ReLU(inplace=True)
+    )
+
+
+class V2ConvNet(nn.Module):
+    CHANNELS = [64, 128, 192, 256, 512]
+    POOL = (1, 1)
+
+    def __init__(self, in_c, num_classes, dropout=0.2, add_layers=False):
+        super().__init__()
+        layer1 = convbn(in_c, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
+        layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
+        layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
+        layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
+        pool = nn.AdaptiveAvgPool2d(self.POOL)
+#         self.layers = nn.Sequential(layer1, layer2, layer3, layer4, pool)
+
+#         if add_layers:
+        layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
+        layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
+        layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
+        layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
+        self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
+
+        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], num_classes)
+        self.dropout = nn.Dropout(p=dropout)
+
+    def forward(self, x, return_feats=False):
+        feats = self.layers(x).flatten(1)
+        x = self.nn(self.dropout(feats))
+
+        if return_feats:
+            return x, feats
+
+
 class AverageMeter(object):
     """
     Computes and stores the average and current value
