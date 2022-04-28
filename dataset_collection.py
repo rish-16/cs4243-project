@@ -102,16 +102,16 @@ def print_dataset(d):
         size += data.shape[0]
     print("Dataset size:", size)
     
-def get_quickdraw(f='dataset/quickdraw'):
+def get_quickdraw(f='dataset/quickdraw', n=10000):
     if dataset_exists(f + '/quickdraw.npy'):
         return load_dataset(f + '/quickdraw.npy')
     categories = ['airplane', 'bird', 'car', 'cat', 'dog', 'frog', 'horse', 'cruise ship', 'truck']
     quickdraw = {}
     for c in categories:
         if c == 'cruise ship':
-            quickdraw['ship'] = 255 - np.load(f'{f}/{c}.npy').reshape((-1, 28, 28))
+            quickdraw['ship'] = 255 - np.load(f'{f}/{c}.npy').reshape((-1, 28, 28))[:n]
         else:
-            quickdraw[c] = 255 - np.load(f'{f}/{c}.npy').reshape((-1, 28, 28))
+            quickdraw[c] = 255 - np.load(f'{f}/{c}.npy').reshape((-1, 28, 28))[:n]
     save_dataset(f"{f}/quickdraw.npy", quickdraw)
     return quickdraw
 
