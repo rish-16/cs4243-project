@@ -266,7 +266,47 @@ class CNN(nn.Module):
         if return_feat:
             return x, feat
         return x
-    
+
+
+def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
+    return nn.Sequential(
+        nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
+        nn.BatchNorm2d(out_channels),
+        nn.ReLU(inplace=True)
+    )
+
+
+class V2ConvNet(nn.Module):
+    CHANNELS = [64, 128, 192, 256, 512]
+    POOL = (1, 1)
+
+    def __init__(self, in_c, num_classes, dropout=0.2, add_layers=False):
+        super().__init__()
+        layer1 = convbn(in_c, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
+        layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
+        layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
+        layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
+        pool = nn.AdaptiveAvgPool2d(self.POOL)
+#         self.layers = nn.Sequential(layer1, layer2, layer3, layer4, pool)
+
+#         if add_layers:
+        layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
+        layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
+        layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
+        layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
+        self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
+
+        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], num_classes)
+        self.dropout = nn.Dropout(p=dropout)
+
+    def forward(self, x, return_feats=False):
+        feats = self.layers(x).flatten(1)
+        x = self.nn(self.dropout(feats))
+
+        if return_feats:
+            return x, feats
+
+
 class AverageMeter(object):
     """
     Computes and stores the average and current value
@@ -326,10 +366,12 @@ class CNNCL(nn.Module):
                  n_conv=2,
                  n_linear=2,
                  dropout=0.1,
-                 c=1,
+                 c1=1,
+                 c2=1,
                  t=0.1):
         super(CNNCL, self).__init__()
-        self.c = c
+        self.c1 = c1
+        self.c2 = c2
         self.t = t
         self.dmodel = CNN(1, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
         self.rmodel = CNN(3, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
@@ -341,10 +383,12 @@ class CNNCL(nn.Module):
         xent = nn.CrossEntropyLoss()
         xent_loss1 = xent(pred1, y)
         xent_loss2 = xent(pred2, y)
-        feat3 = torch.cat((feat1, feat2), axis=0)
-        y3 = torch.cat((y, y), axis=0)
-        cont_loss = compute_contrastive_loss_from_feats(feat3, y3, self.t)
-        loss = xent_loss1 + xent_loss2 + self.c * cont_loss
+        cont_loss1 = compute_contrastive_loss_from_feats(feat1, y, self.t)
+        cont_loss2 = compute_contrastive_loss_from_feats(feat2, y, self.t)
+        cont_loss3 = compute_contrastive_loss_from_feats(feat1*feat2, y, self.t)
+        loss = (xent_loss1 + xent_loss2 
+                + self.c1 * (cont_loss1 + cont_loss2)
+                + self.c2 * cont_loss3)
         return loss
 
     
