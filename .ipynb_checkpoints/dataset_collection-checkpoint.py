@@ -102,7 +102,7 @@ def print_dataset(d):
         size += data.shape[0]
     print("Dataset size:", size)
     
-def get_quickdraw(f='dataset/quickdraw', n=10000):
+def get_quickdraw(f='dataset/quickdraw', n=1000):
     if dataset_exists(f + '/quickdraw.npy'):
         return load_dataset(f + '/quickdraw.npy')
     categories = ['airplane', 'bird', 'car', 'cat', 'dog', 'frog', 'horse', 'cruise ship', 'truck']
