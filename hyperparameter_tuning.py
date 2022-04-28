@@ -24,7 +24,7 @@ class Tuner:
         current_param[p] = v
         for p, v in current_param.items():
             if v is None:
-                current_param[p] = self.param_ranges[p][0]
+                current_param[p] = self.param_ranges[p][-1]
         return current_param
     def create_trainer(self, param):
         if self.model_class == MLP and isinstance(self.trainset, DoodleDataset):

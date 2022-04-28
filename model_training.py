@@ -326,10 +326,12 @@ class CNNCL(nn.Module):
                  n_conv=2,
                  n_linear=2,
                  dropout=0.1,
-                 c=1,
+                 c1=1,
+                 c2=1,
                  t=0.1):
         super(CNNCL, self).__init__()
-        self.c = c
+        self.c1 = c1
+        self.c2 = c2
         self.t = t
         self.dmodel = CNN(1, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
         self.rmodel = CNN(3, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
@@ -341,10 +343,12 @@ class CNNCL(nn.Module):
         xent = nn.CrossEntropyLoss()
         xent_loss1 = xent(pred1, y)
         xent_loss2 = xent(pred2, y)
-        feat3 = torch.cat((feat1, feat2), axis=0)
-        y3 = torch.cat((y, y), axis=0)
-        cont_loss = compute_contrastive_loss_from_feats(feat3, y3, self.t)
-        loss = xent_loss1 + xent_loss2 + self.c * cont_loss
+        cont_loss1 = compute_contrastive_loss_from_feats(feat1, y, self.t)
+        cont_loss2 = compute_contrastive_loss_from_feats(feat2, y, self.t)
+        cont_loss3 = compute_contrastive_loss_from_feats(feat1*feat2, y, self.t)
+        loss = (xent_loss1 + xent_loss2 
+                + self.c1 * (cont_loss1 + cont_loss2)
+                + self.c2 * cont_loss3)
         return loss
 
     
