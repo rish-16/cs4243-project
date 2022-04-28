@@ -7,6 +7,7 @@ import torch
 import random
 import numpy as np
 import cv2
+import copy
 from dataset_collection import *
 
 classes = ['airplane', 'bird', 'car', 'cat', 'dog', 'frog', 'horse', 'ship', 'truck']
@@ -345,6 +346,7 @@ class CNNCL(nn.Module):
         cont_loss = compute_contrastive_loss_from_feats(feat3, y3, self.t)
         loss = xent_loss1 + xent_loss2 + self.c * cont_loss
         return loss
+
     
 class Trainer:
     def __init__(self, model, trainset, valset, epochs, bs):
@@ -354,10 +356,11 @@ class Trainer:
         self.val_loader = DataLoader(valset, batch_size=len(valset))
         self.epochs = epochs
         self.history = None
+        self.best_model = None
+        self.best_perf = None
         self.optimizer = torch.optim.AdamW(params=list(self.model.parameters()), lr=1e-3, weight_decay=3e-4)
         self.xent = nn.CrossEntropyLoss()
         self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=epochs)
-        
     def track(self, metric, value):
         if self.history is None:
             self.history = {
@@ -369,6 +372,7 @@ class Trainer:
         assert metric in self.history
         self.history[metric].append(value)
     def train_epoch(self):
+        self.model.train()
         avg_loss = AverageMeter()
         avg_acc = AverageMeter()
         if not self.contrastive:
@@ -393,6 +397,7 @@ class Trainer:
                 avg_acc.update(acc)
         return avg_acc.avg, avg_loss.avg
     def evaluate_epoch(self):
+        self.model.eval()
         if not self.contrastive:
             x, y = next(iter(self.val_loader))
             with torch.no_grad():
@@ -418,4 +423,57 @@ class Trainer:
             self.track("val_acc", val_acc)
             if verbose:
                 print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f}")
+            self.update_best_model(self.model, val_acc)
         return self.history
+    def update_best_model(self, model, perf):
+        if self.best_model is None or perf > self.best_perf:
+            self.best_model = copy.deepcopy(model)
+            self.best_perf = perf
+    def save(self, idx, params=None, verbose=False):
+        save_model(f"exp_data/{idx}", f"{idx}_model.pt", self.best_model, verbose=verbose)
+        save_history(f"exp_data/{idx}", f"{idx}_history.pkl", self.history, verbose=verbose)
+        if params:
+            save_params(f"exp_data/{idx}", f"{idx}_params.pkl", params, verbose=verbose)
+    def plot(self, metric='val_acc'):
+        plt.plot(self.history['epoch'], self.history[metric], label=f"{metric}")
+        plt.legend(loc='best')
+        plt.show()
+        
+import pickle
+def save_pickle(data, f, verbose=False):
+    with open(f, 'wb') as file:
+        pickle.dump(data, file)
+    if verbose:
+        print(f"Saved file at: {f}")
+def load_pickle(f, verbose=False):
+    with open(f, 'rb') as file:
+        data = pickle.load(file)
+    if verbose:
+        print(f"Loaded file at: {f}")
+    return data
+
+def save_history(checkpoint_dir, checkpoint_name, history, verbose=False):
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    hist_path = os.path.join(checkpoint_dir, checkpoint_name)
+    save_pickle(history, hist_path)
+    if verbose:
+        print(f'Saved history at: {hist_path}')
+def load_history(checkpoint_path, verbose=False):
+    assert os.path.exists(checkpoint_path)
+    history = load_pickle(checkpoint_path)
+    if verbose:
+        print(f"Loaded history from: {checkpoint_path}")
+    return history
+
+def save_params(checkpoint_dir, checkpoint_name, params, verbose=False):
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    params_path = os.path.join(checkpoint_dir, checkpoint_name)
+    save_pickle(params, params_path)
+    if verbose:
+        print(f'Saved hyperparameters at: {hist_path}')
+def load_params(checkpoint_path, verbose=False):
+    assert os.path.exists(checkpoint_path)
+    params = load_pickle(checkpoint_path)
+    if verbose:
+        print(f"Loaded hyperparameters from: {checkpoint_path}")
+    return params
