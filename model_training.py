@@ -242,12 +242,15 @@ class CNN(nn.Module):
         self.act = nn.LeakyReLU()
         self.dropout = nn.Dropout(dropout)
         self.layers = [nn.Conv2d(n_channels, n_filters, (k_size, k_size), padding=1), self.p, self.act]
+
         for _ in range(n_conv-1):
             self.layers.append(nn.Conv2d(n_filters, n_filters, (k_size, k_size), padding=1))
             self.layers.append(self.p)
             self.layers.append(self.act)
         self.layers.append(self.flatten)
+
         linear_units = linear_input_units(self.layers, n_channels)
+        
         if n_linear == 1:
             self.layers.append(nn.Linear(linear_units, n_classes, bias=False))
         else:
@@ -260,13 +263,13 @@ class CNN(nn.Module):
                 self.layers.append(self.dropout)
             self.layers.append(nn.Linear(64, n_classes, bias=False))
         self.layers = nn.Sequential(*self.layers)
+
     def forward(self, x, return_feat=False):
         feat = self.layers[:-1](x)
         x = self.layers[-1](feat)
         if return_feat:
             return x, feat
         return x
-
 
 def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
     return nn.Sequential(
@@ -287,9 +290,7 @@ class V2ConvNet(nn.Module):
         layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
         layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
         pool = nn.AdaptiveAvgPool2d(self.POOL)
-#         self.layers = nn.Sequential(layer1, layer2, layer3, layer4, pool)
 
-#         if add_layers:
         layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
         layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
         layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
@@ -502,6 +503,47 @@ def load_params(checkpoint_path, verbose=False):
         print(f"Loaded hyperparameters from: {checkpoint_path}")
     return params
 
+class ConvNeXtBlock(nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+        self.conv1 = nn.Conv2d(dim, dim, (7, 7), padding=3, groups=dim)
+        self.lin1 = nn.Linear(dim, 4 * dim)
+        self.lin2 = nn.Linear(4 * dim, dim)
+        self.ln = nn.LayerNorm(dim)
+        self.gelu = nn.GELU()
+
+    def forward(self, x):
+        res_inp = x
+        x = self.conv1(x)
+        x = x.permute(0, 2, 3, 1)  # NCHW -> NHWC
+        x = self.ln(x)
+        x = self.lin1(x)
+        x = self.lin2(x)
+        x = self.gelu(x)
+        x = x.permute(0, 3, 1, 2)  # NHWC -> NCHW
+        out = x + res_inp
+
+        return out
+
 class ConvNeXt(nn.Module):
-    def __init__(self):
-        pass
+    def __init__(self, in_channels, classes, block_dims=[192, 384, 768]):
+        super().__init__()
+        blocks = []
+        for dim in block_dims:
+            blocks.append(
+                nn.Conv2d(in_channels, block_dims[i], kernel_size=2, stride=2),
+                ConvNeXtBlock(block_dims[i])
+            )
+        self.blocks = nn.Sequential(*blocks)
+        self.block_dims = block_dims
+        self.project = nn.Linear(block_dims[-1], classes)
+
+    def forward(self, x, return_feats=False):
+        feats = self.blocks(x)
+        x = feats.view(-1, self.block_dims[-1], 8*8).mean(2)
+        out = self.project(x)
+
+        if return_feats:
+            return out, feats
+        
+        return out
