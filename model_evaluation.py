@@ -86,8 +86,8 @@ class Similarity:
         self.idx, self.x1, self.x2, self.y = next(iter(dl))
         del d, dl
     def evaluate(self, dmodel, rmodel):
-        dmodel.eval()
-        rmodel.eval()
+        dmodel = dmodel.eval()
+        rmodel = rmodel.eval()
         with torch.no_grad():
             preds1, feats1 = dmodel(self.x1, return_feat=True)
             preds2, feats2 = rmodel(self.x2, return_feat=True)
