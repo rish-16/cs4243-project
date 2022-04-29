@@ -9,6 +9,8 @@ import numpy as np
 import cv2
 import copy
 from dataset_collection import *
+import warnings
+warnings.filterwarnings("ignore")
 
 classes = ['airplane', 'bird', 'car', 'cat', 'dog', 'frog', 'horse', 'ship', 'truck']
 idx2class = {i: c for i, c in enumerate(classes)}
@@ -201,7 +203,7 @@ class MLP(nn.Module):
                  n_input,
                  n_classes=9,
                  n_linear=2,
-                 dropout=0.1):
+                 dropout=0):
         super(MLP, self).__init__()
         self.act = nn.LeakyReLU()
         self.dropout = nn.Dropout(dropout)
@@ -226,65 +228,37 @@ class MLP(nn.Module):
         return x
 
 
+def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
+    return nn.Sequential(
+        nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
+        nn.BatchNorm2d(out_channels),
+        nn.ReLU(inplace=True)
+    )
+
+
 class CNN(nn.Module):
-    def __init__(self,
-                 n_channels,
-                 n_classes=9,
-                 n_filters=32,
-                 k_size=3,
-                 p_size=2,
-                 n_conv=2,
-                 n_linear=2,
-                 dropout=0.1):
+    CHANNELS = [64, 128, 192, 256, 512]
+    POOL = (1, 1)
+    def __init__(self, n_channels, n_classes=9, dropout=0):
         super(CNN, self).__init__()
-        self.p = nn.MaxPool2d((p_size, p_size))
-        self.flatten = nn.Flatten()
-        self.act = nn.LeakyReLU()
-        self.dropout = nn.Dropout(dropout)
-        self.layers = [nn.Conv2d(n_channels, n_filters, (k_size, k_size), padding=1), self.p, self.act]
-        for _ in range(n_conv-1):
-            self.layers.append(nn.Conv2d(n_filters, n_filters, (k_size, k_size), padding=1))
-            self.layers.append(self.p)
-            self.layers.append(self.act)
-        self.layers.append(self.flatten)
-        linear_units = linear_input_units(self.layers, n_channels)
-        if n_linear == 1:
-            self.layers.append(nn.Linear(linear_units, n_classes, bias=False))
-        else:
-            self.layers.append(nn.Linear(linear_units, layer2units(n_linear, 1), bias=False))
-            self.layers.append(self.act)
-            self.layers.append(self.dropout)
-            for i in range(2, n_linear):
-                self.layers.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
-                self.layers.append(self.act)
-                self.layers.append(self.dropout)
-            self.layers.append(nn.Linear(64, n_classes, bias=False))
-        self.layers = nn.Sequential(*self.layers)
+        layer1 = convbn(n_channels, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
+        layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
+        layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
+        layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
+        pool = nn.AdaptiveAvgPool2d(self.POOL)
+        layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
+        layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
+        layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
+        layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
+        self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
+        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], n_classes)
+        self.dropout = nn.Dropout(p=dropout)
     def forward(self, x, return_feat=False):
-        feat = self.layers[:-1](x)
-        x = self.layers[-1](feat)
+        feats = self.layers(x).flatten(1)
+        x = self.nn(self.dropout(feats))
         if return_feat:
-            return x, feat
+            return x, feats
         return x
-    
-class AverageMeter(object):
-    """
-    Computes and stores the average and current value
-    """
-    def __init__(self):
-        self.reset()
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-    def __str__(self):
-        return self.avg
     
 def compute_sim_matrix(feats):
     """
@@ -320,12 +294,7 @@ def compute_contrastive_loss_from_feats(feats, labels, temperature):
 class CNNCL(nn.Module):
     def __init__(self,
                  n_classes=9,
-                 n_filters=32,
-                 k_size=3,
-                 p_size=2,
-                 n_conv=2,
-                 n_linear=2,
-                 dropout=0.1,
+                 dropout=0,
                  c1=1,
                  c2=1,
                  t=0.1):
@@ -333,8 +302,8 @@ class CNNCL(nn.Module):
         self.c1 = c1
         self.c2 = c2
         self.t = t
-        self.dmodel = CNN(1, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
-        self.rmodel = CNN(3, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
+        self.dmodel = CNN(1, n_classes, dropout)
+        self.rmodel = CNN(3, n_classes, dropout)
     def forward(self, x1, x2):
         pred1, feat1 = self.dmodel(x1, return_feat=True)
         pred2, feat2 = self.rmodel(x2, return_feat=True)
@@ -354,15 +323,15 @@ class CNNCL(nn.Module):
     
 class Trainer:
     def __init__(self, model, trainset, valset, epochs, bs):
-        self.model = model
+        self.model = nn.DataParallel(model).cuda()
         self.contrastive = isinstance(trainset, ContrastiveDataset)
-        self.train_loader = DataLoader(trainset, batch_size=bs)
-        self.val_loader = DataLoader(valset, batch_size=len(valset))
+        self.train_loader = DataLoader(trainset, batch_size=bs, shuffle=True)
+        self.val_loader = DataLoader(valset, batch_size=bs, shuffle=False)
         self.epochs = epochs
         self.history = None
         self.best_model = None
         self.best_perf = None
-        self.optimizer = torch.optim.AdamW(params=list(self.model.parameters()), lr=1e-3, weight_decay=3e-4)
+        self.optimizer = torch.optim.AdamW(params=list(self.model.parameters()), lr=1e-2, weight_decay=3e-4)
         self.xent = nn.CrossEntropyLoss()
         self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=epochs)
     def track(self, metric, value):
@@ -372,15 +341,23 @@ class Trainer:
                 "train_loss": [],
                 "train_acc": [],
                 "val_loss": [],
-                "val_acc": []}
+                "val_acc": [],
+                "train_doodle_acc": [],
+                "train_real_acc": [],
+                "val_doodle_acc": [],
+                "val_real_acc": []
+            }
         assert metric in self.history
         self.history[metric].append(value)
     def train_epoch(self):
         self.model.train()
         avg_loss = AverageMeter()
         avg_acc = AverageMeter()
+        doodle_acc = AverageMeter()
+        real_acc = AverageMeter()
         if not self.contrastive:
             for i, (x, y) in enumerate(self.train_loader):
+                x, y = x.cuda(), y.cuda()
                 pred = self.model(x)
                 loss = self.xent(pred, y)
                 loss.backward()
@@ -391,42 +368,65 @@ class Trainer:
                 avg_acc.update(acc)
         else:
             for i, (x1, x2, y) in enumerate(self.train_loader):
+                x1, x2, y = x1.cuda(), x2.cuda(), y.cuda()
                 pred1, feat1, pred2, feat2 = self.model(x1, x2)
-                loss = self.model.loss(pred1, feat1, pred2, feat2, y)
+                loss = self.model.module.loss(pred1, feat1, pred2, feat2, y)
                 loss.backward()
                 self.optimizer.step()
                 self.optimizer.zero_grad()
-                acc = (compute_accuracy(pred1, y) + compute_accuracy(pred2, y)) / 2
+                acc1 = compute_accuracy(pred1, y)
+                acc2 = compute_accuracy(pred2, y)
+                acc = (acc1 + acc2) / 2
                 avg_loss.update(loss.item())
                 avg_acc.update(acc)
-        return avg_acc.avg, avg_loss.avg
+                doodle_acc.update(acc1)
+                real_acc.update(acc2)
+        return avg_acc.avg, avg_loss.avg, doodle_acc.avg, real_acc.avg
     def evaluate_epoch(self):
         self.model.eval()
+        avg_loss = AverageMeter()
+        avg_acc = AverageMeter()
+        doodle_acc = AverageMeter()
+        real_acc = AverageMeter()
         if not self.contrastive:
-            x, y = next(iter(self.val_loader))
-            with torch.no_grad():
-                pred, feat = self.model(x, return_feat=True)
-                loss = self.xent(pred, y)
-            _, yhat = torch.max(pred, 1)
-            acc = compute_accuracy(pred, y)
+            for i, (x, y) in enumerate(self.val_loader):
+                x, y = x.cuda(), y.cuda()
+                with torch.no_grad():
+                    pred, feat = self.model(x, return_feat=True)
+                    loss = self.xent(pred, y)
+                _, yhat = torch.max(pred, 1)
+                acc = compute_accuracy(pred, y)
+                avg_loss.update(loss.item())
+                avg_acc.update(acc)
         else:
-            x1, x2, y = next(iter(self.val_loader))
-            with torch.no_grad():
-                pred1, feat1, pred2, feat2 = self.model(x1, x2)
-                loss = self.model.loss(pred1, feat1, pred2, feat2, y)
-            acc = (compute_accuracy(pred1, y) +  compute_accuracy(pred2, y)) / 2
-        return acc, loss.item()
+            for i, (x1, x2, y) in enumerate(self.val_loader):
+                x1, x2, y = x1.cuda(), x2.cuda(), y.cuda()
+                with torch.no_grad():
+                    pred1, feat1, pred2, feat2 = self.model(x1, x2)
+                    loss = self.model.module.loss(pred1, feat1, pred2, feat2, y)
+                acc1 = compute_accuracy(pred1, y)
+                acc2 = compute_accuracy(pred2, y)
+                acc = (acc1 + acc2) / 2
+                avg_loss.update(loss.item())
+                avg_acc.update(acc)
+                doodle_acc.update(acc1)
+                real_acc.update(acc2)
+        return avg_acc.avg, avg_loss.avg, doodle_acc.avg, real_acc.avg
     def train(self, verbose=False):
         for epoch in range(self.epochs):
-            train_acc, train_loss = self.train_epoch()
-            val_acc, val_loss = self.evaluate_epoch()
+            train_acc, train_loss, train_doodle_acc, train_real_acc = self.train_epoch()
+            val_acc, val_loss, val_doodle_acc, val_real_acc = self.evaluate_epoch()
             self.track("epoch", epoch)
             self.track("train_loss", train_loss)
             self.track("train_acc", train_acc)
             self.track("val_loss", val_loss)
             self.track("val_acc", val_acc)
+            self.track("train_doodle_acc", train_doodle_acc)
+            self.track("train_real_acc", train_real_acc)
+            self.track("val_doodle_acc", val_doodle_acc)
+            self.track("val_real_acc", val_real_acc)
             if verbose:
-                print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f}")
+                print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f} | Doodle Acc: {val_doodle_acc:.3f} | Real Acc: {val_real_acc:.3f}")
             self.update_best_model(self.model, val_acc)
         return self.history
     def update_best_model(self, model, perf):
@@ -481,3 +481,72 @@ def load_params(checkpoint_path, verbose=False):
     if verbose:
         print(f"Loaded hyperparameters from: {checkpoint_path}")
     return params
+
+class ConvNeXtBlock(nn.Module):
+    def __init__(self, dim):
+        super(ConvNeXtBlock, self).__init__()
+        self.conv1 = nn.Conv2d(dim, dim, (7, 7), padding=3, groups=dim)
+        self.lin1 = nn.Linear(dim, 4 * dim)
+        self.lin2 = nn.Linear(4 * dim, dim)
+        self.ln = nn.LayerNorm(dim)
+        self.gelu = nn.GELU()
+
+    def forward(self, x):
+        res_inp = x
+        x = self.conv1(x)
+        x = x.permute(0, 2, 3, 1)  # NCHW -> NHWC
+        x = self.ln(x)
+        x = self.lin1(x)
+        x = self.lin2(x)
+        x = self.gelu(x)
+        x = x.permute(0, 3, 1, 2)  # NHWC -> NCHW
+        out = x + res_inp
+
+        return out
+
+class ConvNeXt(nn.Module):
+    def __init__(self, n_channels, n_classes=9, dropout=0.2, block_dims=[64,128,192,256,512]):#block_dims=[192, 384, 768]):
+        super(ConvNeXt, self).__init__()
+        blocks = []
+        for dim in block_dims:
+            blocks.append(ConvNeXtBlock(dim))
+        self.blocks = nn.Sequential(*blocks)
+        self.block_dims = block_dims
+        self.project = nn.Linear(block_dims[-1], n_classes)
+        self.dropout = nn.Dropout(p=dropout)
+    def forward(self, x, return_feat=False):
+        feats = self.blocks(x)
+        x = feats.view(-1, self.block_dims[-1], 8*8).mean(2)
+        out = self.project(self.dropout(x))
+        if return_feat:
+            return out, feats
+        return out
+    
+class ConvNextCL(nn.Module):
+    def __init__(self,
+                 n_classes=9,
+                 dropout=0,
+                 c1=1,
+                 c2=1,
+                 t=0.1):
+        super(ConvNextCL, self).__init__()
+        self.c1 = c1
+        self.c2 = c2
+        self.t = t
+        self.dmodel = ConvNeXt(1, n_classes, dropout)
+        self.rmodel = ConvNeXt(3, n_classes, dropout)
+    def forward(self, x1, x2):
+        pred1, feat1 = self.dmodel(x1, return_feat=True)
+        pred2, feat2 = self.rmodel(x2, return_feat=True)
+        return pred1, feat1, pred2, feat2
+    def loss(self, pred1, feat1, pred2, feat2, y):
+        xent = nn.CrossEntropyLoss()
+        xent_loss1 = xent(pred1, y)
+        xent_loss2 = xent(pred2, y)
+        cont_loss1 = compute_contrastive_loss_from_feats(feat1, y, self.t)
+        cont_loss2 = compute_contrastive_loss_from_feats(feat2, y, self.t)
+        cont_loss3 = compute_contrastive_loss_from_feats(feat1*feat2, y, self.t)
+        loss = (xent_loss1 + xent_loss2 
+                + self.c1 * (cont_loss1 + cont_loss2)
+                + self.c2 * cont_loss3)
+        return loss
