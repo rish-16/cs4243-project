@@ -226,47 +226,79 @@ class MLP(nn.Module):
         return x
 
 
+# class CNN(nn.Module):
+#     def __init__(self,
+#                  n_channels,
+#                  n_classes=9,
+#                  n_filters=32,
+#                  k_size=3,
+#                  p_size=2,
+#                  n_conv=2,
+#                  n_linear=2,
+#                  dropout=0.1):
+#         super(CNN, self).__init__()
+#         self.p = nn.MaxPool2d((p_size, p_size))
+#         self.flatten = nn.Flatten()
+#         self.act = nn.LeakyReLU()
+#         self.dropout = nn.Dropout(dropout)
+#         self.layers = [nn.Conv2d(n_channels, n_filters, (k_size, k_size), padding=1), self.p, self.act]
+#         for _ in range(n_conv-1):
+#             self.layers.append(nn.Conv2d(n_filters, n_filters, (k_size, k_size), padding=1))
+#             self.layers.append(self.p)
+#             self.layers.append(self.act)
+#         self.layers.append(self.flatten)
+#         linear_units = linear_input_units(self.layers, n_channels)
+#         if n_linear == 1:
+#             self.layers.append(nn.Linear(linear_units, n_classes, bias=False))
+#         else:
+#             self.layers.append(nn.Linear(linear_units, layer2units(n_linear, 1), bias=False))
+#             self.layers.append(self.act)
+#             self.layers.append(self.dropout)
+#             for i in range(2, n_linear):
+#                 self.layers.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
+#                 self.layers.append(self.act)
+#                 self.layers.append(self.dropout)
+#             self.layers.append(nn.Linear(64, n_classes, bias=False))
+#         self.layers = nn.Sequential(*self.layers)
+#     def forward(self, x, return_feat=False):
+#         feat = self.layers[:-1](x)
+#         x = self.layers[-1](feat)
+#         if return_feat:
+#             return x, feat
+#         return x
+
+
+def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
+    return nn.Sequential(
+        nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
+        nn.BatchNorm2d(out_channels),
+        nn.ReLU(inplace=True)
+    )
+
+
 class CNN(nn.Module):
-    def __init__(self,
-                 n_channels,
-                 n_classes=9,
-                 n_filters=32,
-                 k_size=3,
-                 p_size=2,
-                 n_conv=2,
-                 n_linear=2,
-                 dropout=0.1):
-        super(CNN, self).__init__()
-        self.p = nn.MaxPool2d((p_size, p_size))
-        self.flatten = nn.Flatten()
-        self.act = nn.LeakyReLU()
-        self.dropout = nn.Dropout(dropout)
-        self.layers = [nn.Conv2d(n_channels, n_filters, (k_size, k_size), padding=1), self.p, self.act]
-        for _ in range(n_conv-1):
-            self.layers.append(nn.Conv2d(n_filters, n_filters, (k_size, k_size), padding=1))
-            self.layers.append(self.p)
-            self.layers.append(self.act)
-        self.layers.append(self.flatten)
-        linear_units = linear_input_units(self.layers, n_channels)
-        if n_linear == 1:
-            self.layers.append(nn.Linear(linear_units, n_classes, bias=False))
-        else:
-            self.layers.append(nn.Linear(linear_units, layer2units(n_linear, 1), bias=False))
-            self.layers.append(self.act)
-            self.layers.append(self.dropout)
-            for i in range(2, n_linear):
-                self.layers.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
-                self.layers.append(self.act)
-                self.layers.append(self.dropout)
-            self.layers.append(nn.Linear(64, n_classes, bias=False))
-        self.layers = nn.Sequential(*self.layers)
-    def forward(self, x, return_feat=False):
-        feat = self.layers[:-1](x)
-        x = self.layers[-1](feat)
-        if return_feat:
-            return x, feat
-        return x
-    
+    CHANNELS = [64, 128, 192, 256, 512]
+    POOL = (1, 1)
+    def __init__(self, in_c, num_classes, dropout=0.2, add_layers=False):
+        super(CNN).__init__()
+        layer1 = convbn(in_c, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
+        layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
+        layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
+        layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
+        pool = nn.AdaptiveAvgPool2d(self.POOL)
+        layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
+        layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
+        layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
+        layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
+        self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
+        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], num_classes)
+        self.dropout = nn.Dropout(p=dropout)
+    def forward(self, x, return_feats=False):
+        feats = self.layers(x).flatten(1)
+        x = self.nn(self.dropout(feats))
+        if return_feats:
+            return x, feats
+
 class AverageMeter(object):
     """
     Computes and stores the average and current value
