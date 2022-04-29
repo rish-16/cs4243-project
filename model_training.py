@@ -568,15 +568,17 @@ class ConvNeXt2(nn.Module):
             ConvNeXtBlock2(block_dims[1]),
             nn.Conv2d(block_dims[1], block_dims[2], kernel_size=2, stride=2),
             ConvNeXtBlock2(block_dims[2]),
+            nn.AdaptiveAvgPool2d((1,1))
         )
+        self.flatten = nn.Flatten(1)
         self.block_dims = block_dims
         self.project = nn.Linear(block_dims[-1], n_classes)
 
-    def forward(self, x, return_feat=False):
+    def forward(self, x, return_feats=False):
         x = self.blocks(x)
-        feats = x.view(-1, self.block_dims[-1], 8*8).mean(2).flatten(1)
-        out = self.project(x)
-        if return_feat:
+        feats = self.flatten(x)
+        out = self.project(feats)
+        if return_feats:
             return out, feats
         return out
     
