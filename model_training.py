@@ -522,7 +522,6 @@ class ConvNeXt(nn.Module):
 
         return out
 
-
 class ConvNextCL(nn.Module):
     def __init__(self,
                  n_classes=9,
