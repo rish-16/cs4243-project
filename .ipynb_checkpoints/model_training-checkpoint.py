@@ -156,37 +156,6 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
     def __str__(self):
         return self.avg
-    
-class SimilarityDataset(Dataset):
-    def __init__(self, size=64, split=0.8):
-        super(SimilarityDataset, self).__init__()
-        self.idxs, self.X1, self.X2, self.Y = self.load_datasets(split)
-        self.T1, self.T2 = self.get_transforms(size)
-    def load_datasets(self, split):
-        sketchy_pairs = load_dataset("dataset/sketchy_pairs.npy")
-        idxs = sketchy_pairs['idxs']
-        X1 = sketchy_pairs['doodles']
-        X2 = sketchy_pairs['reals']
-        Y = sketchy_pairs['classes']
-        n = int(split*len(X1))
-        return idxs[n:], X1[n:], X2[n:], Y[n:]
-    def get_transforms(self, size):
-        T1 = transforms.Compose([
-            transforms.ToPILImage(),
-            transforms.Resize(size),
-            transforms.ToTensor(),
-            transforms.Normalize((self.X1/255).mean(), (self.X1/255).std())])
-        T2 = transforms.Compose([
-            transforms.ToPILImage(),
-            transforms.Resize(size),
-            transforms.ToTensor(),
-            transforms.Normalize((self.X2/255).mean(axis=(0, 1, 2)),
-                                 (self.X2/255).std(axis=(0, 1, 2)))])
-        return T1, T2
-    def __getitem__(self, idx):
-        return self.idxs[idx], self.T1(self.X1[idx]), self.T2(self.X2[idx]), self.Y[idx]
-    def __len__(self):
-        return len(self.X1)
 
     
 def linear_input_units(layers, n_channels=3, size=64):
@@ -426,7 +395,10 @@ class Trainer:
             self.track("val_doodle_acc", val_doodle_acc)
             self.track("val_real_acc", val_real_acc)
             if verbose:
-                print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f} | Doodle Acc: {val_doodle_acc:.3f} | Real Acc: {val_real_acc:.3f}")
+                if not self.contrastive:
+                    print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f}")
+                else:
+                    print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f} | Doodle Acc: {val_doodle_acc:.3f} | Real Acc: {val_real_acc:.3f}")
             self.update_best_model(self.model, val_acc)
         return self.history
     def update_best_model(self, model, perf):
