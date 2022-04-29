@@ -480,7 +480,7 @@ class ConvNeXtBlock(nn.Module):
 class ConvNeXt(nn.Module):
     FIRST_BLOCK_DIM = 96
     INPUT_SIZE = 64
-    def __init__(self, n_channels, n_classes=9, dropout=0.2, block_dims=[96, 192, 384, 768]):
+    def __init__(self, n_channels, n_classes=9, block_dims=[96, 192, 384, 768]):
         super(ConvNeXt, self).__init__()
         self.conv = nn.Sequential(
             nn.Conv2d(n_channels, self.FIRST_BLOCK_DIM, kernel_size=3, stride=1, padding=1),
@@ -496,13 +496,12 @@ class ConvNeXt(nn.Module):
         self.block_dims = block_dims
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
         self.project = nn.Linear(block_dims[-1] * 2, n_classes)
-        self.dropout = nn.Dropout(p=dropout)
     def forward(self, x, return_feat=False):
         x = self.conv(x)
         feats = self.blocks(x)
         feats = self.pool(feats).flatten(1)
         x = feats
-        out = self.project(self.dropout(x))
+        out = self.project(x)
         if return_feat:
             return out, feats
         return out
@@ -518,8 +517,8 @@ class ConvNextCL(nn.Module):
         self.c1 = c1
         self.c2 = c2
         self.t = t
-        self.dmodel = ConvNeXt(1, n_classes, dropout)
-        self.rmodel = ConvNeXt(3, n_classes, dropout)
+        self.dmodel = ConvNeXt(1)
+        self.rmodel = ConvNeXt(3)
     def forward(self, x1, x2):
         pred1, feat1 = self.dmodel(x1, return_feat=True)
         pred2, feat2 = self.rmodel(x2, return_feat=True)
@@ -559,7 +558,7 @@ class ConvNeXtBlock2(nn.Module):
         return out
 
 class ConvNeXt2(nn.Module):
-    def __init__(self, n_channels, n_classes=9, dropout=0.2, block_dims=[192, 384, 768]):
+    def __init__(self, n_channels, n_classes=9, block_dims=[192, 384, 768]):
         super().__init__()
         self.blocks = nn.Sequential(
             nn.Conv2d(n_channels, block_dims[0], kernel_size=2, stride=2),
@@ -574,11 +573,11 @@ class ConvNeXt2(nn.Module):
         self.block_dims = block_dims
         self.project = nn.Linear(block_dims[-1], n_classes)
 
-    def forward(self, x, return_feats=False):
+    def forward(self, x, return_feat=False):
         x = self.blocks(x)
         feats = self.flatten(x)
         out = self.project(feats)
-        if return_feats:
+        if return_feat:
             return out, feats
         return out
     
@@ -593,8 +592,8 @@ class ConvNextCL2(nn.Module):
         self.c1 = c1
         self.c2 = c2
         self.t = t
-        self.dmodel = ConvNeXt2(1, n_classes, dropout)
-        self.rmodel = ConvNeXt2(3, n_classes, dropout)
+        self.dmodel = ConvNeXt2(1)
+        self.rmodel = ConvNeXt2(3)
     def forward(self, x1, x2):
         pred1, feat1 = self.dmodel(x1, return_feat=True)
         pred2, feat2 = self.rmodel(x2, return_feat=True)
