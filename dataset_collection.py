@@ -41,7 +41,7 @@ def plot_dataset(d):
         sample_imgs = sample_array(d[clas])
         plot_row(sample_imgs)
         
-def load_dataset(f, verbose=True):
+def load_dataset(f, verbose=False):
     """
     f is the file name to load a dataset dict of {class: data}
     """
@@ -245,7 +245,7 @@ def get_all_datasets():
 
 def get_doodle_datasets():
     dd = {
-        'quickdraw': get_quickdraw(),
+        # 'quickdraw': get_quickdraw(),
         'sketchy_doodle': get_sketchy_doodle(),
         'tuberlin': get_tuberlin(),
         'google_doodles': get_google_doodles()}
