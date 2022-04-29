@@ -237,9 +237,9 @@ def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
 class CNN(nn.Module):
     CHANNELS = [64, 128, 192, 256, 512]
     POOL = (1, 1)
-    def __init__(self, in_c, num_classes, dropout=0.2):
+    def __init__(self, n_channels, n_classes=9, dropout=0):
         super(CNN).__init__()
-        layer1 = convbn(in_c, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
+        layer1 = convbn(n_channels, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
         layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
         layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
         layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
@@ -249,7 +249,7 @@ class CNN(nn.Module):
         layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
         layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
         self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
-        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], num_classes)
+        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], n_classes)
         self.dropout = nn.Dropout(p=dropout)
     def forward(self, x, return_feats=False):
         feats = self.layers(x).flatten(1)
@@ -291,12 +291,7 @@ def compute_contrastive_loss_from_feats(feats, labels, temperature):
 class CNNCL(nn.Module):
     def __init__(self,
                  n_classes=9,
-                 n_filters=32,
-                 k_size=3,
-                 p_size=2,
-                 n_conv=2,
-                 n_linear=2,
-                 dropout=0.1,
+                 dropout=0,
                  c1=1,
                  c2=1,
                  t=0.1):
@@ -304,8 +299,8 @@ class CNNCL(nn.Module):
         self.c1 = c1
         self.c2 = c2
         self.t = t
-        self.dmodel = CNN(1, num_classes=n_classes, dropout=dropout)
-        self.rmodel = CNN(1, num_classes=n_classes, dropout=dropout)
+        self.dmodel = CNN(1, n_classes, dropout)
+        self.rmodel = CNN(3, n_classes, dropout)
     def forward(self, x1, x2):
         pred1, feat1 = self.dmodel(x1, return_feat=True)
         pred2, feat2 = self.rmodel(x2, return_feat=True)
