@@ -323,10 +323,10 @@ class CNNCL(nn.Module):
     
 class Trainer:
     def __init__(self, model, trainset, valset, epochs, bs):
-        self.model = model.cuda()
+        self.model = nn.DataParallel(model).cuda()
         self.contrastive = isinstance(trainset, ContrastiveDataset)
         self.train_loader = DataLoader(trainset, batch_size=bs, shuffle=True)
-        self.val_loader = DataLoader(valset, batch_size=len(valset), shuffle=False)
+        self.val_loader = DataLoader(valset, batch_size=bs, shuffle=False)
         self.epochs = epochs
         self.history = None
         self.best_model = None
@@ -363,7 +363,7 @@ class Trainer:
             for i, (x1, x2, y) in enumerate(self.train_loader):
                 x1, x2, y = x1.cuda(), x2.cuda(), y.cuda()
                 pred1, feat1, pred2, feat2 = self.model(x1, x2)
-                loss = self.model.loss(pred1, feat1, pred2, feat2, y)
+                loss = self.model.module.loss(pred1, feat1, pred2, feat2, y)
                 loss.backward()
                 self.optimizer.step()
                 self.optimizer.zero_grad()
@@ -373,22 +373,28 @@ class Trainer:
         return avg_acc.avg, avg_loss.avg
     def evaluate_epoch(self):
         self.model.eval()
+        avg_loss = AverageMeter()
+        avg_acc = AverageMeter()
         if not self.contrastive:
-            x, y = next(iter(self.val_loader))
-            x, y = x.cuda(), y.cuda()
-            with torch.no_grad():
-                pred, feat = self.model(x, return_feat=True)
-                loss = self.xent(pred, y)
-            _, yhat = torch.max(pred, 1)
-            acc = compute_accuracy(pred, y)
+            for i, (x, y) in enumerate(self.val_loader):
+                x, y = x.cuda(), y.cuda()
+                with torch.no_grad():
+                    pred, feat = self.model(x, return_feat=True)
+                    loss = self.xent(pred, y)
+                _, yhat = torch.max(pred, 1)
+                acc = compute_accuracy(pred, y)
+                avg_loss.update(loss.item())
+                avg_acc.update(acc)
         else:
-            x1, x2, y = next(iter(self.val_loader))
-            x1, x2, y = x1.cuda(), x2.cuda(), y.cuda()
-            with torch.no_grad():
-                pred1, feat1, pred2, feat2 = self.model(x1, x2)
-                loss = self.model.loss(pred1, feat1, pred2, feat2, y)
-            acc = (compute_accuracy(pred1, y) +  compute_accuracy(pred2, y)) / 2
-        return acc, loss.item()
+            for i, (x1, x2, y) in enumerate(self.val_loader):
+                x1, x2, y = x1.cuda(), x2.cuda(), y.cuda()
+                with torch.no_grad():
+                    pred1, feat1, pred2, feat2 = self.model(x1, x2)
+                    loss = self.model.module.loss(pred1, feat1, pred2, feat2, y)
+                acc = (compute_accuracy(pred1, y) +  compute_accuracy(pred2, y)) / 2
+                avg_loss.update(loss.item())
+                avg_acc.update(acc)
+        return avg_acc.avg, avg_loss.avg
     def train(self, verbose=False):
         for epoch in range(self.epochs):
             train_acc, train_loss = self.train_epoch()
