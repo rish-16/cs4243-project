@@ -46,7 +46,7 @@ class GradCAMUtil:
         vis = show_cam_on_image(img/255, overlay, use_rgb=True)
         return vis    
        
-    def visualise_random_batch(self, model, layers, n=10):
+    def visualise_random_batch(self, model, n=10):
         tensors, targets = next(iter(self.loader))
         imgs = self.d.X
         
@@ -55,6 +55,22 @@ class GradCAMUtil:
         tensors = tensors[random_idx]
         targets = targets[random_idx]
         imgs = imgs[random_idx]
+        
+        convs = []
+        for layer in model.children():
+            if isinstance(layer, nn.Conv2d):
+                convs.append(layer)
+            elif isinstance(layer, nn.Sequential):
+                for l in layer.children():
+                    if isinstance(l, nn.Conv2d):
+                        convs.append(l)
+                    elif isinstance(l, nn.Sequential):
+                        for la in l.children():
+                            if isinstance(la, nn.Conv2d):
+                                convs.append(la)
+                            elif isinstance(la, nn.Sequential):
+                                raise Exception()
+        layers = convs
         
         for i in range(n):
             fig = plt.figure(figsize=(20, 16))

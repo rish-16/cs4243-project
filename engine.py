@@ -3,6 +3,8 @@ import torch
 import torch.nn.functional as F
 from torchvision import transforms
 
+from model_training import *
+
 class Engine(object):
     """
     The search engine that maintains a database and retrieve the real images that
@@ -169,7 +171,7 @@ class Engine3(object):
 
         self.database = self.get_database_from_dataset(dataset)  # format: {vec: (img, label)}
 
-        print(f'Engine ready. Database size: {len(self.database)}')
+        # print(f'Engine ready. Database size: {len(self.database)}')
 
     def query(self, doodle_img, topk=1):
         doodle_img = torch.from_numpy(doodle_img).view(1, 64, 64).float().unsqueeze(0)
@@ -207,7 +209,31 @@ class Engine3(object):
             img_label_pair = (data, label)
             pairs[vec] = img_label_pair
 
-            if i % 1000 == 0:
-                print(f'building database... [{i} / {len(real_data)}]')
+            # if i % 1000 == 0:
+            #     print(f'building database... [{i} / {len(real_data)}]')
 
         return pairs
+
+    
+def test_search_acc_top(doodle_model, real_model, engine, doodle_val_set, n=100, k=5, verbose=False):
+    """
+    n is the number of queries 
+    k is the top-k value for the engine
+    verbose = True will show the testing progress
+    """
+
+    accs = []
+    for i in range(n):
+        idx = random.randint(0, len(doodle_val_set) - 1)    # sample a random index
+        doodle, doodle_label = doodle_val_set[i]  # a random doodle sample
+        out_samples = engine.query(doodle.numpy(), topk=k)
+        pred_labels = [x[1] for x in out_samples]
+        if doodle_label in pred_labels:
+            accs.append(1)
+        else:
+            accs.append(0)
+        
+        if i % 10 == 0 and verbose:
+            print(i, n)
+        
+    return sum(accs)/len(accs)
