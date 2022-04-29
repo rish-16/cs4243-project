@@ -574,8 +574,8 @@ class ConvNeXt2(nn.Module):
         self.project = nn.Linear(block_dims[-1], n_classes)
 
     def forward(self, x, return_feat=False):
-        feats = self.blocks(x)
-        feats = feats.view(-1, self.block_dims[-1], 8*8).mean(2).flatten(1)
+        x = self.blocks(x)
+        feats = x.view(-1, self.block_dims[-1], 8*8).mean(2).flatten(1)
         out = self.project(x)
         if return_feat:
             return out, feats
