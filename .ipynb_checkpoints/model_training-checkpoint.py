@@ -9,6 +9,8 @@ import numpy as np
 import cv2
 import copy
 from dataset_collection import *
+import warnings
+warnings.filterwarnings("ignore")
 
 classes = ['airplane', 'bird', 'car', 'cat', 'dog', 'frog', 'horse', 'ship', 'truck']
 idx2class = {i: c for i, c in enumerate(classes)}
@@ -238,7 +240,7 @@ class CNN(nn.Module):
     CHANNELS = [64, 128, 192, 256, 512]
     POOL = (1, 1)
     def __init__(self, n_channels, n_classes=9, dropout=0):
-        super(CNN).__init__()
+        super(CNN, self).__init__()
         layer1 = convbn(n_channels, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
         layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
         layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
@@ -251,11 +253,12 @@ class CNN(nn.Module):
         self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
         self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], n_classes)
         self.dropout = nn.Dropout(p=dropout)
-    def forward(self, x, return_feats=False):
+    def forward(self, x, return_feat=False):
         feats = self.layers(x).flatten(1)
         x = self.nn(self.dropout(feats))
-        if return_feats:
+        if return_feat:
             return x, feats
+        return x
     
 def compute_sim_matrix(feats):
     """
@@ -320,7 +323,7 @@ class CNNCL(nn.Module):
     
 class Trainer:
     def __init__(self, model, trainset, valset, epochs, bs):
-        self.model = model
+        self.model = model.cuda()
         self.contrastive = isinstance(trainset, ContrastiveDataset)
         self.train_loader = DataLoader(trainset, batch_size=bs, shuffle=True)
         self.val_loader = DataLoader(valset, batch_size=len(valset), shuffle=False)
@@ -328,7 +331,7 @@ class Trainer:
         self.history = None
         self.best_model = None
         self.best_perf = None
-        self.optimizer = torch.optim.AdamW(params=list(self.model.parameters()), lr=1e-3, weight_decay=3e-4)
+        self.optimizer = torch.optim.AdamW(params=list(self.model.parameters()), lr=1e-2, weight_decay=3e-4)
         self.xent = nn.CrossEntropyLoss()
         self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=epochs)
     def track(self, metric, value):
@@ -347,6 +350,7 @@ class Trainer:
         avg_acc = AverageMeter()
         if not self.contrastive:
             for i, (x, y) in enumerate(self.train_loader):
+                x, y = x.cuda(), y.cuda()
                 pred = self.model(x)
                 loss = self.xent(pred, y)
                 loss.backward()
@@ -357,6 +361,7 @@ class Trainer:
                 avg_acc.update(acc)
         else:
             for i, (x1, x2, y) in enumerate(self.train_loader):
+                x1, x2, y = x1.cuda(), x2.cuda(), y.cuda()
                 pred1, feat1, pred2, feat2 = self.model(x1, x2)
                 loss = self.model.loss(pred1, feat1, pred2, feat2, y)
                 loss.backward()
@@ -370,6 +375,7 @@ class Trainer:
         self.model.eval()
         if not self.contrastive:
             x, y = next(iter(self.val_loader))
+            x, y = x.cuda(), y.cuda()
             with torch.no_grad():
                 pred, feat = self.model(x, return_feat=True)
                 loss = self.xent(pred, y)
@@ -377,6 +383,7 @@ class Trainer:
             acc = compute_accuracy(pred, y)
         else:
             x1, x2, y = next(iter(self.val_loader))
+            x1, x2, y = x1.cuda(), x2.cuda(), y.cuda()
             with torch.no_grad():
                 pred1, feat1, pred2, feat2 = self.model(x1, x2)
                 loss = self.model.loss(pred1, feat1, pred2, feat2, y)
@@ -471,17 +478,17 @@ class ConvNeXtBlock(nn.Module):
         return out
 
 class ConvNeXt(nn.Module):
-    def __init__(self, in_channels, classes, block_dims=[192, 384, 768]):
+    def __init__(self, n_channels, n_classes=9, block_dims=[192, 384, 768]):
         super().__init__()
         blocks = []
         for dim in block_dims:
             blocks.append(
-                nn.Conv2d(in_channels, block_dims[i], kernel_size=2, stride=2),
+                nn.Conv2d(n_channels, block_dims[i], kernel_size=2, stride=2),
                 ConvNeXtBlock(block_dims[i])
             )
         self.blocks = nn.Sequential(*blocks)
         self.block_dims = block_dims
-        self.project = nn.Linear(block_dims[-1], classes)
+        self.project = nn.Linear(block_dims[-1], n_classes)
 
     def forward(self, x, return_feats=False):
         feats = self.blocks(x)
@@ -490,3 +497,32 @@ class ConvNeXt(nn.Module):
         if return_feats:
             return out, feats
         return out
+    
+class ConvNextCL(nn.Module):
+    def __init__(self,
+                 n_classes=9,
+                 dropout=0,
+                 c1=1,
+                 c2=1,
+                 t=0.1):
+        super(CNNCL, self).__init__()
+        self.c1 = c1
+        self.c2 = c2
+        self.t = t
+        self.dmodel = ConvNeXt(1, n_classes, dropout)
+        self.rmodel = ConvNeXt(3, n_classes, dropout)
+    def forward(self, x1, x2):
+        pred1, feat1 = self.dmodel(x1, return_feat=True)
+        pred2, feat2 = self.rmodel(x2, return_feat=True)
+        return pred1, feat1, pred2, feat2
+    def loss(self, pred1, feat1, pred2, feat2, y):
+        xent = nn.CrossEntropyLoss()
+        xent_loss1 = xent(pred1, y)
+        xent_loss2 = xent(pred2, y)
+        cont_loss1 = compute_contrastive_loss_from_feats(feat1, y, self.t)
+        cont_loss2 = compute_contrastive_loss_from_feats(feat2, y, self.t)
+        cont_loss3 = compute_contrastive_loss_from_feats(feat1*feat2, y, self.t)
+        loss = (xent_loss1 + xent_loss2 
+                + self.c1 * (cont_loss1 + cont_loss2)
+                + self.c2 * cont_loss3)
+        return loss
