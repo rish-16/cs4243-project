@@ -286,7 +286,7 @@ def collapse_datasets(dd, res=64, split=0):
         return traind, testd
               
               
-def get_sketchy_pairs(f='dataset/sketchy'):
+def get_sketchy_pairs(f='dataset/sketchy', split=0.8):
     if dataset_exists(f + '/sketchy_pairs.npy'):
         return load_dataset(f + '/sketchy_pairs.npy')
     sketchy2class = {
@@ -342,14 +342,15 @@ def get_sketchy_pairs(f='dataset/sketchy'):
     idxs = []
     for c, idx in sketchy_pairs.items():
         for name, data in idx.items():
-            for d in data['doodle']:
+            n = int(split * len(data))
+            for d in data['doodle'][n:]:
                 doodles.append(d)
                 reals.append(data['real'])
                 labels.append(class2idx[c])
                 idxs.append(name)
     doodles = np.asarray(doodles)
     reals = np.asarray(reals)
-    labels = np.asarray(classes)
+    labels = np.asarray(labels)
     idxs = np.asarray(idxs)
     sketchy_pairs = {
         'idxs': idxs,

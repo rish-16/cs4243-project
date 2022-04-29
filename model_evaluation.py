@@ -41,16 +41,15 @@ def evaluate_model(model, model_dir, dataset, classes, report=False):
 class SimilarityDataset(Dataset):
     def __init__(self, size=64, split=0.8):
         super(SimilarityDataset, self).__init__()
-        self.idxs, self.X1, self.X2, self.Y = self.load_datasets(split)
+        self.idxs, self.X1, self.X2, self.Y = self.load_datasets()
         self.T1, self.T2 = self.get_transforms(size)
-    def load_datasets(self, split):
-        sketchy_pairs = load_dataset("dataset/sketchy/sketchy_pairs.npy")
+    def load_datasets(self):
+        sketchy_pairs = get_sketchy_pairs()
         idxs = sketchy_pairs['idxs']
         X1 = sketchy_pairs['doodles']
         X2 = sketchy_pairs['reals']
         Y = sketchy_pairs['labels']
-        n = int(split*len(X1))
-        return idxs[n:], X1[n:], X2[n:], Y[n:]
+        return idxs, X1, X2, Y
     def get_transforms(self, size):
         T1 = transforms.Compose([
             transforms.ToPILImage(),
@@ -70,26 +69,27 @@ class SimilarityDataset(Dataset):
         return len(self.X1)
     
 def print_similarity(feats1, feats2, y, classes):
+    def scale_feat(x):
+        return (x - x.min())/(x.max() - x.min())
     assert feats1.shape[1] == feats2.shape[1]
-    sims = F.cosine_similarity(feats1, feats2)
+    sims = F.cosine_similarity(scale_feat(feats1), scale_feat(feats2))
     print("{:>12} {:>10}".format("", "similarity"), end="\n\n")
     for i, c in enumerate(classes):
         print("{:>12} {:>10.2f}".format(c, sims[y == i].mean().item()))
     print("\n{:>12} {:>10.2f}".format("aggregate", sims.mean().item()))
     return sims
-    
+
 class Similarity:
     def __init__(self):
         d = SimilarityDataset()
         dl = DataLoader(d, batch_size=len(d), shuffle=False)
         self.idx, self.x1, self.x2, self.y = next(iter(dl))
         del d, dl
-    def evaluate(self, dmodel_arc, dmodel_dir, rmodel_arc, rmodel_dir):
-        dmodel = load_model(dmodel_arc, dmodel_dir).eval()
-        rmodel = load_model(rmodel_arc, rmodel_dir).eval()
+    def evaluate(self, dmodel, rmodel):
+        dmodel = dmodel.eval()
+        rmodel = rmodel.eval()
         with torch.no_grad():
-            preds1, feats1 = dmodel(self.x1, return_feats=True)
-            preds2, feats2 = rmodel(self.x2, return_feats=True)
-        feats2 = feats2[:,:feats1.shape[1]]  # IMPT: Remove once features are same dim. For testing only!!
+            preds1, feats1 = dmodel(self.x1, return_feat=True)
+            preds2, feats2 = rmodel(self.x2, return_feat=True)
         sims = print_similarity(feats1, feats2, self.y, classes)
         return sims
