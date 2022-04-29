@@ -560,10 +560,10 @@ class ConvNeXtBlock2(nn.Module):
         return out
 
 class ConvNeXt2(nn.Module):
-    def __init__(self, in_channels, classes, block_dims=[192, 384, 768]):
+    def __init__(self, n_channels, n_classes=9, dropout=0.2, block_dims=[192, 384, 768]):
         super().__init__()
         self.blocks = nn.Sequential(
-            nn.Conv2d(in_channels, block_dims[0], kernel_size=2, stride=2),
+            nn.Conv2d(n_channels, block_dims[0], kernel_size=2, stride=2),
             ConvNeXtBlock2(block_dims[0]),
             nn.Conv2d(block_dims[0], block_dims[1], kernel_size=2, stride=2),
             ConvNeXtBlock2(block_dims[1]),
@@ -571,11 +571,11 @@ class ConvNeXt2(nn.Module):
             ConvNeXtBlock2(block_dims[2]),
         )
         self.block_dims = block_dims
-        self.project = nn.Linear(block_dims[-1], classes)
+        self.project = nn.Linear(block_dims[-1], n_classes)
 
     def forward(self, x, return_feat=False):
         feats = self.blocks(x)
-        x = feats.view(-1, self.block_dims[-1], 8*8).mean(2)
+        feats = feats.view(-1, self.block_dims[-1], 8*8).mean(2).flatten(1)
         out = self.project(x)
         if return_feat:
             return out, feats
