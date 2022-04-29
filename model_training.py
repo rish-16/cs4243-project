@@ -538,7 +538,74 @@ class ConvNextCL(nn.Module):
         return loss
 
 
-if __name__ == '__main__':
-    model = ConvNeXt(3)
-    x = torch.randn(2, 3, 64, 64)
-    print(model(x).shape)
+class ConvNeXtBlock2(nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+        self.conv1 = nn.Conv2d(dim, dim, (7, 7), padding=3, groups=dim)
+        self.lin1 = nn.Linear(dim, 4 * dim)
+        self.lin2 = nn.Linear(4 * dim, dim)
+        self.ln = nn.LayerNorm(dim)
+        self.gelu = nn.GELU()
+    def forward(self, x):
+        res_inp = x
+        x = self.conv1(x)
+        x = x.permute(0, 2, 3, 1)  # NCHW -> NHWC
+        x = self.ln(x)
+        x = self.lin1(x)
+        x = self.gelu(x)
+        x = self.lin2(x)
+        x = self.gelu(x)
+        x = x.permute(0, 3, 1, 2)  # NHWC -> NCHW
+        out = x + res_inp
+        return out
+
+class ConvNeXt2(nn.Module):
+    def __init__(self, in_channels, classes, block_dims=[192, 384, 768]):
+        super().__init__()
+        self.blocks = nn.Sequential(
+            nn.Conv2d(in_channels, block_dims[0], kernel_size=2, stride=2),
+            ConvNeXtBlock2(block_dims[0]),
+            nn.Conv2d(block_dims[0], block_dims[1], kernel_size=2, stride=2),
+            ConvNeXtBlock2(block_dims[1]),
+            nn.Conv2d(block_dims[1], block_dims[2], kernel_size=2, stride=2),
+            ConvNeXtBlock2(block_dims[2]),
+        )
+        self.block_dims = block_dims
+        self.project = nn.Linear(block_dims[-1], classes)
+
+    def forward(self, x, return_feat=False):
+        feats = self.blocks(x)
+        x = feats.view(-1, self.block_dims[-1], 8*8).mean(2)
+        out = self.project(x)
+        if return_feat:
+            return out, feats
+        return out
+    
+class ConvNextCL2(nn.Module):
+    def __init__(self,
+                 n_classes=9,
+                 dropout=0,
+                 c1=1,
+                 c2=1,
+                 t=0.1):
+        super(ConvNextCL2, self).__init__()
+        self.c1 = c1
+        self.c2 = c2
+        self.t = t
+        self.dmodel = ConvNeXt2(1, n_classes, dropout)
+        self.rmodel = ConvNeXt2(3, n_classes, dropout)
+    def forward(self, x1, x2):
+        pred1, feat1 = self.dmodel(x1, return_feat=True)
+        pred2, feat2 = self.rmodel(x2, return_feat=True)
+        return pred1, feat1, pred2, feat2
+    def loss(self, pred1, feat1, pred2, feat2, y):
+        xent = nn.CrossEntropyLoss()
+        xent_loss1 = xent(pred1, y)
+        xent_loss2 = xent(pred2, y)
+        cont_loss1 = compute_contrastive_loss_from_feats(feat1, y, self.t)
+        cont_loss2 = compute_contrastive_loss_from_feats(feat2, y, self.t)
+        cont_loss3 = compute_contrastive_loss_from_feats(feat1*feat2, y, self.t)
+        loss = (xent_loss1 + xent_loss2 
+                + self.c1 * (cont_loss1 + cont_loss2)
+                + self.c2 * cont_loss3)
+        return loss
