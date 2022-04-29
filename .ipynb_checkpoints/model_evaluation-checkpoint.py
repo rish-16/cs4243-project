@@ -10,7 +10,6 @@ import torch.nn.functional as F
 import torch.nn as nn
 import torch.utils.data.dataset
 from torch.utils.data import DataLoader
-from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 from sklearn.metrics import classification_report, confusion_matrix
 
