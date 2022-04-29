@@ -341,13 +341,20 @@ class Trainer:
                 "train_loss": [],
                 "train_acc": [],
                 "val_loss": [],
-                "val_acc": []}
+                "val_acc": [],
+                "train_doodle_acc": [],
+                "train_real_acc": [],
+                "val_doodle_acc": [],
+                "val_real_acc": []
+            }
         assert metric in self.history
         self.history[metric].append(value)
     def train_epoch(self):
         self.model.train()
         avg_loss = AverageMeter()
         avg_acc = AverageMeter()
+        doodle_acc = AverageMeter()
+        real_acc = AverageMeter()
         if not self.contrastive:
             for i, (x, y) in enumerate(self.train_loader):
                 x, y = x.cuda(), y.cuda()
@@ -367,14 +374,20 @@ class Trainer:
                 loss.backward()
                 self.optimizer.step()
                 self.optimizer.zero_grad()
-                acc = (compute_accuracy(pred1, y) + compute_accuracy(pred2, y)) / 2
+                acc1 = compute_accuracy(pred1, y)
+                acc2 = compute_accuracy(pred2, y)
+                acc = (acc1 + acc2) / 2
                 avg_loss.update(loss.item())
                 avg_acc.update(acc)
-        return avg_acc.avg, avg_loss.avg
+                doodle_acc.update(acc1)
+                real_acc.update(acc2)
+        return avg_acc.avg, avg_loss.avg, doodle_acc.avg, real_acc.avg
     def evaluate_epoch(self):
         self.model.eval()
         avg_loss = AverageMeter()
         avg_acc = AverageMeter()
+        doodle_acc = AverageMeter()
+        real_acc = AverageMeter()
         if not self.contrastive:
             for i, (x, y) in enumerate(self.val_loader):
                 x, y = x.cuda(), y.cuda()
@@ -391,21 +404,29 @@ class Trainer:
                 with torch.no_grad():
                     pred1, feat1, pred2, feat2 = self.model(x1, x2)
                     loss = self.model.module.loss(pred1, feat1, pred2, feat2, y)
-                acc = (compute_accuracy(pred1, y) +  compute_accuracy(pred2, y)) / 2
+                acc1 = compute_accuracy(pred1, y)
+                acc2 = compute_accuracy(pred2, y)
+                acc = (acc1 + acc2) / 2
                 avg_loss.update(loss.item())
                 avg_acc.update(acc)
-        return avg_acc.avg, avg_loss.avg
+                doodle_acc.update(acc1)
+                real_acc.update(acc2)
+        return avg_acc.avg, avg_loss.avg, doodle_acc.avg, real_acc.avg
     def train(self, verbose=False):
         for epoch in range(self.epochs):
-            train_acc, train_loss = self.train_epoch()
-            val_acc, val_loss = self.evaluate_epoch()
+            train_acc, train_loss, train_doodle_acc, train_real_acc = self.train_epoch()
+            val_acc, val_loss, val_doodle_acc, val_real_acc = self.evaluate_epoch()
             self.track("epoch", epoch)
             self.track("train_loss", train_loss)
             self.track("train_acc", train_acc)
             self.track("val_loss", val_loss)
             self.track("val_acc", val_acc)
+            self.track("train_doodle_acc", train_doodle_acc)
+            self.track("train_real_acc", train_real_acc)
+            self.track("val_doodle_acc", val_doodle_acc)
+            self.track("val_real_acc", val_real_acc)
             if verbose:
-                print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f}")
+                print(f"Epoch: {epoch} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.3f} | Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.3f} | Doodle Acc: {val_doodle_acc:.3f} | Real Acc: {val_real_acc:.3f}")
             self.update_best_model(self.model, val_acc)
         return self.history
     def update_best_model(self, model, perf):
@@ -463,7 +484,7 @@ def load_params(checkpoint_path, verbose=False):
 
 class ConvNeXtBlock(nn.Module):
     def __init__(self, dim):
-        super().__init__()
+        super(ConvNeXtBlock, self).__init__()
         self.conv1 = nn.Conv2d(dim, dim, (7, 7), padding=3, groups=dim)
         self.lin1 = nn.Linear(dim, 4 * dim)
         self.lin2 = nn.Linear(4 * dim, dim)
@@ -484,23 +505,20 @@ class ConvNeXtBlock(nn.Module):
         return out
 
 class ConvNeXt(nn.Module):
-    def __init__(self, n_channels, n_classes=9, block_dims=[192, 384, 768]):
-        super().__init__()
+    def __init__(self, n_channels, n_classes=9, dropout=0.2, block_dims=[64,128,192,256,512]):#block_dims=[192, 384, 768]):
+        super(ConvNeXt, self).__init__()
         blocks = []
         for dim in block_dims:
-            blocks.append(
-                nn.Conv2d(n_channels, block_dims[i], kernel_size=2, stride=2),
-                ConvNeXtBlock(block_dims[i])
-            )
+            blocks.append(ConvNeXtBlock(dim))
         self.blocks = nn.Sequential(*blocks)
         self.block_dims = block_dims
         self.project = nn.Linear(block_dims[-1], n_classes)
-
-    def forward(self, x, return_feats=False):
+        self.dropout = nn.Dropout(p=dropout)
+    def forward(self, x, return_feat=False):
         feats = self.blocks(x)
         x = feats.view(-1, self.block_dims[-1], 8*8).mean(2)
-        out = self.project(x)
-        if return_feats:
+        out = self.project(self.dropout(x))
+        if return_feat:
             return out, feats
         return out
     
@@ -511,7 +529,7 @@ class ConvNextCL(nn.Module):
                  c1=1,
                  c2=1,
                  t=0.1):
-        super(CNNCL, self).__init__()
+        super(ConvNextCL, self).__init__()
         self.c1 = c1
         self.c2 = c2
         self.t = t
