@@ -19,10 +19,10 @@ class Tsne:
     def __init__(self, d):
         dl = DataLoader(d, batch_size=len(d))
         self.x, self.y = next(iter(dl))
-    def visualise(self, model_arc, model_dir):
-        model = load_model(model_arc, model_dir)
+    def visualise(self, model):
+        model = model.eval()
         with torch.no_grad():
-            preds, feats = model(self.x, return_feats=True)
+            preds, feats = model(self.x, return_feat=True)
         self.plot_tsne(feats)
     def plot_tsne(self, feats):
         c = TSNE(n_components=2).fit_transform(feats)

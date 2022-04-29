@@ -25,12 +25,12 @@ def print_accuracy(y, yhat, classes):
         print("{:>12} {:>10.2f}".format(c, a))
     return accuracy
 
-def evaluate_model(model, model_dir, dataset, classes, report=False):
+def evaluate_model(model, dataset, classes, report=False):
     dl = DataLoader(dataset, batch_size=len(dataset), shuffle=False)
     x, y = next(iter(dl))
-    model = load_model(model, model_dir).eval()
+    model = model.eval()
     with torch.no_grad():
-        preds, feats = model(x, return_feats=True)
+        preds, feats = model(x, return_feat=True)
         _, yhat = torch.max(preds, 1)
     accuracy = print_accuracy(y, yhat, classes)
     if report:
