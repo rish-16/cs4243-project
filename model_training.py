@@ -206,21 +206,21 @@ def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
 
 
 class CNN(nn.Module):
-    CHANNELS = [64, 128, 192, 256, 512]
+    CHANNELS = [64, 128, 192, 256]
     POOL = (1, 1)
     def __init__(self, n_channels, n_classes=9, dropout=0):
         super(CNN, self).__init__()
-        layer1 = convbn(n_channels, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
-        layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
-        layer3 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
-        layer4 = convbn(self.CHANNELS[3], self.CHANNELS[4], kernel_size=3, stride=2, padding=1, bias=True)
+        layer1 = convbn(n_channels, self.CHANNELS[0], kernel_size=3, stride=2, padding=1, bias=True)
+        layer2 = convbn(self.CHANNELS[0], self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
+        layer3 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
+        layer4 = convbn(self.CHANNELS[2], self.CHANNELS[3], kernel_size=3, stride=2, padding=1, bias=True)
         pool = nn.AdaptiveAvgPool2d(self.POOL)
-        layer1_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
-        layer2_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
-        layer3_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
-        layer4_2 = convbn(self.CHANNELS[4], self.CHANNELS[4], kernel_size=3, stride=1, padding=0, bias=True)
+        layer1_2 = convbn(self.CHANNELS[0], self.CHANNELS[0], kernel_size=3, stride=1, padding=0, bias=True)
+        layer2_2 = convbn(self.CHANNELS[1], self.CHANNELS[1], kernel_size=3, stride=1, padding=0, bias=True)
+        layer3_2 = convbn(self.CHANNELS[2], self.CHANNELS[2], kernel_size=3, stride=1, padding=0, bias=True)
+        layer4_2 = convbn(self.CHANNELS[3], self.CHANNELS[3], kernel_size=3, stride=1, padding=0, bias=True)
         self.layers = nn.Sequential(layer1, layer1_2, layer2, layer2_2, layer3, layer3_2, layer4, layer4_2, pool)
-        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[4], n_classes)
+        self.nn = nn.Linear(self.POOL[0] * self.POOL[1] * self.CHANNELS[3], n_classes)
         self.dropout = nn.Dropout(p=dropout)
     def forward(self, x, return_feat=False):
         feats = self.layers(x).flatten(1)
@@ -458,7 +458,7 @@ class ConvNeXtBlock(nn.Module):
     RATIO = 4
     def __init__(self, dim, in_shape):
         super(ConvNeXtBlock, self).__init__()
-        self.conv1 = nn.Conv2d(dim, dim, kernel_size=7, stride=2, padding=3, groups=dim)
+        self.conv1 = nn.Conv2d(dim, dim, kernel_size=7, stride=2, padding=3, groups=1)
         self.conv2 = nn.Conv2d(dim, dim * self.RATIO, kernel_size=1, padding=0)
         self.conv3 = nn.Conv2d(dim * self.RATIO, dim * 2, kernel_size=1, padding=0)
         self.ln = nn.LayerNorm(in_shape)
@@ -509,7 +509,6 @@ class ConvNeXt(nn.Module):
 class ConvNextCL(nn.Module):
     def __init__(self,
                  n_classes=9,
-                 dropout=0,
                  c1=1,
                  c2=1,
                  t=0.1):
