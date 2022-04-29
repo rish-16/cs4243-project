@@ -36,19 +36,21 @@ def evaluate_model(model, model_dir, dataset, classes, report=False):
     if report:
         print(classification_report(y, yhat, target_names=classes))
     return accuracy
-
+    
+    
 class SimilarityDataset(Dataset):
-    def __init__(self, size=64):
+    def __init__(self, size=64, split=0.8):
         super(SimilarityDataset, self).__init__()
-        self.idxs, self.X1, self.X2, self.Y = self.load_datasets()
+        self.idxs, self.X1, self.X2, self.Y = self.load_datasets(split)
         self.T1, self.T2 = self.get_transforms(size)
-    def load_datasets(self):
-        sketchy_pairs = load_dataset("dataset/sketchy_pairs.npy")
+    def load_datasets(self, split):
+        sketchy_pairs = load_dataset("dataset/sketchy/sketchy_pairs.npy")
         idxs = sketchy_pairs['idxs']
         X1 = sketchy_pairs['doodles']
         X2 = sketchy_pairs['reals']
-        Y = sketchy_pairs['classes']
-        return idxs, X1, X2, Y
+        Y = sketchy_pairs['labels']
+        n = int(split*len(X1))
+        return idxs[n:], X1[n:], X2[n:], Y[n:]
     def get_transforms(self, size):
         T1 = transforms.Compose([
             transforms.ToPILImage(),
@@ -83,8 +85,8 @@ class Similarity:
         self.idx, self.x1, self.x2, self.y = next(iter(dl))
         del d, dl
     def evaluate(self, dmodel_arc, dmodel_dir, rmodel_arc, rmodel_dir):
-        dmodel = load_model(dmodel_arc, dmodel_dir)
-        rmodel = load_model(rmodel_arc, rmodel_dir)
+        dmodel = load_model(dmodel_arc, dmodel_dir).eval()
+        rmodel = load_model(rmodel_arc, rmodel_dir).eval()
         with torch.no_grad():
             preds1, feats1 = dmodel(self.x1, return_feats=True)
             preds2, feats2 = rmodel(self.x2, return_feats=True)
