@@ -201,7 +201,7 @@ class MLP(nn.Module):
                  n_input,
                  n_classes=9,
                  n_linear=2,
-                 dropout=0.1):
+                 dropout=0):
         super(MLP, self).__init__()
         self.act = nn.LeakyReLU()
         self.dropout = nn.Dropout(dropout)
@@ -226,48 +226,6 @@ class MLP(nn.Module):
         return x
 
 
-# class CNN(nn.Module):
-#     def __init__(self,
-#                  n_channels,
-#                  n_classes=9,
-#                  n_filters=32,
-#                  k_size=3,
-#                  p_size=2,
-#                  n_conv=2,
-#                  n_linear=2,
-#                  dropout=0.1):
-#         super(CNN, self).__init__()
-#         self.p = nn.MaxPool2d((p_size, p_size))
-#         self.flatten = nn.Flatten()
-#         self.act = nn.LeakyReLU()
-#         self.dropout = nn.Dropout(dropout)
-#         self.layers = [nn.Conv2d(n_channels, n_filters, (k_size, k_size), padding=1), self.p, self.act]
-#         for _ in range(n_conv-1):
-#             self.layers.append(nn.Conv2d(n_filters, n_filters, (k_size, k_size), padding=1))
-#             self.layers.append(self.p)
-#             self.layers.append(self.act)
-#         self.layers.append(self.flatten)
-#         linear_units = linear_input_units(self.layers, n_channels)
-#         if n_linear == 1:
-#             self.layers.append(nn.Linear(linear_units, n_classes, bias=False))
-#         else:
-#             self.layers.append(nn.Linear(linear_units, layer2units(n_linear, 1), bias=False))
-#             self.layers.append(self.act)
-#             self.layers.append(self.dropout)
-#             for i in range(2, n_linear):
-#                 self.layers.append(nn.Linear(layer2units(n_linear, i-1), layer2units(n_linear, i), bias=False))
-#                 self.layers.append(self.act)
-#                 self.layers.append(self.dropout)
-#             self.layers.append(nn.Linear(64, n_classes, bias=False))
-#         self.layers = nn.Sequential(*self.layers)
-#     def forward(self, x, return_feat=False):
-#         feat = self.layers[:-1](x)
-#         x = self.layers[-1](feat)
-#         if return_feat:
-#             return x, feat
-#         return x
-
-
 def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
     return nn.Sequential(
         nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias),
@@ -279,7 +237,7 @@ def convbn(in_channels, out_channels, kernel_size, stride, padding, bias):
 class CNN(nn.Module):
     CHANNELS = [64, 128, 192, 256, 512]
     POOL = (1, 1)
-    def __init__(self, in_c, num_classes, dropout=0.2, add_layers=False):
+    def __init__(self, in_c, num_classes, dropout=0.2):
         super(CNN).__init__()
         layer1 = convbn(in_c, self.CHANNELS[1], kernel_size=3, stride=2, padding=1, bias=True)
         layer2 = convbn(self.CHANNELS[1], self.CHANNELS[2], kernel_size=3, stride=2, padding=1, bias=True)
@@ -298,25 +256,6 @@ class CNN(nn.Module):
         x = self.nn(self.dropout(feats))
         if return_feats:
             return x, feats
-
-class AverageMeter(object):
-    """
-    Computes and stores the average and current value
-    """
-    def __init__(self):
-        self.reset()
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-    def __str__(self):
-        return self.avg
     
 def compute_sim_matrix(feats):
     """
@@ -365,8 +304,8 @@ class CNNCL(nn.Module):
         self.c1 = c1
         self.c2 = c2
         self.t = t
-        self.dmodel = CNN(1, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
-        self.rmodel = CNN(3, n_classes, n_filters, k_size, p_size, n_conv, n_linear, dropout)
+        self.dmodel = CNN(1, num_classes=n_classes, dropout=dropout)
+        self.rmodel = CNN(1, num_classes=n_classes, dropout=dropout)
     def forward(self, x1, x2):
         pred1, feat1 = self.dmodel(x1, return_feat=True)
         pred2, feat2 = self.rmodel(x2, return_feat=True)
@@ -388,8 +327,8 @@ class Trainer:
     def __init__(self, model, trainset, valset, epochs, bs):
         self.model = model
         self.contrastive = isinstance(trainset, ContrastiveDataset)
-        self.train_loader = DataLoader(trainset, batch_size=bs)
-        self.val_loader = DataLoader(valset, batch_size=len(valset))
+        self.train_loader = DataLoader(trainset, batch_size=bs, shuffle=True)
+        self.val_loader = DataLoader(valset, batch_size=len(valset), shuffle=False)
         self.epochs = epochs
         self.history = None
         self.best_model = None
@@ -513,3 +452,46 @@ def load_params(checkpoint_path, verbose=False):
     if verbose:
         print(f"Loaded hyperparameters from: {checkpoint_path}")
     return params
+
+class ConvNeXtBlock(nn.Module):
+    def __init__(self, dim):
+        super().__init__()
+        self.conv1 = nn.Conv2d(dim, dim, (7, 7), padding=3, groups=dim)
+        self.lin1 = nn.Linear(dim, 4 * dim)
+        self.lin2 = nn.Linear(4 * dim, dim)
+        self.ln = nn.LayerNorm(dim)
+        self.gelu = nn.GELU()
+
+    def forward(self, x):
+        res_inp = x
+        x = self.conv1(x)
+        x = x.permute(0, 2, 3, 1)  # NCHW -> NHWC
+        x = self.ln(x)
+        x = self.lin1(x)
+        x = self.lin2(x)
+        x = self.gelu(x)
+        x = x.permute(0, 3, 1, 2)  # NHWC -> NCHW
+        out = x + res_inp
+
+        return out
+
+class ConvNeXt(nn.Module):
+    def __init__(self, in_channels, classes, block_dims=[192, 384, 768]):
+        super().__init__()
+        blocks = []
+        for dim in block_dims:
+            blocks.append(
+                nn.Conv2d(in_channels, block_dims[i], kernel_size=2, stride=2),
+                ConvNeXtBlock(block_dims[i])
+            )
+        self.blocks = nn.Sequential(*blocks)
+        self.block_dims = block_dims
+        self.project = nn.Linear(block_dims[-1], classes)
+
+    def forward(self, x, return_feats=False):
+        feats = self.blocks(x)
+        x = feats.view(-1, self.block_dims[-1], 8*8).mean(2)
+        out = self.project(x)
+        if return_feats:
+            return out, feats
+        return out

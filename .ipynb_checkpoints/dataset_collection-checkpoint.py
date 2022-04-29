@@ -281,7 +281,7 @@ def collapse_datasets(dd, res=64, split=0):
         traind, testd = {}, {}
         for c, data in cd.items():
             n = int(split * len(data))
-            traind[c] = data[n:]
+            traind[c] = data[:n]
             testd[c] = data[n:]
         return traind, testd
               
